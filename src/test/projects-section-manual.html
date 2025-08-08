@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProjectsSection Manual Test</title>
+    <style>
+        /* CSS Custom Properties for testing */
+        :root {
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            --space-20: 5rem;
+            --space-24: 6rem;
+            
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-4xl: 2.25rem;
+            --font-size-5xl: 3rem;
+            --font-size-6xl: 3.75rem;
+            
+            --font-weight-bold: 700;
+            --line-height-tight: 1.25;
+            --line-height-relaxed: 1.625;
+            
+            --color-gray-50: #f9fafb;
+            --color-gray-500: #6b7280;
+            --color-gray-600: #4b5563;
+            --color-gray-900: #111827;
+            --color-white: #ffffff;
+            --color-black: #000000;
+            --color-gray-800: #1f2937;
+            
+            --max-width-6xl: 72rem;
+        }
+        
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            background: #f0f0f0;
+        }
+        
+        /* ProjectsSection Styles (copied from component) */
+        .projects-section {
+            padding: var(--space-20) 0;
+            background: var(--color-gray-50);
+            position: relative;
+        }
+        
+        .projects-container {
+            max-width: var(--max-width-6xl);
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+        }
+        
+        .projects-header {
+            text-align: center;
+            margin-bottom: var(--space-16);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .projects-title {
+            font-size: var(--font-size-4xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-gray-900);
+            margin-bottom: var(--space-4);
+            line-height: var(--line-height-tight);
+        }
+        
+        .projects-subtitle {
+            font-size: var(--font-size-lg);
+            color: var(--color-gray-600);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: var(--line-height-relaxed);
+        }
+        
+        .projects-grid {
+            display: grid;
+            gap: var(--space-8);
+            grid-template-columns: 1fr;
+        }
+        
+        .projects-grid__item {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease-out forwards;
+            animation-delay: var(--animation-delay, 0s);
+        }
+        
+        .projects-empty {
+            text-align: center;
+            padding: var(--space-16);
+            color: var(--color-gray-500);
+            font-size: var(--font-size-lg);
+        }
+        
+        /* Mock Project Card for testing */
+        .mock-project-card {
+            background: var(--color-white);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .mock-project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mock-project-card[data-featured="true"] {
+            border: 2px solid #3b82f6;
+        }
+        
+        .mock-project-card[data-featured="true"]::before {
+            content: "Featured";
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #3b82f6;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 10;
+        }
+        
+        .mock-thumbnail {
+            height: 200px;
+            background: linear-gradient(45deg, #e5e7eb, #d1d5db);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-gray-600);
+            font-weight: 600;
+        }
+        
+        .mock-content {
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .mock-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--color-gray-900);
+            margin-bottom: 12px;
+        }
+        
+        .mock-description {
+            color: var(--color-gray-600);
+            font-size: 14px;
+            line-height: 1.5;
+            flex: 1;
+        }
+        
+        .mock-tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        
+        .mock-tech-tag {
+            background: #f3f4f6;
+            color: #374151;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        /* Tablet Layout - 2 columns */
+        @media (min-width: 768px) {
+            .projects-container {
+                padding: 0 var(--space-8);
+            }
+            
+            .projects-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--space-10);
+            }
+            
+            .projects-title {
+                font-size: var(--font-size-5xl);
+            }
+        }
+        
+        /* Desktop Layout - 3 columns */
+        @media (min-width: 1024px) {
+            .projects-section {
+                padding: var(--space-24) 0;
+            }
+            
+            .projects-container {
+                padding: 0 var(--space-12);
+            }
+            
+            .projects-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: var(--space-12);
+            }
+            
+            .projects-header {
+                margin-bottom: var(--space-20);
+            }
+            
+            .projects-title {
+                font-size: var(--font-size-6xl);
+            }
+        }
+        
+        /* Large Desktop - maintain 3 columns with better spacing */
+        @media (min-width: 1280px) {
+            .projects-grid {
+                gap: var(--space-16);
+            }
+        }
+        
+        /* Animation Keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Reduced Motion Support */
+        @media (prefers-reduced-motion: reduce) {
+            .projects-header,
+            .projects-grid__item {
+                animation: none;
+                opacity: 1;
+                transform: none;
+            }
+        }
+        
+        /* Test Controls */
+        .test-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        
+        .test-controls h3 {
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .test-controls button {
+            display: block;
+            width: 100%;
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .test-controls button:hover {
+            background: #2563eb;
+        }
+        
+        .viewport-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-controls">
+        <h3>Test Controls</h3>
+        <button onclick="testEmpty()">Test Empty State</button>
+        <button onclick="testFewProjects()">Test Few Projects</button>
+        <button onclick="testManyProjects()">Test Many Projects</button>
+        <button onclick="testMixedProjects()">Test Mixed Projects</button>
+        <button onclick="toggleReducedMotion()">Toggle Reduced Motion</button>
+    </div>
+    
+    <div class="viewport-indicator" id="viewport">
+        Viewport: <span id="viewport-size"></span>
+    </div>
+
+    <section class="projects-section" id="projects">
+        <div class="projects-container">
+            <header class="projects-header">
+                <h2 class="projects-title">Featured Projects</h2>
+                <p class="projects-subtitle">
+                    A showcase of my recent work and technical expertise
+                </p>
+            </header>
+            
+            <div class="projects-grid" role="list" id="projects-grid">
+                <!-- Projects will be inserted here by JavaScript -->
+            </div>
+            
+            <div class="projects-empty" id="projects-empty" style="display: none;">
+                <p>No projects available at the moment.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Mock project data
+        const mockProjects = [
+            {
+                title: "E-Commerce Platform",
+                description: "A full-stack e-commerce platform with React frontend and Node.js backend, featuring user authentication, product catalog, shopping cart, and payment integration.",
+                technologies: ["React", "Node.js", "Express", "MongoDB", "Stripe"],
+                featured: true,
+                order: 1
+            },
+            {
+                title: "Task Management App",
+                description: "A collaborative task management application built with Vue.js and Firebase, featuring real-time updates, team collaboration, and project tracking.",
+                technologies: ["Vue.js", "Firebase", "Vuex", "CSS3"],
+                featured: false,
+                order: 2
+            },
+            {
+                title: "Weather Dashboard",
+                description: "A responsive weather dashboard that displays current conditions and forecasts using OpenWeatherMap API with interactive charts and location search.",
+                technologies: ["JavaScript", "Chart.js", "OpenWeatherMap API", "CSS3"],
+                featured: true,
+                order: 3
+            },
+            {
+                title: "Blog CMS",
+                description: "A headless content management system for blogs built with Next.js and Strapi, featuring markdown support, SEO optimization, and multi-author capabilities.",
+                technologies: ["Next.js", "Strapi", "GraphQL", "Markdown"],
+                featured: false,
+                order: 4
+            },
+            {
+                title: "Portfolio Website",
+                description: "A modern, responsive portfolio website built with Astro framework, featuring smooth animations, project showcase, and integrated CV viewer.",
+                technologies: ["Astro", "TypeScript", "CSS3", "Vue.js"],
+                featured: false,
+                order: 5
+            },
+            {
+                title: "Social Media Dashboard",
+                description: "A comprehensive social media analytics dashboard with real-time data visualization, multi-platform integration, and automated reporting features.",
+                technologies: ["React", "D3.js", "Node.js", "PostgreSQL"],
+                featured: true,
+                order: 6
+            }
+        ];
+        
+        function createProjectCard(project, index) {
+            return `
+                <div 
+                    class="projects-grid__item" 
+                    role="listitem"
+                    style="--animation-delay: ${index * 0.1}s"
+                >
+                    <article class="mock-project-card" data-featured="${project.featured}">
+                        <div class="mock-thumbnail">
+                            Project ${index + 1} Thumbnail
+                        </div>
+                        <div class="mock-content">
+                            <h3 class="mock-title">${project.title}</h3>
+                            <p class="mock-description">${project.description}</p>
+                            <div class="mock-tech-tags">
+                                ${project.technologies.map(tech => `<span class="mock-tech-tag">${tech}</span>`).join('')}
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            `;
+        }
+        
+        function sortProjects(projects) {
+            return projects.sort((a, b) => {
+                // Featured projects first
+                if (a.featured && !b.featured) return -1;
+                if (!a.featured && b.featured) return 1;
+                
+                // Then by order (lower numbers first)
+                if (a.order !== b.order) {
+                    return a.order - b.order;
+                }
+                
+                return 0;
+            });
+        }
+        
+        function renderProjects(projects) {
+            const grid = document.getElementById('projects-grid');
+            const empty = document.getElementById('projects-empty');
+            
+            if (projects.length === 0) {
+                grid.innerHTML = '';
+                empty.style.display = 'block';
+            } else {
+                const sortedProjects = sortProjects(projects);
+                grid.innerHTML = sortedProjects.map(createProjectCard).join('');
+                empty.style.display = 'none';
+            }
+        }
+        
+        function testEmpty() {
+            renderProjects([]);
+        }
+        
+        function testFewProjects() {
+            renderProjects(mockProjects.slice(0, 3));
+        }
+        
+        function testManyProjects() {
+            renderProjects(mockProjects);
+        }
+        
+        function testMixedProjects() {
+            // Mix of featured and non-featured with different orders
+            const mixed = [
+                { ...mockProjects[1], featured: false, order: 1 },
+                { ...mockProjects[0], featured: true, order: 3 },
+                { ...mockProjects[2], featured: false, order: 2 },
+                { ...mockProjects[3], featured: true, order: 1 }
+            ];
+            renderProjects(mixed);
+        }
+        
+        function toggleReducedMotion() {
+            const body = document.body;
+            const hasReducedMotion = body.style.getPropertyValue('--prefers-reduced-motion');
+            
+            if (hasReducedMotion) {
+                body.style.removeProperty('--prefers-reduced-motion');
+            } else {
+                body.style.setProperty('--prefers-reduced-motion', 'reduce');
+                // Add CSS to disable animations
+                const style = document.createElement('style');
+                style.textContent = `
+                    .projects-header,
+                    .projects-grid__item {
+                        animation: none !important;
+                        opacity: 1 !important;
+                        transform: none !important;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+        
+        function updateViewportIndicator() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const indicator = document.getElementById('viewport-size');
+            
+            let breakpoint = 'Mobile';
+            if (width >= 1280) breakpoint = 'Large Desktop';
+            else if (width >= 1024) breakpoint = 'Desktop';
+            else if (width >= 768) breakpoint = 'Tablet';
+            
+            indicator.textContent = `${width}x${height} (${breakpoint})`;
+        }
+        
+        // Initialize
+        window.addEventListener('resize', updateViewportIndicator);
+        updateViewportIndicator();
+        testMixedProjects(); // Start with mixed projects to show sorting
+    </script>
+</body>
+</html>
