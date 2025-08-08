@@ -1,16 +1,23 @@
 ---
-
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProfileSection from '../components/sections/ProfileSection.astro';
+import IntroSection from '../components/sections/IntroSection.astro';
+import '../styles/global.css';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout 
+  title="Portfolio - Full Stack Developer"
+  description="Modern portfolio showcasing full-stack development projects and expertise"
+  keywords={["developer", "portfolio", "full-stack", "web development", "software engineer"]}
+>
+  <main>
+    <ProfileSection 
+      name="John Developer"
+      role="Software Developer / Fullstack"
+    />
+    <IntroSection 
+      content="I'm a passionate full-stack developer with expertise in modern web technologies. I love creating efficient, scalable solutions and bringing ideas to life through clean, maintainable code. With a focus on user experience and performance, I strive to build applications that make a difference."
+      fadeInDelay={0.8}
+    />
+  </main>
+</BaseLayout>

@@ -1,0 +1,108 @@
+/* Layout Component Styles */
+
+/* BaseLayout specific styles */
+.base-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.base-layout__main {
+  flex: 1;
+}
+
+/* Container utilities */
+.container-sm {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 var(--space-container);
+}
+
+.container-md {
+  max-width: 768px;
+  margin: 0 auto;
+  padding: 0 var(--space-container);
+}
+
+.container-lg {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 0 var(--space-container);
+}
+
+.container-xl {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--space-container);
+}
+
+/* Section spacing utilities */
+.section {
+  padding: var(--space-section) 0;
+}
+
+.section--sm {
+  padding: var(--space-16) 0;
+}
+
+.section--lg {
+  padding: calc(var(--space-section) * 1.5) 0;
+}
+
+/* Grid utilities */
+.grid {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.grid--2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 768px) {
+  .grid--2,
+  .grid--3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Flex utilities */
+.flex {
+  display: flex;
+}
+
+.flex--center {
+  align-items: center;
+  justify-content: center;
+}
+
+.flex--between {
+  justify-content: space-between;
+}
+
+.flex--column {
+  flex-direction: column;
+}
+
+/* Responsive utilities */
+.hidden-mobile {
+  display: block;
+}
+
+.hidden-desktop {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .hidden-mobile {
+    display: none;
+  }
+  
+  .hidden-desktop {
+    display: block;
+  }
+}

@@ -1,0 +1,178 @@
+---
+export interface Props {
+  content?: string;
+  fadeInDelay?: number;
+}
+
+const {
+  content = "I'm a passionate full-stack developer with expertise in modern web technologies. I love creating efficient, scalable solutions and bringing ideas to life through clean, maintainable code. With a focus on user experience and performance, I strive to build applications that make a difference.",
+  fadeInDelay = 0.8
+} = Astro.props;
+---
+
+<section class="intro-section">
+  <div class="intro-container">
+    <div class="intro-content" style={`--fade-delay: ${fadeInDelay}s`}>
+      <p class="intro-text">{content}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .intro-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-section) var(--space-container);
+    background: var(--color-white);
+    border-top: 1px solid var(--color-gray-200);
+  }
+
+  .intro-container {
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .intro-content {
+    opacity: 0;
+    transform: translateY(1.5rem);
+    animation: introFadeIn 0.8s ease-out var(--fade-delay) forwards;
+  }
+
+  .intro-text {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-normal);
+    color: var(--color-gray-700);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: 0;
+    max-width: 100%;
+  }
+
+  /* Animation */
+  @keyframes introFadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Responsive Typography and Spacing */
+  @media (max-width: 640px) {
+    .intro-section {
+      padding: var(--space-16) var(--space-4);
+    }
+
+    .intro-text {
+      font-size: var(--font-size-base);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .intro-container {
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .intro-section {
+      padding: var(--space-12) var(--space-4);
+    }
+
+    .intro-text {
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-normal);
+    }
+  }
+
+  /* Tablet screens */
+  @media (min-width: 641px) and (max-width: 1023px) {
+    .intro-section {
+      padding: var(--space-20) var(--space-6);
+    }
+
+    .intro-text {
+      font-size: var(--font-size-xl);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .intro-container {
+      max-width: 700px;
+    }
+  }
+
+  /* Desktop screens */
+  @media (min-width: 1024px) {
+    .intro-section {
+      padding: var(--space-24) var(--space-8);
+    }
+
+    .intro-text {
+      font-size: var(--font-size-xl);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .intro-container {
+      max-width: 800px;
+    }
+  }
+
+  /* Large desktop screens */
+  @media (min-width: 1280px) {
+    .intro-section {
+      padding: var(--space-32) var(--space-10);
+    }
+
+    .intro-text {
+      font-size: var(--font-size-2xl);
+      line-height: var(--line-height-relaxed);
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .intro-content {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .intro-section {
+      border-top-color: var(--color-black);
+      border-top-width: 2px;
+    }
+
+    .intro-text {
+      color: var(--color-black);
+    }
+  }
+
+  /* Dark mode adjustments */
+  @media (prefers-color-scheme: dark) {
+    .intro-section {
+      background: var(--color-gray-800);
+      border-top-color: var(--color-gray-700);
+    }
+
+    .intro-text {
+      color: var(--color-gray-300);
+    }
+  }
+
+  /* Print styles */
+  @media print {
+    .intro-section {
+      background: white;
+      border: none;
+      padding: var(--space-8) 0;
+    }
+
+    .intro-text {
+      color: black;
+      font-size: 14pt;
+      line-height: 1.4;
+    }
+  }
+</style>

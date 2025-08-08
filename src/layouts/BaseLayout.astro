@@ -1,0 +1,74 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  keywords?: string[];
+}
+
+const {
+  title = "Portfolio - Full Stack Developer",
+  description = "Modern portfolio showcasing full-stack development projects and expertise",
+  image = "/favicon.svg",
+  keywords = ["developer", "portfolio", "full-stack", "web development", "software engineer"]
+} = Astro.props;
+
+const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astro.url;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Basic Meta Tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- SEO Meta Tags -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords.join(", ")} />
+    <link rel="canonical" href={canonicalURL} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={Astro.site ? new URL(image, Astro.site) : image} />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={Astro.url} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={Astro.site ? new URL(image, Astro.site) : image} />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    
+    <!-- Preload Critical Assets -->
+    <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin />
+    
+    <!-- DNS Prefetch for External Resources -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#1f2937" />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json" is:inline>
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Full Stack Developer",
+        "jobTitle": "Software Developer",
+        "url": "{Astro.url}",
+        "sameAs": []
+      }
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

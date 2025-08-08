@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ui/ProjectCard.astro';
+
+// Sample project data for testing
+const sampleProjects = [
+  {
+    title: "Portfolio Website",
+    description: "A modern, responsive portfolio website built with Astro framework, featuring smooth animations, project showcase, and integrated CV viewer.",
+    technologies: ["Astro", "Vue.js", "TypeScript", "Tailwind CSS", "CSS Animations"],
+    thumbnail: "/images/projects/portfolio-thumbnail.svg",
+    links: {
+      main: "https://portfolio.example.com",
+      github: "https://github.com/username/portfolio-website"
+    },
+    featured: false
+  },
+  {
+    title: "E-commerce Platform",
+    description: "A full-stack e-commerce solution with modern payment processing, inventory management, and responsive design.",
+    technologies: ["React", "Node.js", "PostgreSQL", "Stripe", "Docker"],
+    thumbnail: "/images/projects/ecommerce-thumbnail.svg",
+    links: {
+      main: "https://shop.example.com",
+      github: "https://github.com/username/ecommerce-platform",
+      additional: "https://docs.example.com"
+    },
+    featured: true
+  },
+  {
+    title: "Weather Dashboard",
+    description: "A clean and intuitive weather dashboard with location-based forecasts and interactive charts.",
+    technologies: ["JavaScript", "Chart.js", "OpenWeather API"],
+    thumbnail: "/images/projects/weather-thumbnail.svg",
+    links: {
+      main: "https://weather.example.com"
+    },
+    featured: false
+  }
+];
+---
+
+<BaseLayout title="ProjectCard Component Test">
+  <main class="container">
+    <section class="py-16">
+      <h1 class="text-4xl font-bold text-center mb-8">ProjectCard Component Test</h1>
+      <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+        Testing the ProjectCard component with various configurations including regular projects, 
+        featured projects, and different link combinations.
+      </p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {sampleProjects.map((project) => (
+          <ProjectCard
+            title={project.title}
+            description={project.description}
+            technologies={project.technologies}
+            thumbnail={project.thumbnail}
+            links={project.links}
+            featured={project.featured}
+          />
+        ))}
+      </div>
+      
+      <div class="mt-16 text-center">
+        <h2 class="text-2xl font-semibold mb-4">Component Features Tested</h2>
+        <ul class="text-left max-w-2xl mx-auto space-y-2">
+          <li>✅ Responsive card layout with proper spacing</li>
+          <li>✅ Title, description, and technology tags display</li>
+          <li>✅ Hover states with smooth transitions</li>
+          <li>✅ Featured project badge styling</li>
+          <li>✅ Multiple link types (main, GitHub, additional)</li>
+          <li>✅ Placeholder thumbnail styling</li>
+          <li>✅ Mobile-responsive design</li>
+          <li>✅ Accessibility features (ARIA labels, focus states)</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  @media (min-width: 640px) {
+    .container {
+      padding: 0 2rem;
+    }
+  }
+</style>
