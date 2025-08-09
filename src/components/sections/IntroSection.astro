@@ -10,9 +10,10 @@ const {
 } = Astro.props;
 ---
 
-<section class="intro-section">
+<section class="intro-section" aria-labelledby="intro-heading">
   <div class="intro-container">
     <div class="intro-content" style={`--fade-delay: ${fadeInDelay}s`}>
+      <h2 id="intro-heading" class="sr-only">About Me</h2>
       <p class="intro-text">{content}</p>
     </div>
   </div>
@@ -47,6 +48,19 @@ const {
     line-height: var(--line-height-relaxed);
     margin-bottom: 0;
     max-width: 100%;
+  }
+
+  /* Screen reader only content */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   /* Animation */

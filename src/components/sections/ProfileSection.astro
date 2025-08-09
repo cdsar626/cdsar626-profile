@@ -19,7 +19,7 @@ const {
 // Image handling is done conditionally in the template
 ---
 
-<section class="profile-section">
+<section class="profile-section" aria-labelledby="profile-heading">
   <div class="profile-container">
     <div class="profile-image-wrapper">
       {profileImageSrc ? (
@@ -41,8 +41,8 @@ const {
       )}
     </div>
     <div class="profile-info">
-      <h1 class="profile-name">{name}</h1>
-      <p class="profile-role">{role}</p>
+      <h1 id="profile-heading" class="profile-name">{name}</h1>
+      <p class="profile-role" aria-describedby="profile-heading">{role}</p>
     </div>
   </div>
 </section>

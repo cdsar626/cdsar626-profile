@@ -44,9 +44,15 @@
             methods: {
               openCV() {
                 this.isOpen = true;
+                // Update button ARIA state
+                cvButton.setAttribute('aria-expanded', 'true');
               },
               closeCV() {
                 this.isOpen = false;
+                // Update button ARIA state
+                cvButton.setAttribute('aria-expanded', 'false');
+                // Return focus to the button
+                cvButton.focus();
               }
             },
             template: `
@@ -75,6 +81,23 @@
 
       } catch (error) {
         console.error('Failed to load CV viewer:', error);
+        
+        // Show user-friendly error message
+        const errorMessage = 'Unable to load CV viewer. Opening CV in new tab instead.';
+        
+        // Create a temporary alert for screen readers
+        const alertDiv = document.createElement('div');
+        alertDiv.setAttribute('role', 'alert');
+        alertDiv.setAttribute('aria-live', 'assertive');
+        alertDiv.textContent = errorMessage;
+        alertDiv.style.position = 'absolute';
+        alertDiv.style.left = '-10000px';
+        document.body.appendChild(alertDiv);
+        
+        // Remove the alert after screen readers have announced it
+        setTimeout(() => {
+          document.body.removeChild(alertDiv);
+        }, 1000);
         
         // Fallback: try to open CV in new tab
         const fallbackUrl = '/cv/sample-cv.pdf';

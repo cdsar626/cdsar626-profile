@@ -161,19 +161,21 @@ describe('Mobile Touch Interactions', () => {
       expect(mockOpen).toHaveBeenCalledWith('https://example.com/', '_blank');
     });
 
-    it('should remove touch-active class after timeout', (done) => {
+    it('should remove touch-active class after timeout', async () => {
       mockProjectCard.classList.add('touch-active');
       
       // Simulate the timeout behavior
-      setTimeout(() => {
-        mockProjectCard.classList.remove('touch-active');
-        mockTooltip.classList.remove('show');
-        mockTooltip.setAttribute('aria-hidden', 'true');
-        
-        expect(mockProjectCard.classList.contains('touch-active')).toBe(false);
-        expect(mockTooltip.classList.contains('show')).toBe(false);
-        done();
-      }, 100); // Shortened for testing
+      await new Promise<void>((resolve) => {
+        setTimeout(() => {
+          mockProjectCard.classList.remove('touch-active');
+          mockTooltip.classList.remove('show');
+          mockTooltip.setAttribute('aria-hidden', 'true');
+          
+          expect(mockProjectCard.classList.contains('touch-active')).toBe(false);
+          expect(mockTooltip.classList.contains('show')).toBe(false);
+          resolve();
+        }, 100); // Shortened for testing
+      });
     });
   });
 

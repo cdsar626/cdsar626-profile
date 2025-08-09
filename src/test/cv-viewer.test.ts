@@ -41,7 +41,7 @@ describe('CVViewer', () => {
     })
 
     expect(wrapper.find('.fixed.top-0.right-0').exists()).toBe(true)
-    expect(wrapper.find('h2').text()).toBe('CV')
+    expect(wrapper.find('h2').text()).toBe('CV Document')
   })
 
   it('does not render when isOpen is false', () => {
@@ -61,7 +61,7 @@ describe('CVViewer', () => {
       }
     })
 
-    const closeButton = wrapper.find('button[aria-label="Close CV viewer"]')
+    const closeButton = wrapper.find('button[aria-label="Close CV document viewer"]')
     await closeButton.trigger('click')
 
     expect(wrapper.emitted('close')).toBeTruthy()
@@ -115,7 +115,7 @@ describe('CVViewer', () => {
     expect(wrapper.vm.totalPages).toBe(2)
     
     const pageSpan = wrapper.find('.text-sm.text-gray-600')
-    expect(pageSpan.text()).toContain('1 / 2')
+    expect(pageSpan.text()).toContain('Page 1 of 2')
   })
 
   it('navigates between pages correctly', async () => {
@@ -133,21 +133,21 @@ describe('CVViewer', () => {
 
     await wrapper.vm.$nextTick()
 
-    // Test next page
-    const nextButton = wrapper.find('button[aria-label="Next page"]')
+    // Test next page - use more specific selector
+    const nextButton = wrapper.find('button[aria-label*="Go to next page"]')
     await nextButton.trigger('click')
 
     expect(wrapper.vm.currentPage).toBe(2)
     
     const pageSpan = wrapper.find('.text-sm.text-gray-600')
-    expect(pageSpan.text()).toContain('2 / 2')
+    expect(pageSpan.text()).toContain('Page 2 of 2')
 
     // Test previous page
-    const prevButton = wrapper.find('button[aria-label="Previous page"]')
+    const prevButton = wrapper.find('button[aria-label*="Go to previous page"]')
     await prevButton.trigger('click')
 
     expect(wrapper.vm.currentPage).toBe(1)
-    expect(pageSpan.text()).toContain('1 / 2')
+    expect(pageSpan.text()).toContain('Page 1 of 2')
   })
 
   it('disables navigation buttons at boundaries', async () => {
@@ -166,7 +166,7 @@ describe('CVViewer', () => {
     await wrapper.vm.$nextTick()
 
     // At first page, previous should be disabled
-    const prevButton = wrapper.find('button[aria-label="Previous page"]')
+    const prevButton = wrapper.find('button[aria-label*="Go to previous page"]')
     expect(prevButton.attributes('disabled')).toBeDefined()
 
     // Navigate to last page
@@ -174,7 +174,7 @@ describe('CVViewer', () => {
     await wrapper.vm.$nextTick()
 
     // At last page, next should be disabled
-    const nextButton = wrapper.find('button[aria-label="Next page"]')
+    const nextButton = wrapper.find('button[aria-label*="Go to next page"]')
     expect(nextButton.attributes('disabled')).toBeDefined()
   })
 
@@ -189,7 +189,7 @@ describe('CVViewer', () => {
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.loading).toBe(true)
     expect(wrapper.find('.animate-spin').exists()).toBe(true)
-    expect(wrapper.text()).toContain('Loading CV...')
+    expect(wrapper.text()).toContain('Loading CV document...')
   })
 
   it('shows error state when PDF fails to load', async () => {
@@ -260,13 +260,15 @@ describe('CVViewer', () => {
     wrapper.vm.handleKeydown(escapeEvent)
     expect(wrapper.emitted('close')).toBeTruthy()
 
-    // Test Arrow Right key
+    // Test Arrow Right key - should call nextPage method
     const rightEvent = new KeyboardEvent('keydown', { key: 'ArrowRight' })
+    Object.defineProperty(rightEvent, 'target', { value: document.createElement('div') })
     wrapper.vm.handleKeydown(rightEvent)
     expect(wrapper.vm.currentPage).toBe(2)
 
-    // Test Arrow Left key
+    // Test Arrow Left key - should call previousPage method
     const leftEvent = new KeyboardEvent('keydown', { key: 'ArrowLeft' })
+    Object.defineProperty(leftEvent, 'target', { value: document.createElement('div') })
     wrapper.vm.handleKeydown(leftEvent)
     expect(wrapper.vm.currentPage).toBe(1)
   })
