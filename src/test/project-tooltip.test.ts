@@ -324,8 +324,8 @@ describe('ProjectTooltip', () => {
     vi.advanceTimersByTime(300);
 
     // Check that positioning styles are applied
-    expect(tooltip.style.left).toBeTruthy();
-    expect(tooltip.style.top).toBeTruthy();
+    expect((tooltip as HTMLElement).style.left).toBeTruthy();
+    expect((tooltip as HTMLElement).style.top).toBeTruthy();
     expect(tooltip.getAttribute('data-placement')).toBeTruthy();
   });
 

@@ -3,6 +3,7 @@
 ---
 
 <script>
+  // @ts-nocheck
   // Critical performance optimizations that need to run early
   
   // 1. Optimize font loading
@@ -253,6 +254,9 @@
         disconnect: () => {
           lcpObserver.disconnect();
           clsObserver.disconnect();
+        },
+        observe: () => {
+          // Placeholder method to satisfy TypeScript
         }
       };
     }

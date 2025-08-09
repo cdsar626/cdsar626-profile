@@ -106,7 +106,7 @@ describe('Animation System', () => {
     });
 
     document = dom.window.document;
-    window = dom.window as Window & typeof globalThis;
+    window = dom.window as unknown as Window & typeof globalThis;
     
     // Mock IntersectionObserver
     global.IntersectionObserver = vi.fn().mockImplementation((callback) => ({

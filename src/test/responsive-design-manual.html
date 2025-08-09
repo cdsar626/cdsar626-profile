@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Design System - Manual Testing</title>
+    <link rel="stylesheet" href="../styles/global.css">
+    <style>
+        /* Additional test styles */
+        .test-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            background: #f9fafb;
+        }
+        
+        .test-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        
+        .test-description {
+            margin-bottom: 1.5rem;
+            color: #6b7280;
+        }
+        
+        .demo-box {
+            background: #3b82f6;
+            color: white;
+            padding: 1rem;
+            border-radius: 0.25rem;
+            text-align: center;
+            margin: 0.5rem 0;
+        }
+        
+        .demo-text {
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.25rem;
+            margin: 0.5rem 0;
+        }
+        
+        .demo-button {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            margin: 0.25rem;
+            transition: all 0.2s;
+        }
+        
+        .demo-button:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+        
+        .demo-image {
+            background: #e5e7eb;
+            border: 2px dashed #9ca3af;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        .breakpoint-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #1f2937;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            z-index: 1000;
+        }
+        
+        .breakpoint-indicator::before {
+            content: 'XS (< 640px)';
+        }
+        
+        @media (min-width: 640px) {
+            .breakpoint-indicator::before {
+                content: 'SM (≥ 640px)';
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .breakpoint-indicator::before {
+                content: 'MD (≥ 768px)';
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .breakpoint-indicator::before {
+                content: 'LG (≥ 1024px)';
+            }
+        }
+        
+        @media (min-width: 1280px) {
+            .breakpoint-indicator::before {
+                content: 'XL (≥ 1280px)';
+            }
+        }
+        
+        @media (min-width: 1536px) {
+            .breakpoint-indicator::before {
+                content: '2XL (≥ 1536px)';
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="breakpoint-indicator"></div>
+    
+    <div class="container">
+        <header class="text-center-responsive py-responsive">
+            <h1 class="heading-display">Responsive Design System</h1>
+            <p class="text-lg-responsive">Manual testing for breakpoints, utilities, and responsive behavior</p>
+        </header>
+
+        <!-- Container System Test -->
+        <section class="test-section">
+            <h2 class="test-title">Container System</h2>
+            <p class="test-description">
+                Test different container sizes and responsive behavior. 
+                Resize your browser to see how containers adapt.
+            </p>
+            
+            <div class="container demo-box">Default Container</div>
+            <div class="container-sm demo-box">Small Container (640px max)</div>
+            <div class="container-md demo-box">Medium Container (768px max)</div>
+            <div class="container-lg demo-box">Large Container (1024px max)</div>
+            <div class="container-xl demo-box">XL Container (1280px max)</div>
+            <div class="container-2xl demo-box">2XL Container (1536px max)</div>
+        </section>
+
+        <!-- Grid System Test -->
+        <section class="test-section">
+            <h2 class="test-title">Responsive Grid System</h2>
+            <p class="test-description">
+                Grid that changes from 1 column on mobile to 2 on tablet to 3 on desktop.
+            </p>
+            
+            <div class="grid-responsive grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-responsive">
+                <div class="demo-box">Grid Item 1</div>
+                <div class="demo-box">Grid Item 2</div>
+                <div class="demo-box">Grid Item 3</div>
+                <div class="demo-box">Grid Item 4</div>
+                <div class="demo-box">Grid Item 5</div>
+                <div class="demo-box">Grid Item 6</div>
+            </div>
+        </section>
+
+        <!-- Typography Test -->
+        <section class="test-section">
+            <h2 class="test-title">Responsive Typography</h2>
+            <p class="test-description">
+                Typography that scales fluidly with viewport size using clamp() functions.
+            </p>
+            
+            <div class="demo-text">
+                <div class="heading-display">Display Heading</div>
+                <div class="heading-h1">H1 Heading</div>
+                <div class="heading-h2">H2 Heading</div>
+                <div class="heading-h3">H3 Heading</div>
+                <div class="heading-h4">H4 Heading</div>
+                <div class="text-lg-responsive">Large body text that scales responsively</div>
+                <div class="text-base-responsive">Base body text with fluid scaling</div>
+                <div class="text-sm-responsive">Small text that remains readable</div>
+            </div>
+        </section>
+
+        <!-- Spacing Test -->
+        <section class="test-section">
+            <h2 class="test-title">Responsive Spacing</h2>
+            <p class="test-description">
+                Spacing that adapts to screen size for optimal density and readability.
+            </p>
+            
+            <div class="p-responsive demo-box">Responsive Padding</div>
+            <div class="m-responsive demo-box">Responsive Margin</div>
+            <div class="section-spacing demo-box">Section Spacing</div>
+        </section>
+
+        <!-- Touch Targets Test -->
+        <section class="test-section">
+            <h2 class="test-title">Touch Target Sizes</h2>
+            <p class="test-description">
+                Buttons and interactive elements meet minimum touch target requirements (44px minimum).
+            </p>
+            
+            <div class="flex-responsive gap-responsive">
+                <button class="demo-button touch-target">Standard Touch Target (44px min)</button>
+                <button class="demo-button touch-target-sm">Small Touch Target (36px min)</button>
+                <button class="demo-button touch-target-lg">Large Touch Target (48px min)</button>
+            </div>
+        </section>
+
+        <!-- Image Responsiveness Test -->
+        <section class="test-section">
+            <h2 class="test-title">Responsive Images</h2>
+            <p class="test-description">
+                Images that scale properly and maintain aspect ratios across devices.
+            </p>
+            
+            <div class="grid-responsive grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-responsive">
+                <div class="demo-image aspect-square" style="height: 200px;">Square Aspect</div>
+                <div class="demo-image aspect-video" style="height: 150px;">Video Aspect (16:9)</div>
+                <div class="demo-image aspect-photo" style="height: 180px;">Photo Aspect (4:3)</div>
+                <div class="demo-image aspect-portrait" style="height: 240px;">Portrait Aspect (3:4)</div>
+            </div>
+        </section>
+
+        <!-- Flexbox Test -->
+        <section class="test-section">
+            <h2 class="test-title">Responsive Flexbox</h2>
+            <p class="test-description">
+                Flexbox layouts that change direction and alignment based on screen size.
+            </p>
+            
+            <div class="flex-responsive flex-col-responsive md:flex-row-responsive items-center-responsive justify-between-responsive gap-responsive">
+                <div class="demo-box">Flex Item 1</div>
+                <div class="demo-box">Flex Item 2</div>
+                <div class="demo-box">Flex Item 3</div>
+            </div>
+        </section>
+
+        <!-- Visibility Test -->
+        <section class="test-section">
+            <h2 class="test-title">Responsive Visibility</h2>
+            <p class="test-description">
+                Elements that show/hide based on screen size for optimal mobile experience.
+            </p>
+            
+            <div class="demo-box visible-xs">Visible only on mobile (< 640px)</div>
+            <div class="demo-box hidden-xs">Hidden on mobile (≥ 640px)</div>
+            <div class="demo-box visible-sm hidden-lg">Visible on tablet only (640px - 1024px)</div>
+            <div class="demo-box visible-lg">Visible on desktop only (≥ 1024px)</div>
+        </section>
+
+        <!-- Text Alignment Test -->
+        <section class="test-section">
+            <h2 class="test-title">Responsive Text Alignment</h2>
+            <p class="test-description">
+                Text alignment that changes based on screen size for better readability.
+            </p>
+            
+            <div class="demo-text text-center-responsive md:text-left">
+                Center on mobile, left on desktop
+            </div>
+            <div class="demo-text text-left-responsive lg:text-center">
+                Left on mobile/tablet, center on desktop
+            </div>
+            <div class="demo-text text-center-responsive">
+                Always centered
+            </div>
+        </section>
+
+        <!-- Max Width Test -->
+        <section class="test-section">
+            <h2 class="test-title">Max Width Utilities</h2>
+            <p class="test-description">
+                Content containers with different maximum widths for optimal reading lengths.
+            </p>
+            
+            <div class="max-w-sm demo-box mx-responsive">Max Width Small (24rem)</div>
+            <div class="max-w-md demo-box mx-responsive">Max Width Medium (28rem)</div>
+            <div class="max-w-lg demo-box mx-responsive">Max Width Large (32rem)</div>
+            <div class="max-w-xl demo-box mx-responsive">Max Width XL (36rem)</div>
+            <div class="max-w-2xl demo-box mx-responsive">Max Width 2XL (42rem)</div>
+            <div class="max-w-4xl demo-box mx-responsive">Max Width 4XL (56rem)</div>
+        </section>
+
+        <!-- Accessibility Features Test -->
+        <section class="test-section">
+            <h2 class="test-title">Accessibility Features</h2>
+            <p class="test-description">
+                Features that respect user preferences for motion, contrast, and print.
+            </p>
+            
+            <div class="demo-box motion-reduce:animate-none">
+                Respects reduced motion preference
+            </div>
+            <div class="demo-box contrast-high:border-black contrast-high:text-black">
+                High contrast mode support
+            </div>
+            <div class="demo-box print:hidden">
+                Hidden in print mode
+            </div>
+            <div class="demo-box print:text-black print:bg-white" style="display: none;">
+                Print-optimized styling
+            </div>
+        </section>
+
+        <footer class="text-center-responsive py-responsive mt-responsive">
+            <p class="text-sm-responsive">
+                Resize your browser window to test responsive behavior at different breakpoints.
+                Check the indicator in the top-right corner to see the current breakpoint.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Add some interactive behavior for testing
+        document.addEventListener('DOMContentLoaded', function() {
+            // Log current viewport size
+            function logViewportSize() {
+                const width = window.innerWidth;
+                const height = window.innerHeight;
+                console.log(`Viewport: ${width}x${height}`);
+                
+                // Determine breakpoint
+                let breakpoint = 'xs';
+                if (width >= 1536) breakpoint = '2xl';
+                else if (width >= 1280) breakpoint = 'xl';
+                else if (width >= 1024) breakpoint = 'lg';
+                else if (width >= 768) breakpoint = 'md';
+                else if (width >= 640) breakpoint = 'sm';
+                
+                console.log(`Current breakpoint: ${breakpoint}`);
+            }
+            
+            // Log on load and resize
+            logViewportSize();
+            window.addEventListener('resize', logViewportSize);
+            
+            // Test touch targets on touch devices
+            if ('ontouchstart' in window) {
+                console.log('Touch device detected - testing touch targets');
+                
+                const touchTargets = document.querySelectorAll('.touch-target, .touch-target-sm, .touch-target-lg');
+                touchTargets.forEach(target => {
+                    const rect = target.getBoundingClientRect();
+                    const minSize = target.classList.contains('touch-target-lg') ? 48 : 
+                                   target.classList.contains('touch-target-sm') ? 36 : 44;
+                    
+                    if (rect.width < minSize || rect.height < minSize) {
+                        console.warn(`Touch target too small: ${rect.width}x${rect.height}, minimum: ${minSize}px`);
+                    } else {
+                        console.log(`Touch target OK: ${rect.width}x${rect.height}`);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

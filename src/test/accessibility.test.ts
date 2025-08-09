@@ -32,7 +32,7 @@ beforeEach(() => {
   global.navigator = dom.window.navigator;
   
   document = dom.window.document;
-  window = dom.window;
+  window = dom.window as unknown as Window & typeof globalThis;
 });
 
 afterEach(() => {

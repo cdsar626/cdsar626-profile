@@ -45,8 +45,6 @@ export default defineConfig({
     inlineStylesheets: 'auto',
     // Enable asset optimization
     assets: 'assets',
-    // Split CSS for better caching
-    split: true,
   },
 
   // Enhanced prefetch configuration for better performance
