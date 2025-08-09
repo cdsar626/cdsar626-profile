@@ -1,0 +1,116 @@
+---
+// This component provides the client-side script for header interactions
+---
+
+<script>
+  // CV Viewer state management
+  let cvViewerInstance: any = null;
+  let isInitialized = false;
+
+  // Initialize CV viewer functionality
+  function initializeCVViewer() {
+    if (isInitialized) return;
+
+    const cvButton = document.getElementById('cv-button');
+    if (!cvButton) return;
+
+    // Create CV viewer container if it doesn't exist
+    let cvViewerContainer = document.getElementById('cv-viewer-container');
+    if (!cvViewerContainer) {
+      cvViewerContainer = document.createElement('div');
+      cvViewerContainer.id = 'cv-viewer-container';
+      document.body.appendChild(cvViewerContainer);
+    }
+
+    // Handle CV button click
+    cvButton.addEventListener('click', async () => {
+      try {
+        // Dynamically import and mount the Vue CV viewer component
+        if (!cvViewerInstance) {
+          const { createApp } = await import('vue');
+          const CVViewer = await import('../ui/CVViewer.vue');
+          
+          const app = createApp({
+            components: {
+              CVViewer: CVViewer.default
+            },
+            data() {
+              return {
+                isOpen: false,
+                cvAssets: [],
+                defaultCvPath: '/cv/sample-cv.pdf'
+              };
+            },
+            methods: {
+              openCV() {
+                this.isOpen = true;
+              },
+              closeCV() {
+                this.isOpen = false;
+              }
+            },
+            template: `
+              <CVViewer 
+                :isOpen="isOpen" 
+                :cvAssets="cvAssets"
+                :defaultCvPath="defaultCvPath"
+                @close="closeCV"
+              />
+            `
+          });
+
+          cvViewerInstance = app.mount(cvViewerContainer);
+        }
+
+        // Open the CV viewer
+        cvViewerInstance.openCV();
+
+        // Add analytics tracking if available
+        if (typeof (window as any).gtag !== 'undefined') {
+          (window as any).gtag('event', 'cv_view', {
+            event_category: 'engagement',
+            event_label: 'header_button'
+          });
+        }
+
+      } catch (error) {
+        console.error('Failed to load CV viewer:', error);
+        
+        // Fallback: try to open CV in new tab
+        const fallbackUrl = '/cv/sample-cv.pdf';
+        window.open(fallbackUrl, '_blank', 'noopener,noreferrer');
+      }
+    });
+
+    // Handle keyboard navigation
+    cvButton.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        cvButton.click();
+      }
+    });
+
+    // Add visual feedback for touch devices
+    if ('ontouchstart' in window) {
+      cvButton.addEventListener('touchstart', () => {
+        cvButton.style.transform = 'scale(0.98)';
+      });
+
+      cvButton.addEventListener('touchend', () => {
+        cvButton.style.transform = '';
+      });
+    }
+
+    isInitialized = true;
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeCVViewer);
+  } else {
+    initializeCVViewer();
+  }
+
+  // Re-initialize if navigating with client-side routing
+  document.addEventListener('astro:page-load', initializeCVViewer);
+</script>

@@ -1,0 +1,236 @@
+---
+export interface Props {
+  className?: string;
+}
+
+const { className = '' } = Astro.props;
+---
+
+<header class={`header ${className}`}>
+  <div class="header-container">
+    <!-- CV Button -->
+    <button 
+      id="cv-button"
+      class="cv-button"
+      aria-label="View CV"
+      type="button"
+    >
+      <span class="cv-button-icon">
+        <svg 
+          width="20" 
+          height="20" 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          stroke-width="2" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14,2 14,8 20,8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10,9 9,9 8,9"/>
+        </svg>
+      </span>
+      <span class="cv-button-text">View CV</span>
+    </button>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-fixed);
+    background: rgba(249, 250, 251, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(229, 231, 235, 0.3);
+    transition: all var(--transition-base);
+  }
+
+  .header-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--space-4) var(--space-container);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .cv-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cv-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left var(--transition-slow);
+  }
+
+  .cv-button:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .cv-button:hover::before {
+    left: 100%;
+  }
+
+  .cv-button:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .cv-button:focus-visible {
+    outline: 2px solid var(--color-primary-light);
+    outline-offset: 2px;
+  }
+
+  .cv-button-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--transition-base);
+  }
+
+  .cv-button:hover .cv-button-icon {
+    transform: scale(1.1);
+  }
+
+  .cv-button-text {
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.025em;
+  }
+
+  /* Mobile Responsive Design */
+  @media (max-width: 640px) {
+    .header-container {
+      padding: var(--space-3) var(--space-4);
+    }
+
+    .cv-button {
+      padding: var(--space-2) var(--space-3);
+      font-size: var(--font-size-xs);
+      gap: var(--space-1);
+    }
+
+    .cv-button-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .cv-button-text {
+      display: none;
+    }
+  }
+
+  /* Tablet adjustments */
+  @media (max-width: 768px) and (min-width: 641px) {
+    .cv-button {
+      padding: var(--space-2) var(--space-3);
+      font-size: var(--font-size-sm);
+    }
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .header {
+      background: rgba(17, 24, 39, 0.8);
+      border-bottom-color: rgba(75, 85, 99, 0.3);
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .header {
+      background: var(--color-white);
+      border-bottom: 2px solid var(--color-black);
+    }
+
+    .cv-button {
+      background: var(--color-black);
+      color: var(--color-white);
+      border: 2px solid var(--color-black);
+    }
+
+    .cv-button:hover {
+      background: var(--color-white);
+      color: var(--color-black);
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .cv-button,
+    .cv-button::before,
+    .cv-button-icon {
+      transition: none;
+    }
+
+    .cv-button:hover {
+      transform: none;
+    }
+
+    .cv-button:hover .cv-button-icon {
+      transform: none;
+    }
+
+    .cv-button::before {
+      display: none;
+    }
+  }
+
+  /* Print styles */
+  @media print {
+    .header {
+      display: none;
+    }
+  }
+
+  /* Touch device optimizations */
+  @media (hover: none) and (pointer: coarse) {
+    .cv-button {
+      min-height: 44px; /* Minimum touch target size */
+      min-width: 44px;
+    }
+
+    .cv-button:hover {
+      transform: none;
+    }
+
+    .cv-button:active {
+      background: var(--color-primary-dark);
+      transform: scale(0.98);
+    }
+  }
+</style>

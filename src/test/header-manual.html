@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header Component Manual Test</title>
+    <style>
+        /* Import global CSS variables */
+        :root {
+            --color-primary: #3b82f6;
+            --color-primary-dark: #1d4ed8;
+            --color-primary-light: #60a5fa;
+            --color-white: #ffffff;
+            --color-gray-50: #f9fafb;
+            --color-gray-200: #e5e7eb;
+            --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-size-sm: 0.875rem;
+            --font-weight-medium: 500;
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-container: clamp(1rem, 5vw, 2rem);
+            --radius-lg: 0.5rem;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --transition-base: 250ms ease-in-out;
+            --transition-slow: 350ms ease-in-out;
+            --z-fixed: 1030;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family-sans);
+            background-color: var(--color-gray-50);
+            min-height: 100vh;
+            padding-top: 80px; /* Space for fixed header */
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: var(--z-fixed);
+            background: rgba(249, 250, 251, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.3);
+            transition: all var(--transition-base);
+        }
+
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: var(--space-4) var(--space-container);
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .cv-button {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-4);
+            background: var(--color-primary);
+            color: var(--color-white);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cv-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: left var(--transition-slow);
+        }
+
+        .cv-button:hover {
+            background: var(--color-primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .cv-button:hover::before {
+            left: 100%;
+        }
+
+        .cv-button:active {
+            transform: translateY(0);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .cv-button:focus-visible {
+            outline: 2px solid var(--color-primary-light);
+            outline-offset: 2px;
+        }
+
+        .cv-button-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform var(--transition-base);
+        }
+
+        .cv-button:hover .cv-button-icon {
+            transform: scale(1.1);
+        }
+
+        .cv-button-text {
+            font-weight: var(--font-weight-medium);
+            letter-spacing: 0.025em;
+        }
+
+        /* Mobile Responsive Design */
+        @media (max-width: 640px) {
+            body {
+                padding-top: 64px;
+            }
+
+            .header-container {
+                padding: var(--space-3) var(--space-4);
+            }
+
+            .cv-button {
+                padding: var(--space-2) var(--space-3);
+                font-size: 0.75rem;
+                gap: var(--space-1);
+            }
+
+            .cv-button-icon svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            .cv-button-text {
+                display: none;
+            }
+        }
+
+        /* Content for testing */
+        .content {
+            padding: 2rem;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .test-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .test-instructions {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .test-instructions h3 {
+            color: #0c4a6e;
+            margin-bottom: 0.5rem;
+        }
+
+        .test-instructions ul {
+            color: #0c4a6e;
+            padding-left: 1.5rem;
+        }
+
+        .test-instructions li {
+            margin-bottom: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Component -->
+    <header class="header">
+        <div class="header-container">
+            <button 
+                id="cv-button"
+                class="cv-button"
+                aria-label="View CV"
+                type="button"
+            >
+                <span class="cv-button-icon">
+                    <svg 
+                        width="20" 
+                        height="20" 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        stroke-width="2" 
+                        stroke-linecap="round" 
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                    >
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14,2 14,8 20,8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10,9 9,9 8,9"/>
+                    </svg>
+                </span>
+                <span class="cv-button-text">View CV</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="test-instructions">
+            <h3>Header Component Manual Test</h3>
+            <p>Test the following functionality:</p>
+            <ul>
+                <li><strong>Visual Design:</strong> Header should be fixed at top with glassmorphism effect</li>
+                <li><strong>CV Button:</strong> Blue button with document icon in top right</li>
+                <li><strong>Hover Effects:</strong> Button should lift up, change color, and show shimmer effect</li>
+                <li><strong>Responsive:</strong> On mobile (&lt;640px), button text should hide, icon should be smaller</li>
+                <li><strong>Accessibility:</strong> Button should be focusable with keyboard (Tab key)</li>
+                <li><strong>Click Handler:</strong> Button should show alert when clicked (see script below)</li>
+                <li><strong>Touch Support:</strong> On touch devices, button should scale down when pressed</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h2>Header Position Test</h2>
+            <p>The header should remain fixed at the top when scrolling. Scroll down to test this behavior.</p>
+        </div>
+
+        <div class="test-section">
+            <h2>Responsive Design Test</h2>
+            <p>Resize the browser window to test responsive behavior:</p>
+            <ul>
+                <li><strong>Desktop (>640px):</strong> Button shows icon + "View CV" text</li>
+                <li><strong>Mobile (≤640px):</strong> Button shows only icon, smaller size</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h2>Accessibility Test</h2>
+            <p>Test keyboard navigation:</p>
+            <ul>
+                <li>Press <kbd>Tab</kbd> to focus the CV button</li>
+                <li>Press <kbd>Enter</kbd> or <kbd>Space</kbd> to activate</li>
+                <li>Button should have visible focus outline</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h2>Animation Test</h2>
+            <p>Hover over the CV button to test animations:</p>
+            <ul>
+                <li>Button should lift up (translateY)</li>
+                <li>Background color should darken</li>
+                <li>Icon should scale up slightly</li>
+                <li>Shimmer effect should sweep across</li>
+                <li>Box shadow should increase</li>
+            </ul>
+        </div>
+
+        <!-- Add more content to test scrolling -->
+        <div class="test-section">
+            <h2>Scroll Test Content</h2>
+            <p>This content is here to test the fixed header behavior when scrolling.</p>
+            <div style="height: 200vh; background: linear-gradient(to bottom, #f0f9ff, #e0f2fe);">
+                <p style="padding: 2rem;">Scroll down to see if the header stays fixed at the top...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple test script for CV button functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const cvButton = document.getElementById('cv-button');
+            
+            if (cvButton) {
+                // Click handler
+                cvButton.addEventListener('click', function() {
+                    alert('CV button clicked! In the real app, this would open the CV viewer.');
+                });
+
+                // Keyboard handler
+                cvButton.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        cvButton.click();
+                    }
+                });
+
+                // Touch feedback for mobile devices
+                if ('ontouchstart' in window) {
+                    cvButton.addEventListener('touchstart', function() {
+                        cvButton.style.transform = 'scale(0.98)';
+                    });
+
+                    cvButton.addEventListener('touchend', function() {
+                        cvButton.style.transform = '';
+                    });
+                }
+
+                console.log('Header test script loaded successfully');
+            }
+        });
+    </script>
+</body>
+</html>
