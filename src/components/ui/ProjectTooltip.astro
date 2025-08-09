@@ -1,0 +1,261 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  technologies: string[];
+  featured?: boolean;
+}
+
+const { title, description, technologies, featured = false } = Astro.props;
+---
+
+<div class="project-tooltip" role="tooltip" aria-hidden="true">
+  <div class="project-tooltip__content">
+    <div class="project-tooltip__header">
+      <h4 class="project-tooltip__title">{title}</h4>
+      {featured && (
+        <span class="project-tooltip__badge">Featured</span>
+      )}
+    </div>
+    
+    <p class="project-tooltip__description">{description}</p>
+    
+    <div class="project-tooltip__technologies">
+      <span class="project-tooltip__tech-label">Technologies:</span>
+      <div class="project-tooltip__tech-list">
+        {technologies.map((tech) => (
+          <span class="project-tooltip__tech-tag">{tech}</span>
+        ))}
+      </div>
+    </div>
+  </div>
+  
+  <div class="project-tooltip__arrow" aria-hidden="true"></div>
+</div>
+
+<style>
+  .project-tooltip {
+    position: absolute;
+    z-index: var(--z-tooltip);
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--color-gray-200);
+    padding: var(--space-4);
+    max-width: 320px;
+    min-width: 280px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px) scale(0.95);
+    transition: all var(--transition-base) ease-out;
+    pointer-events: none;
+    backdrop-filter: blur(8px);
+    will-change: opacity, visibility, transform;
+  }
+  
+  .project-tooltip.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+  
+  .project-tooltip__content {
+    position: relative;
+  }
+  
+  .project-tooltip__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+  
+  .project-tooltip__title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-900);
+    line-height: var(--line-height-tight);
+    margin: 0;
+    flex: 1;
+  }
+  
+  .project-tooltip__badge {
+    background: var(--color-primary);
+    color: var(--color-white);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  
+  .project-tooltip__description {
+    color: var(--color-gray-700);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--space-4);
+    margin-top: 0;
+  }
+  
+  .project-tooltip__technologies {
+    border-top: 1px solid var(--color-gray-200);
+    padding-top: var(--space-3);
+  }
+  
+  .project-tooltip__tech-label {
+    display: block;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-2);
+  }
+  
+  .project-tooltip__tech-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+  }
+  
+  .project-tooltip__tech-tag {
+    background: var(--color-gray-100);
+    color: var(--color-gray-700);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    border: 1px solid var(--color-gray-200);
+  }
+  
+  .project-tooltip__arrow {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    transform: rotate(45deg);
+    border-radius: 2px;
+  }
+  
+  /* Arrow positioning variants */
+  .project-tooltip[data-placement="top"] .project-tooltip__arrow {
+    bottom: -6px;
+    left: 50%;
+    margin-left: -6px;
+    border-top: none;
+    border-left: none;
+  }
+  
+  .project-tooltip[data-placement="bottom"] .project-tooltip__arrow {
+    top: -6px;
+    left: 50%;
+    margin-left: -6px;
+    border-bottom: none;
+    border-right: none;
+  }
+  
+  .project-tooltip[data-placement="left"] .project-tooltip__arrow {
+    right: -6px;
+    top: 50%;
+    margin-top: -6px;
+    border-left: none;
+    border-bottom: none;
+  }
+  
+  .project-tooltip[data-placement="right"] .project-tooltip__arrow {
+    left: -6px;
+    top: 50%;
+    margin-top: -6px;
+    border-right: none;
+    border-top: none;
+  }
+  
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .project-tooltip {
+      background: var(--color-gray-800);
+      border-color: var(--color-gray-700);
+    }
+    
+    .project-tooltip__title {
+      color: var(--color-gray-100);
+    }
+    
+    .project-tooltip__description {
+      color: var(--color-gray-300);
+    }
+    
+    .project-tooltip__tech-label {
+      color: var(--color-gray-400);
+    }
+    
+    .project-tooltip__tech-tag {
+      background: var(--color-gray-700);
+      color: var(--color-gray-200);
+      border-color: var(--color-gray-600);
+    }
+    
+    .project-tooltip__technologies {
+      border-color: var(--color-gray-700);
+    }
+    
+    .project-tooltip__arrow {
+      background: var(--color-gray-800);
+      border-color: var(--color-gray-700);
+    }
+  }
+  
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .project-tooltip {
+      border: 2px solid var(--color-gray-900);
+      box-shadow: var(--shadow-2xl);
+    }
+    
+    .project-tooltip__tech-tag {
+      border: 1px solid var(--color-gray-900);
+    }
+    
+    .project-tooltip__arrow {
+      border: 2px solid var(--color-gray-900);
+    }
+  }
+  
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .project-tooltip {
+      transition: none;
+      transform: none;
+    }
+    
+    .project-tooltip.show {
+      transform: none;
+    }
+  }
+  
+  /* Mobile responsive adjustments */
+  @media (max-width: 640px) {
+    .project-tooltip {
+      max-width: 280px;
+      min-width: 240px;
+      padding: var(--space-3);
+    }
+    
+    .project-tooltip__title {
+      font-size: var(--font-size-base);
+    }
+    
+    .project-tooltip__description {
+      font-size: var(--font-size-xs);
+    }
+    
+    .project-tooltip__tech-tag {
+      font-size: 0.625rem;
+      padding: 0.125rem var(--space-1);
+    }
+  }
+</style>

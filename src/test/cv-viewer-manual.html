@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Viewer Manual Test</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Backdrop transition */
+        .backdrop-enter-active,
+        .backdrop-leave-active {
+            transition: opacity 0.3s ease;
+        }
+
+        .backdrop-enter-from,
+        .backdrop-leave-to {
+            opacity: 0;
+        }
+
+        /* Slide transition */
+        .slide-enter-active,
+        .slide-leave-active {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide-enter-from,
+        .slide-leave-to {
+            transform: translateX(100%);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .cv-panel {
+                width: 100vw !important;
+                max-width: none !important;
+            }
+        }
+
+        /* Focus styles for accessibility */
+        button:focus-visible {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        /* Smooth scrolling for PDF content */
+        .overflow-auto {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div id="app">
+        <div class="container mx-auto p-8">
+            <h1 class="text-3xl font-bold mb-8 text-center">CV Viewer Component Test</h1>
+            
+            <div class="text-center mb-8">
+                <button 
+                    @click="openCV" 
+                    class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold"
+                >
+                    Open CV Viewer
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h2 class="text-xl font-semibold mb-4">Test Features</h2>
+                    <ul class="space-y-2 text-sm">
+                        <li>✅ Slide-in animation from right</li>
+                        <li>✅ PDF rendering in iframe</li>
+                        <li>✅ Multi-page navigation</li>
+                        <li>✅ Close button functionality</li>
+                        <li>✅ Click outside to close</li>
+                        <li>✅ Keyboard navigation (ESC, arrows)</li>
+                        <li>✅ Loading and error states</li>
+                        <li>✅ Responsive design</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h2 class="text-xl font-semibold mb-4">Test Options</h2>
+                    <div class="space-y-3">
+                        <button 
+                            @click="testSinglePage" 
+                            class="block w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                        >
+                            Test Single Page CV
+                        </button>
+                        <button 
+                            @click="testMultiPage" 
+                            class="block w-full px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
+                        >
+                            Test Multi-Page CV
+                        </button>
+                        <button 
+                            @click="testErrorState" 
+                            class="block w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+                        >
+                            Test Error State
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CV Viewer Component -->
+            <cv-viewer 
+                :is-open="isOpen" 
+                :cv-assets="cvAssets"
+                :default-cv-path="defaultCvPath"
+                @close="closeCV"
+            ></cv-viewer>
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref } = Vue;
+
+        // CV Viewer Component
+        const CVViewer = {
+            props: {
+                isOpen: Boolean,
+                cvAssets: {
+                    type: Array,
+                    default: () => []
+                },
+                defaultCvPath: {
+                    type: String,
+                    default: '/cv/sample-cv.pdf'
+                }
+            },
+            emits: ['close'],
+            setup(props, { emit }) {
+                const loading = ref(false);
+                const error = ref(null);
+                const currentPage = ref(1);
+                const totalPages = ref(1);
+                const pdfFrame = ref(null);
+
+                // Initialize loading state based on isOpen prop
+                if (props.isOpen) {
+                    loading.value = true;
+                }
+
+                const currentAssets = Vue.computed(() => {
+                    if (props.cvAssets.length > 0) {
+                        return props.cvAssets;
+                    }
+                    return [{
+                        type: 'pdf',
+                        src: props.defaultCvPath,
+                        page: 1
+                    }];
+                });
+
+                const currentPdfUrl = Vue.computed(() => {
+                    const asset = currentAssets.value[currentPage.value - 1];
+                    if (!asset) return props.defaultCvPath;
+                    
+                    if (asset.type === 'pdf' && asset.page && asset.page > 1) {
+                        return `${asset.src}#page=${asset.page}`;
+                    }
+                    
+                    return asset.src;
+                });
+
+                const closeViewer = () => {
+                    emit('close');
+                };
+
+                const handleBackdropClick = () => {
+                    closeViewer();
+                };
+
+                const previousPage = () => {
+                    if (currentPage.value > 1) {
+                        currentPage.value--;
+                    }
+                };
+
+                const nextPage = () => {
+                    if (currentPage.value < totalPages.value) {
+                        currentPage.value++;
+                    }
+                };
+
+                const handlePdfLoad = () => {
+                    loading.value = false;
+                    error.value = null;
+                };
+
+                const handlePdfError = () => {
+                    loading.value = false;
+                    error.value = 'Unable to load the CV document. Please try again later.';
+                };
+
+                const retryLoad = () => {
+                    error.value = null;
+                    loading.value = true;
+                    
+                    if (pdfFrame.value) {
+                        pdfFrame.value.src = currentPdfUrl.value;
+                    }
+                };
+
+                const handleKeydown = (event) => {
+                    if (!props.isOpen) return;
+                    
+                    switch (event.key) {
+                        case 'Escape':
+                            closeViewer();
+                            break;
+                        case 'ArrowLeft':
+                            previousPage();
+                            break;
+                        case 'ArrowRight':
+                            nextPage();
+                            break;
+                    }
+                };
+
+                Vue.watch(() => props.isOpen, (newValue) => {
+                    if (newValue) {
+                        loading.value = true;
+                        error.value = null;
+                        currentPage.value = 1;
+                        totalPages.value = Math.max(1, currentAssets.value.length);
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = '';
+                    }
+                });
+
+                Vue.watch(() => currentAssets.value, (newAssets) => {
+                    totalPages.value = Math.max(1, newAssets.length);
+                }, { immediate: true });
+
+                Vue.watch(currentPdfUrl, () => {
+                    if (props.isOpen) {
+                        loading.value = true;
+                        error.value = null;
+                    }
+                });
+
+                Vue.onMounted(() => {
+                    document.addEventListener('keydown', handleKeydown);
+                });
+
+                Vue.onUnmounted(() => {
+                    document.removeEventListener('keydown', handleKeydown);
+                    document.body.style.overflow = '';
+                });
+
+                return {
+                    loading,
+                    error,
+                    currentPage,
+                    totalPages,
+                    pdfFrame,
+                    currentAssets,
+                    currentPdfUrl,
+                    closeViewer,
+                    handleBackdropClick,
+                    previousPage,
+                    nextPage,
+                    handlePdfLoad,
+                    handlePdfError,
+                    retryLoad
+                };
+            },
+            template: `
+                <Teleport to="body">
+                    <!-- Backdrop overlay -->
+                    <Transition name="backdrop">
+                        <div
+                            v-if="isOpen"
+                            class="fixed inset-0 bg-black bg-opacity-50 z-40"
+                            @click="handleBackdropClick"
+                        />
+                    </Transition>
+
+                    <!-- CV Panel -->
+                    <Transition name="slide">
+                        <div
+                            v-if="isOpen"
+                            class="cv-panel fixed top-0 right-0 h-full w-full max-w-4xl bg-white shadow-2xl z-50 flex flex-col"
+                            @click.stop
+                        >
+                            <!-- Header with close button and navigation -->
+                            <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
+                                <div class="flex items-center gap-4">
+                                    <h2 class="text-xl font-semibold text-gray-900">CV</h2>
+                                    
+                                    <!-- Page navigation for multi-page PDFs -->
+                                    <div v-if="totalPages > 1" class="flex items-center gap-2">
+                                        <button
+                                            @click="previousPage"
+                                            :disabled="currentPage <= 1"
+                                            class="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed rounded transition-colors"
+                                            aria-label="Previous page"
+                                        >
+                                            ←
+                                        </button>
+                                        <span class="text-sm text-gray-600">
+                                            {{ currentPage }} / {{ totalPages }}
+                                        </span>
+                                        <button
+                                            @click="nextPage"
+                                            :disabled="currentPage >= totalPages"
+                                            class="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed rounded transition-colors"
+                                            aria-label="Next page"
+                                        >
+                                            →
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Close button -->
+                                <button
+                                    @click="closeViewer"
+                                    class="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                                    aria-label="Close CV viewer"
+                                >
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <!-- CV Content -->
+                            <div class="flex-1 overflow-auto bg-gray-50 p-4">
+                                <div class="max-w-full mx-auto bg-white shadow-lg">
+                                    <!-- Error state -->
+                                    <div v-if="error" class="p-8 text-center">
+                                        <div class="text-red-600 mb-4">
+                                            <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 19.5c-.77.833.192 2.5 1.732 2.5z" />
+                                            </svg>
+                                        </div>
+                                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Failed to load CV</h3>
+                                        <p class="text-gray-600 mb-4">{{ error }}</p>
+                                        <button
+                                            @click="retryLoad"
+                                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                                        >
+                                            Try Again
+                                        </button>
+                                    </div>
+
+                                    <!-- Loading state -->
+                                    <div v-else-if="loading" class="p-8 text-center">
+                                        <div class="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+                                        <p class="text-gray-600">Loading CV...</p>
+                                    </div>
+
+                                    <!-- PDF Content -->
+                                    <div v-else class="w-full">
+                                        <iframe
+                                            ref="pdfFrame"
+                                            :src="currentPdfUrl"
+                                            class="w-full h-[800px] border-0"
+                                            title="CV Document"
+                                            @load="handlePdfLoad"
+                                            @error="handlePdfError"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </Transition>
+                </Teleport>
+            `
+        };
+
+        createApp({
+            components: {
+                CVViewer
+            },
+            setup() {
+                const isOpen = ref(false);
+                const cvAssets = ref([]);
+                const defaultCvPath = ref('/cv/sample-cv.pdf');
+
+                const openCV = () => {
+                    isOpen.value = true;
+                };
+
+                const closeCV = () => {
+                    isOpen.value = false;
+                };
+
+                const testSinglePage = () => {
+                    cvAssets.value = [];
+                    defaultCvPath.value = '/cv/sample-cv.pdf';
+                    openCV();
+                };
+
+                const testMultiPage = () => {
+                    cvAssets.value = [
+                        { type: 'pdf', src: '/cv/sample-cv.pdf', page: 1 },
+                        { type: 'pdf', src: '/cv/sample-cv.pdf', page: 2 }
+                    ];
+                    openCV();
+                };
+
+                const testErrorState = () => {
+                    cvAssets.value = [];
+                    defaultCvPath.value = '/cv/nonexistent.pdf';
+                    openCV();
+                };
+
+                return {
+                    isOpen,
+                    cvAssets,
+                    defaultCvPath,
+                    openCV,
+                    closeCV,
+                    testSinglePage,
+                    testMultiPage,
+                    testErrorState
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

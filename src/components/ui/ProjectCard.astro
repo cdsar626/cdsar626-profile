@@ -1,4 +1,6 @@
 ---
+import ProjectTooltip from './ProjectTooltip.astro';
+
 export interface Props {
   title: string;
   description: string;
@@ -80,6 +82,14 @@ const { title, description, technologies, thumbnail, links, featured = false } =
       ))}
     </div>
   </div>
+  
+  <!-- Project Tooltip -->
+  <ProjectTooltip 
+    title={title}
+    description={description}
+    technologies={technologies}
+    featured={featured}
+  />
 </article>
 
 <style>
@@ -391,3 +401,205 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     }
   }
 </style>
+
+<script>
+  class ProjectTooltipManager {
+    constructor() {
+      this.tooltips = new Map();
+      this.showDelay = 300;
+      this.hideDelay = 100;
+      this.init();
+    }
+
+    init() {
+      // Wait for DOM to be ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => this.setupTooltips());
+      } else {
+        this.setupTooltips();
+      }
+    }
+
+    setupTooltips() {
+      const projectCards = document.querySelectorAll('.project-card');
+      
+      projectCards.forEach((card) => {
+        const tooltip = card.querySelector('.project-tooltip');
+        if (!tooltip) return;
+
+        const tooltipData = {
+          element: tooltip,
+          card: card,
+          showTimeout: null,
+          hideTimeout: null,
+          isVisible: false
+        };
+
+        this.tooltips.set(card, tooltipData);
+
+        // Add event listeners
+        card.addEventListener('mouseenter', (e) => this.handleMouseEnter(e, tooltipData));
+        card.addEventListener('mouseleave', (e) => this.handleMouseLeave(e, tooltipData));
+        card.addEventListener('mousemove', (e) => this.handleMouseMove(e, tooltipData));
+        
+        // Handle focus for accessibility
+        card.addEventListener('focusin', (e) => this.handleFocusIn(e, tooltipData));
+        card.addEventListener('focusout', (e) => this.handleFocusOut(e, tooltipData));
+      });
+    }
+
+    handleMouseEnter(event, tooltipData) {
+      // Clear any existing hide timeout
+      if (tooltipData.hideTimeout) {
+        clearTimeout(tooltipData.hideTimeout);
+        tooltipData.hideTimeout = null;
+      }
+
+      // Set show timeout
+      tooltipData.showTimeout = setTimeout(() => {
+        this.showTooltip(tooltipData, event);
+      }, this.showDelay);
+    }
+
+    handleMouseLeave(event, tooltipData) {
+      // Clear show timeout
+      if (tooltipData.showTimeout) {
+        clearTimeout(tooltipData.showTimeout);
+        tooltipData.showTimeout = null;
+      }
+
+      // Set hide timeout
+      tooltipData.hideTimeout = setTimeout(() => {
+        this.hideTooltip(tooltipData);
+      }, this.hideDelay);
+    }
+
+    handleMouseMove(event, tooltipData) {
+      if (tooltipData.isVisible) {
+        this.positionTooltip(tooltipData, event);
+      }
+    }
+
+    handleFocusIn(event, tooltipData) {
+      // Show tooltip immediately on focus for accessibility
+      this.showTooltip(tooltipData, event);
+    }
+
+    handleFocusOut(event, tooltipData) {
+      // Hide tooltip when focus leaves the card
+      if (!tooltipData.card.contains(event.relatedTarget)) {
+        this.hideTooltip(tooltipData);
+      }
+    }
+
+    showTooltip(tooltipData, event) {
+      const { element, card } = tooltipData;
+      
+      // Position the tooltip
+      this.positionTooltip(tooltipData, event);
+      
+      // Show the tooltip
+      element.classList.add('show');
+      element.setAttribute('aria-hidden', 'false');
+      tooltipData.isVisible = true;
+
+      // Clear any pending timeouts
+      if (tooltipData.showTimeout) {
+        clearTimeout(tooltipData.showTimeout);
+        tooltipData.showTimeout = null;
+      }
+    }
+
+    hideTooltip(tooltipData) {
+      const { element } = tooltipData;
+      
+      element.classList.remove('show');
+      element.setAttribute('aria-hidden', 'true');
+      tooltipData.isVisible = false;
+
+      // Clear any pending timeouts
+      if (tooltipData.hideTimeout) {
+        clearTimeout(tooltipData.hideTimeout);
+        tooltipData.hideTimeout = null;
+      }
+    }
+
+    positionTooltip(tooltipData, event) {
+      const { element, card } = tooltipData;
+      const cardRect = card.getBoundingClientRect();
+      const tooltipRect = element.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      const scrollX = window.pageXOffset;
+      const scrollY = window.pageYOffset;
+
+      // Default positioning - above the card
+      let placement = 'top';
+      let left = cardRect.left + scrollX + (cardRect.width / 2) - (tooltipRect.width / 2);
+      let top = cardRect.top + scrollY - tooltipRect.height - 12;
+
+      // Check if tooltip fits above the card
+      if (top < scrollY + 20) {
+        // Position below the card
+        placement = 'bottom';
+        top = cardRect.bottom + scrollY + 12;
+      }
+
+      // Check if tooltip fits below the card (if we switched to bottom)
+      if (placement === 'bottom' && top + tooltipRect.height > scrollY + viewportHeight - 20) {
+        // Try positioning to the side
+        if (cardRect.left + scrollX > tooltipRect.width + 20) {
+          // Position to the left
+          placement = 'left';
+          left = cardRect.left + scrollX - tooltipRect.width - 12;
+          top = cardRect.top + scrollY + (cardRect.height / 2) - (tooltipRect.height / 2);
+        } else if (cardRect.right + scrollX + tooltipRect.width + 20 < viewportWidth) {
+          // Position to the right
+          placement = 'right';
+          left = cardRect.right + scrollX + 12;
+          top = cardRect.top + scrollY + (cardRect.height / 2) - (tooltipRect.height / 2);
+        } else {
+          // Keep it above, but adjust if needed
+          placement = 'top';
+          top = cardRect.top + scrollY - tooltipRect.height - 12;
+        }
+      }
+
+      // Ensure tooltip doesn't go off screen horizontally
+      if (left < scrollX + 20) {
+        left = scrollX + 20;
+      } else if (left + tooltipRect.width > scrollX + viewportWidth - 20) {
+        left = scrollX + viewportWidth - tooltipRect.width - 20;
+      }
+
+      // Ensure tooltip doesn't go off screen vertically
+      if (top < scrollY + 20) {
+        top = scrollY + 20;
+      } else if (top + tooltipRect.height > scrollY + viewportHeight - 20) {
+        top = scrollY + viewportHeight - tooltipRect.height - 20;
+      }
+
+      // Apply positioning
+      element.style.left = `${left}px`;
+      element.style.top = `${top}px`;
+      element.setAttribute('data-placement', placement);
+    }
+
+    // Clean up method
+    destroy() {
+      this.tooltips.forEach((tooltipData) => {
+        if (tooltipData.showTimeout) clearTimeout(tooltipData.showTimeout);
+        if (tooltipData.hideTimeout) clearTimeout(tooltipData.hideTimeout);
+      });
+      this.tooltips.clear();
+    }
+  }
+
+  // Initialize tooltip manager
+  const tooltipManager = new ProjectTooltipManager();
+
+  // Clean up on page unload
+  window.addEventListener('beforeunload', () => {
+    tooltipManager.destroy();
+  });
+</script>

@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Tooltip Manual Test</title>
+    <style>
+        /* Import global styles */
+        @import url('../styles/global.css');
+        
+        body {
+            padding: 2rem;
+            background: var(--color-gray-50);
+            font-family: var(--font-family-sans);
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .test-section {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-base);
+        }
+        
+        .test-title {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: 1rem;
+            color: var(--color-gray-900);
+        }
+        
+        .test-description {
+            color: var(--color-gray-600);
+            margin-bottom: 2rem;
+            line-height: var(--line-height-relaxed);
+        }
+        
+        /* Project Card Styles (copied from ProjectCard.astro) */
+        .project-card {
+            background: var(--color-white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-base);
+            overflow: hidden;
+            transition: all var(--transition-base);
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 2rem;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .project-card[data-featured="true"] {
+            border: 2px solid var(--color-primary);
+        }
+        
+        .project-card[data-featured="true"]::before {
+            content: "Featured";
+            position: absolute;
+            top: var(--space-3);
+            right: var(--space-3);
+            background: var(--color-primary);
+            color: var(--color-white);
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-semibold);
+            z-index: 10;
+        }
+        
+        .project-card__thumbnail {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            background: var(--color-gray-100);
+        }
+        
+        .project-card__image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--transition-base) ease-out;
+        }
+        
+        .project-card:hover .project-card__image {
+            transform: scale3d(1.05, 1.05, 1);
+        }
+        
+        .project-card__content {
+            padding: var(--space-6);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .project-card__title {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-gray-900);
+            margin-bottom: var(--space-3);
+            line-height: var(--line-height-tight);
+        }
+        
+        .project-card__description {
+            color: var(--color-gray-600);
+            font-size: var(--font-size-sm);
+            line-height: var(--line-height-relaxed);
+            margin-bottom: var(--space-4);
+            flex: 1;
+        }
+        
+        .project-card__technologies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+            margin-top: auto;
+        }
+        
+        .project-card__tech-tag {
+            background: var(--color-gray-100);
+            color: var(--color-gray-700);
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-full);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-medium);
+            transition: all var(--transition-fast);
+        }
+        
+        /* Project Tooltip Styles (copied from ProjectTooltip.astro) */
+        .project-tooltip {
+            position: absolute;
+            z-index: var(--z-tooltip);
+            background: var(--color-white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--color-gray-200);
+            padding: var(--space-4);
+            max-width: 320px;
+            min-width: 280px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(8px) scale(0.95);
+            transition: all var(--transition-base) ease-out;
+            pointer-events: none;
+            backdrop-filter: blur(8px);
+        }
+        
+        .project-tooltip.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+        
+        .project-tooltip__content {
+            position: relative;
+        }
+        
+        .project-tooltip__header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: var(--space-3);
+            margin-bottom: var(--space-3);
+        }
+        
+        .project-tooltip__title {
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-gray-900);
+            line-height: var(--line-height-tight);
+            margin: 0;
+            flex: 1;
+        }
+        
+        .project-tooltip__badge {
+            background: var(--color-primary);
+            color: var(--color-white);
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-semibold);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        
+        .project-tooltip__description {
+            color: var(--color-gray-700);
+            font-size: var(--font-size-sm);
+            line-height: var(--line-height-relaxed);
+            margin-bottom: var(--space-4);
+            margin-top: 0;
+        }
+        
+        .project-tooltip__technologies {
+            border-top: 1px solid var(--color-gray-200);
+            padding-top: var(--space-3);
+        }
+        
+        .project-tooltip__tech-label {
+            display: block;
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-2);
+        }
+        
+        .project-tooltip__tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-1);
+        }
+        
+        .project-tooltip__tech-tag {
+            background: var(--color-gray-100);
+            color: var(--color-gray-700);
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-medium);
+            border: 1px solid var(--color-gray-200);
+        }
+        
+        .project-tooltip__arrow {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--color-white);
+            border: 1px solid var(--color-gray-200);
+            transform: rotate(45deg);
+            border-radius: 2px;
+        }
+        
+        .project-tooltip[data-placement="top"] .project-tooltip__arrow {
+            bottom: -6px;
+            left: 50%;
+            margin-left: -6px;
+            border-top: none;
+            border-left: none;
+        }
+        
+        .project-tooltip[data-placement="bottom"] .project-tooltip__arrow {
+            top: -6px;
+            left: 50%;
+            margin-left: -6px;
+            border-bottom: none;
+            border-right: none;
+        }
+        
+        .project-tooltip[data-placement="left"] .project-tooltip__arrow {
+            right: -6px;
+            top: 50%;
+            margin-top: -6px;
+            border-left: none;
+            border-bottom: none;
+        }
+        
+        .project-tooltip[data-placement="right"] .project-tooltip__arrow {
+            left: -6px;
+            top: 50%;
+            margin-top: -6px;
+            border-right: none;
+            border-top: none;
+        }
+        
+        .instructions {
+            background: var(--color-info);
+            color: white;
+            padding: 1rem;
+            border-radius: var(--radius-base);
+            margin-bottom: 2rem;
+        }
+        
+        .instructions h3 {
+            margin: 0 0 0.5rem 0;
+            color: white;
+        }
+        
+        .instructions ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        
+        .edge-test {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+            border: 2px dashed var(--color-gray-300);
+            border-radius: var(--radius-base);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .edge-card {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Project Tooltip Manual Test</h1>
+        
+        <div class="instructions">
+            <h3>Test Instructions:</h3>
+            <ul>
+                <li>Hover over project cards to see tooltips appear after 300ms delay</li>
+                <li>Move mouse away to see tooltips disappear after 100ms delay</li>
+                <li>Use Tab key to focus cards and see tooltips appear immediately</li>
+                <li>Test on different screen sizes and positions</li>
+                <li>Verify tooltips stay within viewport boundaries</li>
+            </ul>
+        </div>
+        
+        <div class="test-grid">
+            <div class="test-section">
+                <h2 class="test-title">Regular Project</h2>
+                <p class="test-description">Test basic tooltip functionality with a regular project card.</p>
+                
+                <article class="project-card" data-featured="false" tabindex="0">
+                    <div class="project-card__thumbnail">
+                        <img src="https://via.placeholder.com/400x225/3b82f6/ffffff?text=Project+1" 
+                             alt="Test project thumbnail" class="project-card__image" />
+                    </div>
+                    <div class="project-card__content">
+                        <h3 class="project-card__title">E-Commerce Platform</h3>
+                        <p class="project-card__description">A modern e-commerce solution built with React and Node.js</p>
+                        <div class="project-card__technologies">
+                            <span class="project-card__tech-tag">React</span>
+                            <span class="project-card__tech-tag">Node.js</span>
+                            <span class="project-card__tech-tag">MongoDB</span>
+                        </div>
+                    </div>
+                    
+                    <div class="project-tooltip" role="tooltip" aria-hidden="true">
+                        <div class="project-tooltip__content">
+                            <div class="project-tooltip__header">
+                                <h4 class="project-tooltip__title">E-Commerce Platform</h4>
+                            </div>
+                            <p class="project-tooltip__description">A comprehensive e-commerce solution featuring user authentication, product catalog, shopping cart, payment processing, and admin dashboard. Built with modern technologies for optimal performance and scalability.</p>
+                            <div class="project-tooltip__technologies">
+                                <span class="project-tooltip__tech-label">Technologies:</span>
+                                <div class="project-tooltip__tech-list">
+                                    <span class="project-tooltip__tech-tag">React</span>
+                                    <span class="project-tooltip__tech-tag">Node.js</span>
+                                    <span class="project-tooltip__tech-tag">MongoDB</span>
+                                    <span class="project-tooltip__tech-tag">Express</span>
+                                    <span class="project-tooltip__tech-tag">Stripe</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-tooltip__arrow" aria-hidden="true"></div>
+                    </div>
+                </article>
+            </div>
+            
+            <div class="test-section">
+                <h2 class="test-title">Featured Project</h2>
+                <p class="test-description">Test tooltip with featured project badge.</p>
+                
+                <article class="project-card" data-featured="true" tabindex="0">
+                    <div class="project-card__thumbnail">
+                        <img src="https://via.placeholder.com/400x225/10b981/ffffff?text=Featured+Project" 
+                             alt="Featured project thumbnail" class="project-card__image" />
+                    </div>
+                    <div class="project-card__content">
+                        <h3 class="project-card__title">AI Task Manager</h3>
+                        <p class="project-card__description">An intelligent task management app with AI-powered suggestions</p>
+                        <div class="project-card__technologies">
+                            <span class="project-card__tech-tag">Vue.js</span>
+                            <span class="project-card__tech-tag">Python</span>
+                            <span class="project-card__tech-tag">TensorFlow</span>
+                        </div>
+                    </div>
+                    
+                    <div class="project-tooltip" role="tooltip" aria-hidden="true">
+                        <div class="project-tooltip__content">
+                            <div class="project-tooltip__header">
+                                <h4 class="project-tooltip__title">AI Task Manager</h4>
+                                <span class="project-tooltip__badge">Featured</span>
+                            </div>
+                            <p class="project-tooltip__description">An innovative task management application that uses machine learning to provide intelligent task prioritization, deadline predictions, and productivity insights. Features natural language processing for task creation and smart categorization.</p>
+                            <div class="project-tooltip__technologies">
+                                <span class="project-tooltip__tech-label">Technologies:</span>
+                                <div class="project-tooltip__tech-list">
+                                    <span class="project-tooltip__tech-tag">Vue.js</span>
+                                    <span class="project-tooltip__tech-tag">Python</span>
+                                    <span class="project-tooltip__tech-tag">TensorFlow</span>
+                                    <span class="project-tooltip__tech-tag">FastAPI</span>
+                                    <span class="project-tooltip__tech-tag">PostgreSQL</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-tooltip__arrow" aria-hidden="true"></div>
+                    </div>
+                </article>
+            </div>
+            
+            <div class="test-section">
+                <h2 class="test-title">Long Description</h2>
+                <p class="test-description">Test tooltip with longer content to verify text wrapping and sizing.</p>
+                
+                <article class="project-card" data-featured="false" tabindex="0">
+                    <div class="project-card__thumbnail">
+                        <img src="https://via.placeholder.com/400x225/f59e0b/ffffff?text=Long+Content" 
+                             alt="Long content project thumbnail" class="project-card__image" />
+                    </div>
+                    <div class="project-card__content">
+                        <h3 class="project-card__title">Social Media Analytics Dashboard</h3>
+                        <p class="project-card__description">Comprehensive analytics platform for social media management</p>
+                        <div class="project-card__technologies">
+                            <span class="project-card__tech-tag">Angular</span>
+                            <span class="project-card__tech-tag">D3.js</span>
+                            <span class="project-card__tech-tag">Spring Boot</span>
+                            <span class="project-card__tech-tag">Redis</span>
+                        </div>
+                    </div>
+                    
+                    <div class="project-tooltip" role="tooltip" aria-hidden="true">
+                        <div class="project-tooltip__content">
+                            <div class="project-tooltip__header">
+                                <h4 class="project-tooltip__title">Social Media Analytics Dashboard</h4>
+                            </div>
+                            <p class="project-tooltip__description">A comprehensive social media analytics platform that aggregates data from multiple social networks including Facebook, Twitter, Instagram, LinkedIn, and TikTok. Features real-time monitoring, sentiment analysis, competitor tracking, automated reporting, and predictive analytics. The dashboard provides actionable insights through interactive visualizations and customizable KPI tracking.</p>
+                            <div class="project-tooltip__technologies">
+                                <span class="project-tooltip__tech-label">Technologies:</span>
+                                <div class="project-tooltip__tech-list">
+                                    <span class="project-tooltip__tech-tag">Angular</span>
+                                    <span class="project-tooltip__tech-tag">D3.js</span>
+                                    <span class="project-tooltip__tech-tag">Spring Boot</span>
+                                    <span class="project-tooltip__tech-tag">Redis</span>
+                                    <span class="project-tooltip__tech-tag">Apache Kafka</span>
+                                    <span class="project-tooltip__tech-tag">Elasticsearch</span>
+                                    <span class="project-tooltip__tech-tag">Docker</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-tooltip__arrow" aria-hidden="true"></div>
+                    </div>
+                </article>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2 class="test-title">Edge Case Testing</h2>
+            <p class="test-description">Test tooltip positioning near viewport edges.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div class="edge-test">
+                    <p style="position: absolute; top: 10px; left: 10px; margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Top-left corner</p>
+                    <article class="project-card edge-card" data-featured="false" tabindex="0" style="position: absolute; top: 20px; left: 20px;">
+                        <div class="project-card__thumbnail">
+                            <img src="https://via.placeholder.com/200x112/ef4444/ffffff?text=Edge+Test" 
+                                 alt="Edge test thumbnail" class="project-card__image" />
+                        </div>
+                        <div class="project-card__content" style="padding: var(--space-3);">
+                            <h3 class="project-card__title" style="font-size: var(--font-size-base); margin-bottom: var(--space-2);">Edge Test</h3>
+                            <p class="project-card__description" style="font-size: var(--font-size-xs); margin-bottom: var(--space-2);">Testing edge positioning</p>
+                        </div>
+                        
+                        <div class="project-tooltip" role="tooltip" aria-hidden="true">
+                            <div class="project-tooltip__content">
+                                <div class="project-tooltip__header">
+                                    <h4 class="project-tooltip__title">Edge Test Project</h4>
+                                </div>
+                                <p class="project-tooltip__description">This tooltip should position itself to stay within the viewport boundaries when the card is near the edge.</p>
+                                <div class="project-tooltip__technologies">
+                                    <span class="project-tooltip__tech-label">Technologies:</span>
+                                    <div class="project-tooltip__tech-list">
+                                        <span class="project-tooltip__tech-tag">HTML</span>
+                                        <span class="project-tooltip__tech-tag">CSS</span>
+                                        <span class="project-tooltip__tech-tag">JavaScript</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="project-tooltip__arrow" aria-hidden="true"></div>
+                        </div>
+                    </article>
+                </div>
+                
+                <div class="edge-test">
+                    <p style="position: absolute; top: 10px; right: 10px; margin: 0; font-size: 0.875rem; color: var(--color-gray-600);">Top-right corner</p>
+                    <article class="project-card edge-card" data-featured="false" tabindex="0" style="position: absolute; top: 20px; right: 20px;">
+                        <div class="project-card__thumbnail">
+                            <img src="https://via.placeholder.com/200x112/8b5cf6/ffffff?text=Edge+Test+2" 
+                                 alt="Edge test 2 thumbnail" class="project-card__image" />
+                        </div>
+                        <div class="project-card__content" style="padding: var(--space-3);">
+                            <h3 class="project-card__title" style="font-size: var(--font-size-base); margin-bottom: var(--space-2);">Edge Test 2</h3>
+                            <p class="project-card__description" style="font-size: var(--font-size-xs); margin-bottom: var(--space-2);">Testing right edge</p>
+                        </div>
+                        
+                        <div class="project-tooltip" role="tooltip" aria-hidden="true">
+                            <div class="project-tooltip__content">
+                                <div class="project-tooltip__header">
+                                    <h4 class="project-tooltip__title">Right Edge Test</h4>
+                                </div>
+                                <p class="project-tooltip__description">This tooltip should adjust its position when the card is near the right edge of the viewport.</p>
+                                <div class="project-tooltip__technologies">
+                                    <span class="project-tooltip__tech-label">Technologies:</span>
+                                    <div class="project-tooltip__tech-list">
+                                        <span class="project-tooltip__tech-tag">React</span>
+                                        <span class="project-tooltip__tech-tag">CSS</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="project-tooltip__arrow" aria-hidden="true"></div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Copy the tooltip manager script from ProjectCard.astro
+        class ProjectTooltipManager {
+            constructor() {
+                this.tooltips = new Map();
+                this.showDelay = 300;
+                this.hideDelay = 100;
+                this.init();
+            }
+
+            init() {
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', () => this.setupTooltips());
+                } else {
+                    this.setupTooltips();
+                }
+            }
+
+            setupTooltips() {
+                const projectCards = document.querySelectorAll('.project-card');
+                
+                projectCards.forEach((card) => {
+                    const tooltip = card.querySelector('.project-tooltip');
+                    if (!tooltip) return;
+
+                    const tooltipData = {
+                        element: tooltip,
+                        card: card,
+                        showTimeout: null,
+                        hideTimeout: null,
+                        isVisible: false
+                    };
+
+                    this.tooltips.set(card, tooltipData);
+
+                    card.addEventListener('mouseenter', (e) => this.handleMouseEnter(e, tooltipData));
+                    card.addEventListener('mouseleave', (e) => this.handleMouseLeave(e, tooltipData));
+                    card.addEventListener('mousemove', (e) => this.handleMouseMove(e, tooltipData));
+                    card.addEventListener('focusin', (e) => this.handleFocusIn(e, tooltipData));
+                    card.addEventListener('focusout', (e) => this.handleFocusOut(e, tooltipData));
+                });
+            }
+
+            handleMouseEnter(event, tooltipData) {
+                if (tooltipData.hideTimeout) {
+                    clearTimeout(tooltipData.hideTimeout);
+                    tooltipData.hideTimeout = null;
+                }
+
+                tooltipData.showTimeout = setTimeout(() => {
+                    this.showTooltip(tooltipData, event);
+                }, this.showDelay);
+            }
+
+            handleMouseLeave(event, tooltipData) {
+                if (tooltipData.showTimeout) {
+                    clearTimeout(tooltipData.showTimeout);
+                    tooltipData.showTimeout = null;
+                }
+
+                tooltipData.hideTimeout = setTimeout(() => {
+                    this.hideTooltip(tooltipData);
+                }, this.hideDelay);
+            }
+
+            handleMouseMove(event, tooltipData) {
+                if (tooltipData.isVisible) {
+                    this.positionTooltip(tooltipData, event);
+                }
+            }
+
+            handleFocusIn(event, tooltipData) {
+                this.showTooltip(tooltipData, event);
+            }
+
+            handleFocusOut(event, tooltipData) {
+                if (!tooltipData.card.contains(event.relatedTarget)) {
+                    this.hideTooltip(tooltipData);
+                }
+            }
+
+            showTooltip(tooltipData, event) {
+                const { element } = tooltipData;
+                
+                this.positionTooltip(tooltipData, event);
+                
+                element.classList.add('show');
+                element.setAttribute('aria-hidden', 'false');
+                tooltipData.isVisible = true;
+
+                if (tooltipData.showTimeout) {
+                    clearTimeout(tooltipData.showTimeout);
+                    tooltipData.showTimeout = null;
+                }
+            }
+
+            hideTooltip(tooltipData) {
+                const { element } = tooltipData;
+                
+                element.classList.remove('show');
+                element.setAttribute('aria-hidden', 'true');
+                tooltipData.isVisible = false;
+
+                if (tooltipData.hideTimeout) {
+                    clearTimeout(tooltipData.hideTimeout);
+                    tooltipData.hideTimeout = null;
+                }
+            }
+
+            positionTooltip(tooltipData, event) {
+                const { element, card } = tooltipData;
+                const cardRect = card.getBoundingClientRect();
+                const tooltipRect = element.getBoundingClientRect();
+                const viewportWidth = window.innerWidth;
+                const viewportHeight = window.innerHeight;
+                const scrollX = window.pageXOffset;
+                const scrollY = window.pageYOffset;
+
+                let placement = 'top';
+                let left = cardRect.left + scrollX + (cardRect.width / 2) - (tooltipRect.width / 2);
+                let top = cardRect.top + scrollY - tooltipRect.height - 12;
+
+                if (top < scrollY + 20) {
+                    placement = 'bottom';
+                    top = cardRect.bottom + scrollY + 12;
+                }
+
+                if (placement === 'bottom' && top + tooltipRect.height > scrollY + viewportHeight - 20) {
+                    if (cardRect.left + scrollX > tooltipRect.width + 20) {
+                        placement = 'left';
+                        left = cardRect.left + scrollX - tooltipRect.width - 12;
+                        top = cardRect.top + scrollY + (cardRect.height / 2) - (tooltipRect.height / 2);
+                    } else if (cardRect.right + scrollX + tooltipRect.width + 20 < viewportWidth) {
+                        placement = 'right';
+                        left = cardRect.right + scrollX + 12;
+                        top = cardRect.top + scrollY + (cardRect.height / 2) - (tooltipRect.height / 2);
+                    } else {
+                        placement = 'top';
+                        top = cardRect.top + scrollY - tooltipRect.height - 12;
+                    }
+                }
+
+                if (left < scrollX + 20) {
+                    left = scrollX + 20;
+                } else if (left + tooltipRect.width > scrollX + viewportWidth - 20) {
+                    left = scrollX + viewportWidth - tooltipRect.width - 20;
+                }
+
+                if (top < scrollY + 20) {
+                    top = scrollY + 20;
+                } else if (top + tooltipRect.height > scrollY + viewportHeight - 20) {
+                    top = scrollY + viewportHeight - tooltipRect.height - 20;
+                }
+
+                element.style.left = `${left}px`;
+                element.style.top = `${top}px`;
+                element.setAttribute('data-placement', placement);
+            }
+
+            destroy() {
+                this.tooltips.forEach((tooltipData) => {
+                    if (tooltipData.showTimeout) clearTimeout(tooltipData.showTimeout);
+                    if (tooltipData.hideTimeout) clearTimeout(tooltipData.hideTimeout);
+                });
+                this.tooltips.clear();
+            }
+        }
+
+        const tooltipManager = new ProjectTooltipManager();
+
+        window.addEventListener('beforeunload', () => {
+            tooltipManager.destroy();
+        });
+    </script>
+</body>
+</html>
