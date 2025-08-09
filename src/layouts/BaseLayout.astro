@@ -149,11 +149,203 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astr
   </head>
   <body>
     <Header />
-    <div id="main-content" class="main-content">
+    <div id="main-content" class="main-content page-transition">
       <slot />
     </div>
     <HeaderScript />
     <PerformanceScript />
+    
+    <!-- Page Transition and Animation Enhancement Script -->
+    <script>
+      class PageAnimationManager {
+        constructor() {
+          this.isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          this.init();
+        }
+
+        init() {
+          // Initialize page entrance animation
+          this.initPageTransitions();
+          
+          // Initialize intersection observer for scroll-triggered animations
+          this.initScrollAnimations();
+          
+          // Initialize loading state management
+          this.initLoadingStates();
+          
+          // Listen for reduced motion preference changes
+          this.initReducedMotionListener();
+        }
+
+        initPageTransitions() {
+          if (this.isReducedMotion) return;
+          
+          const mainContent = document.getElementById('main-content');
+          if (mainContent) {
+            // Add GPU acceleration for smooth animations
+            mainContent.classList.add('gpu-accelerated');
+            
+            // Ensure page transition animation plays
+            mainContent.style.willChange = 'opacity, transform';
+            
+            // Clean up will-change after animation
+            setTimeout(() => {
+              mainContent.style.willChange = 'auto';
+            }, 500);
+          }
+        }
+
+        initScrollAnimations() {
+          if (this.isReducedMotion) return;
+          
+          // Create intersection observer for scroll-triggered animations
+          const observerOptions = {
+            root: null,
+            rootMargin: '0px 0px -100px 0px',
+            threshold: 0.1
+          };
+
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const element = entry.target;
+                
+                // Add stagger animation class if it has data-stagger attribute
+                if (element.hasAttribute('data-stagger')) {
+                  const delay = element.getAttribute('data-stagger') || '0';
+                  element.style.animationDelay = `${delay}s`;
+                }
+                
+                // Add animation class
+                element.classList.add('animate-in');
+                
+                // Optimize for hardware acceleration
+                element.style.willChange = 'transform, opacity';
+                
+                // Clean up will-change after animation
+                setTimeout(() => {
+                  element.style.willChange = 'auto';
+                }, 1000);
+                
+                // Stop observing this element
+                observer.unobserve(element);
+              }
+            });
+          }, observerOptions);
+
+          // Observe elements that should animate on scroll
+          const animateElements = document.querySelectorAll('[data-animate-on-scroll]');
+          animateElements.forEach((el) => observer.observe(el));
+        }
+
+        initLoadingStates() {
+          // Handle image loading states
+          const images = document.querySelectorAll('img[loading="lazy"]');
+          images.forEach((img) => {
+            if (!img.complete) {
+              img.classList.add('loading-shimmer');
+              
+              img.addEventListener('load', () => {
+                img.classList.remove('loading-shimmer');
+                if (!this.isReducedMotion) {
+                  img.classList.add('fade-in');
+                }
+              }, { once: true });
+              
+              img.addEventListener('error', () => {
+                img.classList.remove('loading-shimmer');
+              }, { once: true });
+            }
+          });
+        }
+
+        initReducedMotionListener() {
+          const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+          mediaQuery.addEventListener('change', (e) => {
+            this.isReducedMotion = e.matches;
+            
+            if (this.isReducedMotion) {
+              // Remove all animations if reduced motion is preferred
+              document.body.classList.add('reduce-motion');
+            } else {
+              document.body.classList.remove('reduce-motion');
+            }
+          });
+        }
+      }
+
+      // Initialize animation manager when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          new PageAnimationManager();
+        });
+      } else {
+        new PageAnimationManager();
+      }
+    </script>
+    
+    <style>
+      /* Enhanced page transition styles */
+      .main-content {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: pageEnter 0.5s ease-out 0.1s forwards;
+      }
+      
+      /* Scroll-triggered animation styles */
+      [data-animate-on-scroll] {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+      
+      [data-animate-on-scroll].animate-in {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      
+      /* Loading shimmer effect for images */
+      img.loading-shimmer {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200px 100%;
+        animation: shimmer 2s infinite;
+        min-height: 200px;
+      }
+      
+      /* Reduced motion override */
+      .reduce-motion *,
+      .reduce-motion *::before,
+      .reduce-motion *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      
+      .reduce-motion .main-content {
+        opacity: 1;
+        transform: none;
+        animation: none;
+      }
+      
+      @media (prefers-reduced-motion: reduce) {
+        .main-content {
+          opacity: 1;
+          transform: none;
+          animation: none;
+        }
+        
+        [data-animate-on-scroll] {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+        
+        img.loading-shimmer {
+          animation: none;
+          background: #f0f0f0;
+        }
+      }
+    </style>
   </body>
 </html>
 

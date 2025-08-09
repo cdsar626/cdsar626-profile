@@ -35,7 +35,9 @@ const sortedProjects = allProjects.sort((a, b) => {
         <div 
           class="projects-grid__item" 
           role="listitem"
-          style={`--animation-delay: ${index * 0.1}s`}
+          data-animate-on-scroll
+          data-stagger={index * 0.15}
+          style={`--animation-delay: ${index * 0.15}s; --stagger-index: ${index}`}
         >
           <ProjectCard
             title={project.data.title}
@@ -102,8 +104,21 @@ const sortedProjects = allProjects.sort((a, b) => {
   
   .projects-grid__item {
     opacity: 0;
-    transform: translateY(30px);
-    animation: fadeInUp 0.6s ease-out forwards;
+    transform: translateY(30px) scale(0.95);
+    transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition-delay: calc(var(--stagger-index, 0) * 0.1s);
+    will-change: transform, opacity;
+  }
+  
+  .projects-grid__item.animate-in {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  
+  /* Fallback animation for browsers without intersection observer */
+  .projects-grid__item:not(.animate-in) {
+    animation: staggeredFadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
     animation-delay: var(--animation-delay, 0s);
   }
   
@@ -170,6 +185,17 @@ const sortedProjects = allProjects.sort((a, b) => {
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+  
+  @keyframes staggeredFadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
     }
   }
   

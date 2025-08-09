@@ -12,7 +12,11 @@ const {
 
 <section class="intro-section" aria-labelledby="intro-heading">
   <div class="intro-container">
-    <div class="intro-content" style={`--fade-delay: ${fadeInDelay}s`}>
+    <div 
+      class="intro-content" 
+      style={`--fade-delay: ${fadeInDelay}s`}
+      data-animate-on-scroll
+    >
       <h2 id="intro-heading" class="sr-only">About Me</h2>
       <p class="intro-text">{content}</p>
     </div>
@@ -38,7 +42,20 @@ const {
   .intro-content {
     opacity: 0;
     transform: translateY(1.5rem);
-    animation: introFadeIn 0.8s ease-out var(--fade-delay) forwards;
+    animation: introFadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) var(--fade-delay) forwards;
+    will-change: transform, opacity;
+  }
+  
+  /* Enhanced scroll-triggered animation */
+  .intro-content[data-animate-on-scroll] {
+    transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition-delay: 0.2s;
+  }
+  
+  .intro-content[data-animate-on-scroll].animate-in {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .intro-text {

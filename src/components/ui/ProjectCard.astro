@@ -111,15 +111,19 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-base);
     overflow: hidden;
-    transition: all var(--transition-base);
+    transition: transform var(--transition-base) cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                box-shadow var(--transition-base) cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: relative;
     height: 100%;
     display: flex;
     flex-direction: column;
+    will-change: transform;
+    transform: translateZ(0); /* Hardware acceleration */
+    backface-visibility: hidden;
   }
   
   .project-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-4px) translateZ(0);
     box-shadow: var(--shadow-lg);
   }
   
