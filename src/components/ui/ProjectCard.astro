@@ -1,6 +1,4 @@
 ---
-import ProjectTooltip from './ProjectTooltip.astro';
-
 export interface Props {
   title: string;
   description: string;
@@ -87,7 +85,6 @@ const { title, description, technologies, thumbnail, links, featured = false } =
   
   <div class="project-card__content">
     <h3 id={`project-title-${title.replace(/\s+/g, '-').toLowerCase()}`} class="project-card__title">{title}</h3>
-    <p class="project-card__description">{description}</p>
     
     <div class="project-card__technologies" role="list" aria-label="Technologies used">
       {technologies.map((tech) => (
@@ -96,13 +93,15 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     </div>
   </div>
   
-  <!-- Project Tooltip -->
-  <ProjectTooltip 
-    title={title}
-    description={description}
-    technologies={technologies}
-    featured={featured}
-  />
+  <!-- Hidden tooltip data for Tippy.js -->
+  <div class="project-tooltip-data" style="display: none;">
+    <div class="project-tooltip__description">{description}</div>
+    <div class="project-tooltip__tech-list">
+      {technologies.map((tech) => (
+        <span class="project-tooltip__tech-tag">{tech}</span>
+      ))}
+    </div>
+  </div>
 </article>
 
 <style>
@@ -110,7 +109,7 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     background: var(--color-white);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-base);
-    overflow: hidden;
+    overflow: visible; /* Allow tooltip to show outside card bounds */
     transition: transform var(--transition-base) cubic-bezier(0.25, 0.46, 0.45, 0.94),
                 box-shadow var(--transition-base) cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: relative;
@@ -278,15 +277,8 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     font-size: var(--font-size-xl);
     font-weight: var(--font-weight-semibold);
     color: var(--color-gray-900);
-    margin-bottom: var(--space-3);
-    line-height: var(--line-height-tight);
-  }
-  
-  .project-card__description {
-    color: var(--color-gray-600);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-relaxed);
     margin-bottom: var(--space-4);
+    line-height: var(--line-height-tight);
     flex: 1;
   }
   
@@ -488,320 +480,3 @@ const { title, description, technologies, thumbnail, links, featured = false } =
   }
 </style>
 
-<script>
-  // @ts-nocheck
-  class ProjectTooltipManager {
-    constructor() {
-      this.tooltips = new Map();
-      this.showDelay = 300;
-      this.hideDelay = 100;
-      this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-      this.init();
-    }
-
-    init() {
-      // Wait for DOM to be ready
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => this.setupTooltips());
-      } else {
-        this.setupTooltips();
-      }
-    }
-
-    setupTooltips() {
-      const projectCards = document.querySelectorAll('.project-card');
-      
-      projectCards.forEach((card) => {
-        const tooltip = card.querySelector('.project-tooltip');
-        if (!tooltip) return;
-
-        const tooltipData = {
-          element: tooltip,
-          card: card,
-          showTimeout: null,
-          hideTimeout: null,
-          isVisible: false,
-          touchActive: false,
-          touchStartTime: 0
-        };
-
-        this.tooltips.set(card, tooltipData);
-
-        if (this.isTouchDevice) {
-          // Touch event listeners for mobile
-          card.addEventListener('touchstart', (e) => this.handleTouchStart(e, tooltipData), { passive: true });
-          card.addEventListener('touchend', (e) => this.handleTouchEnd(e, tooltipData), { passive: false });
-          card.addEventListener('touchcancel', (e) => this.handleTouchCancel(e, tooltipData));
-          
-          // Prevent context menu on long press for better UX
-          card.addEventListener('contextmenu', (e) => {
-            if (tooltipData.touchActive) {
-              e.preventDefault();
-            }
-          });
-        } else {
-          // Mouse event listeners for desktop
-          card.addEventListener('mouseenter', (e) => this.handleMouseEnter(e, tooltipData));
-          card.addEventListener('mouseleave', (e) => this.handleMouseLeave(e, tooltipData));
-          card.addEventListener('mousemove', (e) => this.handleMouseMove(e, tooltipData));
-        }
-        
-        // Handle focus for accessibility (both touch and mouse)
-        card.addEventListener('focusin', (e) => this.handleFocusIn(e, tooltipData));
-        card.addEventListener('focusout', (e) => this.handleFocusOut(e, tooltipData));
-        
-        // Handle keyboard navigation
-        card.addEventListener('keydown', (e) => this.handleKeydown(e, tooltipData));
-      });
-    }
-
-    // Touch event handlers
-    handleTouchStart(event, tooltipData) {
-      tooltipData.touchStartTime = Date.now();
-      
-      // If card is not active, activate it on first touch
-      if (!tooltipData.touchActive) {
-        tooltipData.touchActive = true;
-        tooltipData.card.classList.add('touch-active');
-        
-        // Show tooltip immediately on touch
-        this.showTooltip(tooltipData, event);
-        
-        // Prevent default to avoid triggering hover states
-        event.preventDefault();
-      }
-    }
-
-    handleTouchEnd(event, tooltipData) {
-      const touchDuration = Date.now() - tooltipData.touchStartTime;
-      const target = event.target;
-      
-      // If touch was very short (tap), handle link navigation
-      if (touchDuration < 200) {
-        // Check if the tap was on a link
-        const link = target.closest('.project-card__link');
-        if (link && link.href) {
-          // Allow the link to be followed
-          window.open(link.href, link.target || '_blank');
-        } else if (target.closest('.project-card__link--main')) {
-          // Handle main link
-          const mainLink = tooltipData.card.querySelector('.project-card__link--main');
-          if (mainLink && mainLink.href) {
-            window.open(mainLink.href, mainLink.target || '_blank');
-          }
-        }
-      }
-      
-      // Set timeout to deactivate touch state
-      setTimeout(() => {
-        if (tooltipData.touchActive) {
-          tooltipData.touchActive = false;
-          tooltipData.card.classList.remove('touch-active');
-          this.hideTooltip(tooltipData);
-        }
-      }, 3000); // Keep active for 3 seconds after touch
-    }
-
-    handleTouchCancel(event, tooltipData) {
-      tooltipData.touchActive = false;
-      tooltipData.card.classList.remove('touch-active');
-      this.hideTooltip(tooltipData);
-    }
-
-    handleMouseEnter(event, tooltipData) {
-      // Clear any existing hide timeout
-      if (tooltipData.hideTimeout) {
-        clearTimeout(tooltipData.hideTimeout);
-        tooltipData.hideTimeout = null;
-      }
-
-      // Set show timeout
-      tooltipData.showTimeout = setTimeout(() => {
-        this.showTooltip(tooltipData, event);
-      }, this.showDelay);
-    }
-
-    handleMouseLeave(event, tooltipData) {
-      // Clear show timeout
-      if (tooltipData.showTimeout) {
-        clearTimeout(tooltipData.showTimeout);
-        tooltipData.showTimeout = null;
-      }
-
-      // Set hide timeout
-      tooltipData.hideTimeout = setTimeout(() => {
-        this.hideTooltip(tooltipData);
-      }, this.hideDelay);
-    }
-
-    handleMouseMove(event, tooltipData) {
-      if (tooltipData.isVisible) {
-        this.positionTooltip(tooltipData, event);
-      }
-    }
-
-    handleFocusIn(event, tooltipData) {
-      // Show tooltip immediately on focus for accessibility
-      this.showTooltip(tooltipData, event);
-    }
-
-    handleFocusOut(event, tooltipData) {
-      // Hide tooltip when focus leaves the card
-      if (!tooltipData.card.contains(event.relatedTarget)) {
-        this.hideTooltip(tooltipData);
-      }
-    }
-
-    handleKeydown(event, tooltipData) {
-      const { card } = tooltipData;
-      
-      switch (event.key) {
-        case 'Enter':
-        case ' ':
-          event.preventDefault();
-          // Activate the main link if available
-          const mainLink = card.querySelector('.project-card__link--main');
-          if (mainLink && mainLink.href) {
-            window.open(mainLink.href, mainLink.target || '_blank');
-          }
-          break;
-          
-        case 'g':
-        case 'G':
-          event.preventDefault();
-          // Activate GitHub link if available
-          const githubLink = card.querySelector('.project-card__link--github');
-          if (githubLink && githubLink.href) {
-            window.open(githubLink.href, githubLink.target || '_blank');
-          }
-          break;
-          
-        case 'l':
-        case 'L':
-          event.preventDefault();
-          // Activate additional link if available
-          const additionalLink = card.querySelector('.project-card__link--additional');
-          if (additionalLink && additionalLink.href) {
-            window.open(additionalLink.href, additionalLink.target || '_blank');
-          }
-          break;
-          
-        case 'Escape':
-          event.preventDefault();
-          // Remove focus from the card
-          card.blur();
-          break;
-      }
-    }
-
-    showTooltip(tooltipData, event) {
-      const { element, card } = tooltipData;
-      
-      // Position the tooltip
-      this.positionTooltip(tooltipData, event);
-      
-      // Show the tooltip
-      element.classList.add('show');
-      element.setAttribute('aria-hidden', 'false');
-      tooltipData.isVisible = true;
-
-      // Clear any pending timeouts
-      if (tooltipData.showTimeout) {
-        clearTimeout(tooltipData.showTimeout);
-        tooltipData.showTimeout = null;
-      }
-    }
-
-    hideTooltip(tooltipData) {
-      const { element } = tooltipData;
-      
-      element.classList.remove('show');
-      element.setAttribute('aria-hidden', 'true');
-      tooltipData.isVisible = false;
-
-      // Clear any pending timeouts
-      if (tooltipData.hideTimeout) {
-        clearTimeout(tooltipData.hideTimeout);
-        tooltipData.hideTimeout = null;
-      }
-    }
-
-    positionTooltip(tooltipData, event) {
-      const { element, card } = tooltipData;
-      const cardRect = card.getBoundingClientRect();
-      const tooltipRect = element.getBoundingClientRect();
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
-      const scrollX = window.pageXOffset;
-      const scrollY = window.pageYOffset;
-
-      // Default positioning - above the card
-      let placement = 'top';
-      let left = cardRect.left + scrollX + (cardRect.width / 2) - (tooltipRect.width / 2);
-      let top = cardRect.top + scrollY - tooltipRect.height - 12;
-
-      // Check if tooltip fits above the card
-      if (top < scrollY + 20) {
-        // Position below the card
-        placement = 'bottom';
-        top = cardRect.bottom + scrollY + 12;
-      }
-
-      // Check if tooltip fits below the card (if we switched to bottom)
-      if (placement === 'bottom' && top + tooltipRect.height > scrollY + viewportHeight - 20) {
-        // Try positioning to the side
-        if (cardRect.left + scrollX > tooltipRect.width + 20) {
-          // Position to the left
-          placement = 'left';
-          left = cardRect.left + scrollX - tooltipRect.width - 12;
-          top = cardRect.top + scrollY + (cardRect.height / 2) - (tooltipRect.height / 2);
-        } else if (cardRect.right + scrollX + tooltipRect.width + 20 < viewportWidth) {
-          // Position to the right
-          placement = 'right';
-          left = cardRect.right + scrollX + 12;
-          top = cardRect.top + scrollY + (cardRect.height / 2) - (tooltipRect.height / 2);
-        } else {
-          // Keep it above, but adjust if needed
-          placement = 'top';
-          top = cardRect.top + scrollY - tooltipRect.height - 12;
-        }
-      }
-
-      // Ensure tooltip doesn't go off screen horizontally
-      if (left < scrollX + 20) {
-        left = scrollX + 20;
-      } else if (left + tooltipRect.width > scrollX + viewportWidth - 20) {
-        left = scrollX + viewportWidth - tooltipRect.width - 20;
-      }
-
-      // Ensure tooltip doesn't go off screen vertically
-      if (top < scrollY + 20) {
-        top = scrollY + 20;
-      } else if (top + tooltipRect.height > scrollY + viewportHeight - 20) {
-        top = scrollY + viewportHeight - tooltipRect.height - 20;
-      }
-
-      // Apply positioning
-      element.style.left = `${left}px`;
-      element.style.top = `${top}px`;
-      element.setAttribute('data-placement', placement);
-    }
-
-    // Clean up method
-    destroy() {
-      this.tooltips.forEach((tooltipData) => {
-        if (tooltipData.showTimeout) clearTimeout(tooltipData.showTimeout);
-        if (tooltipData.hideTimeout) clearTimeout(tooltipData.hideTimeout);
-      });
-      this.tooltips.clear();
-    }
-  }
-
-  // Initialize tooltip manager
-  const tooltipManager = new ProjectTooltipManager();
-
-  // Clean up on page unload
-  window.addEventListener('beforeunload', () => {
-    tooltipManager.destroy();
-  });
-</script>

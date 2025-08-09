@@ -2,6 +2,7 @@
 import Header from '../components/layout/Header.astro';
 import HeaderScript from '../components/layout/HeaderScript.astro';
 import PerformanceScript from '../components/layout/PerformanceScript.astro';
+import 'tippy.js/dist/tippy.css';
 
 export interface Props {
   title?: string;
@@ -285,6 +286,86 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astr
       }
     </script>
     
+        
+        <!-- Simple Tooltip Setup with Tippy.js -->
+        <script>
+          // @ts-nocheck
+          import tippy, {followCursor} from 'tippy.js';
+          document.addEventListener('DOMContentLoaded', () => {
+            console.log('Setting up Tippy.js tooltips...');
+            
+            
+            // Find all project cards
+            const projectCards = document.querySelectorAll('.project-card');
+            console.log(`Found ${projectCards.length} project cards`);
+            
+            if (projectCards.length === 0) {
+              console.warn('No project cards found!');
+              return;
+            }
+            
+            projectCards.forEach((card, index) => {
+              console.log(`Setting up tooltip for card ${index + 1}`);
+              
+              // Get tooltip data from the card
+              const title = card.querySelector('.project-card__title')?.textContent || 'No Title';
+              const description = card.querySelector('.project-tooltip__description')?.textContent || 'No description available';
+              const techTags = Array.from(card.querySelectorAll('.project-tooltip__tech-tag')).map(tag => tag.textContent);
+              const isFeatured = card.hasAttribute('data-featured') && card.getAttribute('data-featured') === 'true';
+              
+              console.log(`Card ${index + 1} data:`, { title, description, techTags, isFeatured });
+              
+              // Create simple tooltip content for testing
+              const tooltipContent = `
+                <div style="padding: 12px; max-width: 300px;">
+                  <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600;">${title}</h4>
+                  <p style="margin: 0 0 8px 0; font-size: 14px; color: #666;">${description}</p>
+                  <div style="font-size: 12px; color: #888;">
+                    Technologies: ${techTags.join(', ') || 'None specified'}
+                  </div>
+                </div>
+              `;
+              
+              try {
+                // Initialize Tippy.js tooltip with simple settings
+                const instance = tippy(card, {
+                  content: tooltipContent,
+                  plugins: [followCursor],
+                  allowHTML: true,
+                  theme: 'light',
+                  followCursor: true,
+                  animation: 'fade',
+                  duration: [200, 150],
+                  delay: [200, 100],
+                  arrow: true,
+                  interactive: false,
+                  hideOnClick: true,
+                  trigger: 'mouseenter focus',
+                  zIndex: 9999,
+                  maxWidth: 320,
+                  offset: [0, 12],
+                  onShow(instance) {
+                    console.log('✅ Showing tooltip for:', title);
+                  },
+                  onHide(instance) {
+                    console.log('❌ Hiding tooltip for:', title);
+                  },
+                  onCreate(instance) {
+                    console.log('🎯 Tooltip created for:', title);
+                  }
+                });
+                
+                console.log(`✅ Tooltip initialized for card ${index + 1}:`, instance);
+                
+              } catch (error) {
+                console.error(`❌ Error initializing tooltip for card ${index + 1}:`, error);
+              }
+            });
+            
+            console.log('🎉 Tippy.js tooltips setup complete!');
+          });
+        </script>
+
     <style>
       /* Enhanced page transition styles */
       .main-content {
