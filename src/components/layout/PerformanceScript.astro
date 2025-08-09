@@ -1,0 +1,260 @@
+---
+// Performance optimization script component
+---
+
+<script>
+  // Critical performance optimizations that need to run early
+  
+  // 1. Optimize font loading
+  (function() {
+    // Add font-display: swap to improve loading performance
+    const style = document.createElement('style');
+    style.textContent = `
+      @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 100 900;
+        font-display: swap;
+        src: url('/fonts/inter-var.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+    `;
+    document.head.appendChild(style);
+  })();
+
+  // 2. Optimize image loading
+  (function() {
+    // Add loading="lazy" to images that don't have it
+    const images = document.querySelectorAll('img:not([loading])');
+    images.forEach(img => {
+      // Don't lazy load above-the-fold images
+      const rect = img.getBoundingClientRect();
+      if (rect.top > window.innerHeight) {
+        img.setAttribute('loading', 'lazy');
+      }
+    });
+  })();
+
+  // 3. Preload critical resources based on user interaction
+  (function() {
+    let preloadTriggered = false;
+    
+    function preloadCriticalResources() {
+      if (preloadTriggered) return;
+      preloadTriggered = true;
+      
+      // Preload CV viewer component when user shows intent to interact
+      const cvButton = document.querySelector('[data-cv-button]');
+      if (cvButton) {
+        const link = document.createElement('link');
+        link.rel = 'modulepreload';
+        link.href = '/src/components/ui/CVViewer.vue';
+        document.head.appendChild(link);
+      }
+      
+      // Preload project images on hover intent
+      const projectCards = document.querySelectorAll('.project-card');
+      projectCards.forEach(card => {
+        const img = card.querySelector('img[data-src]');
+        if (img && img.dataset.src) {
+          const preloadLink = document.createElement('link');
+          preloadLink.rel = 'preload';
+          preloadLink.as = 'image';
+          preloadLink.href = img.dataset.src;
+          document.head.appendChild(preloadLink);
+        }
+      });
+    }
+    
+    // Trigger preloading on first user interaction
+    ['mouseenter', 'touchstart', 'keydown'].forEach(event => {
+      document.addEventListener(event, preloadCriticalResources, { once: true, passive: true });
+    });
+    
+    // Fallback: preload after 3 seconds if no interaction
+    setTimeout(preloadCriticalResources, 3000);
+  })();
+
+  // 4. Optimize animations for performance
+  (function() {
+    // Check if user prefers reduced motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    if (prefersReducedMotion) {
+      // Disable animations for users who prefer reduced motion
+      const style = document.createElement('style');
+      style.textContent = `
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      `;
+      document.head.appendChild(style);
+    } else {
+      // Optimize animations for better performance
+      const animatedElements = document.querySelectorAll('[class*="fade"], [class*="slide"], [class*="scale"]');
+      animatedElements.forEach(el => {
+        // Add will-change for elements that will animate
+        el.style.willChange = 'transform, opacity';
+        
+        // Remove will-change after animation completes
+        el.addEventListener('animationend', () => {
+          el.style.willChange = 'auto';
+        }, { once: true });
+      });
+    }
+  })();
+
+  // 5. Optimize scroll performance
+  (function() {
+    let ticking = false;
+    
+    function updateScrollElements() {
+      // Batch scroll-related DOM updates
+      requestAnimationFrame(() => {
+        // Update any scroll-dependent elements here
+        ticking = false;
+      });
+    }
+    
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        ticking = true;
+        updateScrollElements();
+      }
+    }, { passive: true });
+  })();
+
+  // 6. Memory optimization
+  (function() {
+    // Clean up unused event listeners and observers
+    window.addEventListener('beforeunload', () => {
+      // Clean up any global observers or timers
+      if (window.performanceObserver) {
+        window.performanceObserver.disconnect();
+      }
+    });
+    
+    // Optimize garbage collection for large objects
+    if ('FinalizationRegistry' in window) {
+      const cleanup = new FinalizationRegistry((heldValue) => {
+        // Clean up resources when objects are garbage collected
+        console.debug('Cleaning up resources:', heldValue);
+      });
+      
+      // Register cleanup for large objects
+      window.registerCleanup = (obj, identifier) => {
+        cleanup.register(obj, identifier);
+      };
+    }
+  })();
+
+  // 7. Network optimization
+  (function() {
+    // Prefetch next likely pages based on user behavior
+    const links = document.querySelectorAll('a[href^="/"]');
+    const prefetchedUrls = new Set();
+    
+    function prefetchUrl(url) {
+      if (prefetchedUrls.has(url)) return;
+      prefetchedUrls.add(url);
+      
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = url;
+      document.head.appendChild(link);
+    }
+    
+    // Prefetch on hover with delay
+    links.forEach(link => {
+      let hoverTimeout;
+      
+      link.addEventListener('mouseenter', () => {
+        hoverTimeout = setTimeout(() => {
+          prefetchUrl(link.href);
+        }, 100);
+      });
+      
+      link.addEventListener('mouseleave', () => {
+        clearTimeout(hoverTimeout);
+      });
+    });
+  })();
+
+  // 8. Service Worker registration
+  (function() {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.debug('Service Worker registered:', registration);
+            
+            // Update available
+            registration.addEventListener('updatefound', () => {
+              const newWorker = registration.installing;
+              if (newWorker) {
+                newWorker.addEventListener('statechange', () => {
+                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    // New content available, refresh page
+                    if (confirm('New content available. Refresh to update?')) {
+                      window.location.reload();
+                    }
+                  }
+                });
+              }
+            });
+          })
+          .catch((error) => {
+            console.debug('Service Worker registration failed:', error);
+          });
+      });
+    }
+  })();
+
+  // 9. Performance monitoring
+  (function() {
+    if ('PerformanceObserver' in window) {
+      // Monitor Largest Contentful Paint
+      const lcpObserver = new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        const lastEntry = entries[entries.length - 1];
+        console.debug('LCP:', lastEntry.startTime);
+      });
+      
+      try {
+        lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+      } catch (e) {
+        // Fallback for browsers that don't support LCP
+        console.debug('LCP monitoring not supported');
+      }
+      
+      // Monitor Cumulative Layout Shift
+      const clsObserver = new PerformanceObserver((list) => {
+        let clsValue = 0;
+        for (const entry of list.getEntries()) {
+          if (!entry.hadRecentInput) {
+            clsValue += entry.value;
+          }
+        }
+        console.debug('CLS:', clsValue);
+      });
+      
+      try {
+        clsObserver.observe({ entryTypes: ['layout-shift'] });
+      } catch (e) {
+        // Fallback for browsers that don't support CLS
+        console.debug('CLS monitoring not supported');
+      }
+      
+      // Store observers for cleanup
+      window.performanceObserver = {
+        disconnect: () => {
+          lcpObserver.disconnect();
+          clsObserver.disconnect();
+        }
+      };
+    }
+  })();
+</script>

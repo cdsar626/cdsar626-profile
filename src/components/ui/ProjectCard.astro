@@ -29,7 +29,11 @@ const { title, description, technologies, thumbnail, links, featured = false } =
       src={thumbnail} 
       alt={`Screenshot of ${title} project showing the main interface`}
       loading="lazy"
+      decoding="async"
       class="project-card__image"
+      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+      width="400"
+      height="225"
     />
     <div class="project-card__overlay" aria-hidden="true">
       {/* Main link covering entire card */}

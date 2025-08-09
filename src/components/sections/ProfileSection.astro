@@ -26,17 +26,26 @@ const {
         <img
           src={profileImageSrc}
           alt={profileImageAlt}
-          width={200}
-          height={200}
+          width={280}
+          height={280}
           class="profile-image"
+          loading="eager"
+          decoding="async"
+          sizes="(max-width: 480px) 120px, (max-width: 640px) 150px, (max-width: 768px) 200px, (max-width: 1024px) 240px, 280px"
         />
       ) : (
         <Image
           src={profileImage}
           alt={profileImageAlt}
-          width={200}
-          height={200}
+          width={280}
+          height={280}
           class="profile-image"
+          loading="eager"
+          decoding="async"
+          sizes="(max-width: 480px) 120px, (max-width: 640px) 150px, (max-width: 768px) 200px, (max-width: 1024px) 240px, 280px"
+          widths={[120, 150, 200, 240, 280, 560]}
+          format="webp"
+          fallbackFormat="jpg"
         />
       )}
     </div>
