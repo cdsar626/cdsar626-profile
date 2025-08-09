@@ -13,8 +13,11 @@
     <Transition name="slide">
       <div
         v-if="isOpen"
-        class="fixed top-0 right-0 h-full w-full max-w-4xl bg-white shadow-2xl z-50 flex flex-col"
+        class="fixed top-0 right-0 h-full w-full max-w-4xl bg-white shadow-2xl z-50 flex flex-col cv-panel"
         @click.stop
+        @touchstart="handleTouchStart"
+        @touchmove="handleTouchMove"
+        @touchend="handleTouchEnd"
       >
         <!-- Header with close button and navigation -->
         <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
@@ -222,6 +225,74 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 }
 
+// Touch interaction state
+const touchState = ref({
+  startX: 0,
+  startY: 0,
+  startTime: 0,
+  isDragging: false,
+  threshold: 50 // Minimum distance for swipe
+})
+
+// Touch event handlers for mobile navigation
+const handleTouchStart = (event: TouchEvent) => {
+  const touch = event.touches[0]
+  touchState.value = {
+    startX: touch.clientX,
+    startY: touch.clientY,
+    startTime: Date.now(),
+    isDragging: false,
+    threshold: 50
+  }
+}
+
+const handleTouchMove = (event: TouchEvent) => {
+  if (!touchState.value.startX) return
+  
+  const touch = event.touches[0]
+  const deltaX = Math.abs(touch.clientX - touchState.value.startX)
+  const deltaY = Math.abs(touch.clientY - touchState.value.startY)
+  
+  // If horizontal movement is greater than vertical, we might be swiping
+  if (deltaX > deltaY && deltaX > 10) {
+    touchState.value.isDragging = true
+    // Prevent scrolling during horizontal swipe
+    event.preventDefault()
+  }
+}
+
+const handleTouchEnd = (event: TouchEvent) => {
+  if (!touchState.value.startX) return
+  
+  const touch = event.changedTouches[0]
+  const deltaX = touch.clientX - touchState.value.startX
+  const deltaY = touch.clientY - touchState.value.startY
+  const deltaTime = Date.now() - touchState.value.startTime
+  
+  // Check for swipe gesture (horizontal movement > threshold, quick gesture)
+  if (Math.abs(deltaX) > touchState.value.threshold && 
+      Math.abs(deltaX) > Math.abs(deltaY) && 
+      deltaTime < 500) {
+    
+    if (deltaX > 0) {
+      // Swipe right - previous page
+      previousPage()
+    } else {
+      // Swipe left - next page
+      nextPage()
+    }
+  }
+  
+  // Reset touch state
+  touchState.value = {
+    startX: 0,
+    startY: 0,
+    startTime: 0,
+    isDragging: false,
+    threshold: 50
+  }
+}
+
 // Watchers
 watch(() => props.isOpen, (newValue) => {
   if (newValue) {
@@ -290,11 +361,127 @@ onUnmounted(() => {
   transform: translateX(100%);
 }
 
+/* Mobile-specific touch optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .cv-panel {
+    /* Improve touch scrolling */
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Larger touch targets for mobile */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px;
+  }
+  
+  /* Navigation buttons with better touch feedback */
+  .flex.items-center.gap-2 button {
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+  
+  .flex.items-center.gap-2 button:active {
+    transform: scale(0.95);
+    background-color: #e5e7eb;
+  }
+  
+  /* Close button with better touch feedback */
+  .rounded-full:active {
+    transform: scale(0.9);
+    background-color: #f3f4f6;
+  }
+  
+  /* PDF iframe adjustments for mobile */
+  iframe {
+    height: calc(100vh - 120px) !important;
+    min-height: 400px;
+  }
+  
+  /* Header adjustments for mobile */
+  .flex.items-center.justify-between {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  /* Make navigation more prominent on mobile */
+  .flex.items-center.gap-2 {
+    order: 2;
+    width: 100%;
+    justify-content: center;
+    margin-top: 8px;
+  }
+  
+  /* Swipe indicator for mobile users */
+  .cv-panel::after {
+    content: 'Swipe left/right to navigate pages';
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    opacity: 0;
+    animation: swipeHint 3s ease-in-out 1s;
+    pointer-events: none;
+    z-index: 60;
+  }
+  
+  @keyframes swipeHint {
+    0%, 90%, 100% { opacity: 0; }
+    10%, 80% { opacity: 1; }
+  }
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .fixed.right-0 {
     width: 100vw;
     max-width: none;
+  }
+  
+  /* Adjust padding for smaller screens */
+  .p-4 {
+    padding: 16px 12px;
+  }
+  
+  /* Stack header elements on very small screens */
+  .flex.items-center.gap-4 {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .flex.items-center.gap-4 h2 {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Very small screens - optimize space */
+  .p-4 {
+    padding: 12px 8px;
+  }
+  
+  .bg-gray-50.p-4 {
+    padding: 8px;
+  }
+  
+  /* Hide page count text on very small screens, keep only buttons */
+  .text-sm.text-gray-600 {
+    font-size: 12px;
+  }
+  
+  /* Make navigation buttons smaller but still touch-friendly */
+  .flex.items-center.gap-2 button {
+    padding: 6px 10px;
+    min-width: 40px;
+    min-height: 40px;
   }
 }
 
@@ -307,5 +494,34 @@ button:focus-visible {
 /* Smooth scrolling for PDF content */
 .overflow-auto {
   scroll-behavior: smooth;
+}
+
+/* Enhanced loading state for mobile */
+@media (max-width: 768px) {
+  .animate-spin {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .p-8.text-center {
+    padding: 32px 16px;
+  }
+}
+
+/* Improved error state for mobile */
+@media (max-width: 768px) {
+  .w-16.h-16 {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .text-lg {
+    font-size: 16px;
+  }
+  
+  .px-4.py-2 {
+    padding: 12px 20px;
+    min-height: 44px;
+  }
 }
 </style>

@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Touch Interactions - Manual Test</title>
+    <style>
+        /* Import the same CSS variables as the main project */
+        :root {
+            --color-primary: #3b82f6;
+            --color-primary-dark: #1d4ed8;
+            --color-primary-light: #60a5fa;
+            --color-white: #ffffff;
+            --color-gray-50: #f9fafb;
+            --color-gray-100: #f3f4f6;
+            --color-gray-200: #e5e7eb;
+            --color-gray-600: #4b5563;
+            --color-gray-700: #374151;
+            --color-gray-900: #111827;
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --radius-base: 0.25rem;
+            --radius-lg: 0.5rem;
+            --radius-full: 9999px;
+            --shadow-base: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            --transition-base: 250ms ease-in-out;
+            --transition-fast: 150ms ease-in-out;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 600;
+            --line-height-tight: 1.25;
+            --line-height-relaxed: 1.625;
+            --z-tooltip: 1070;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--color-gray-50);
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .test-section {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-base);
+        }
+
+        .test-title {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: 10px;
+            color: var(--color-gray-900);
+        }
+
+        .test-description {
+            color: var(--color-gray-600);
+            margin-bottom: 20px;
+        }
+
+        /* Project Card Styles */
+        .project-card {
+            background: var(--color-white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-base);
+            overflow: hidden;
+            transition: all var(--transition-base);
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .project-card__thumbnail {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            background: var(--color-gray-100);
+        }
+
+        .project-card__image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--transition-base) ease-out;
+        }
+
+        .project-card:hover .project-card__image {
+            transform: scale3d(1.05, 1.05, 1);
+        }
+
+        .project-card__overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0.8) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-base) ease-out;
+            backdrop-filter: blur(2px);
+        }
+
+        .project-card:hover .project-card__overlay {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .project-card__corner-links {
+            position: absolute;
+            top: var(--space-3);
+            right: var(--space-3);
+            display: flex;
+            gap: var(--space-2);
+            z-index: 3;
+        }
+
+        .project-card__link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--color-gray-700);
+            border-radius: var(--radius-full);
+            transition: all var(--transition-fast) ease-out;
+            text-decoration: none;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .project-card__link:hover {
+            background: var(--color-primary);
+            color: var(--color-white);
+            transform: scale3d(1.1, 1.1, 1);
+        }
+
+        .project-card__link--main {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0;
+            background: transparent;
+            backdrop-filter: none;
+            border: none;
+            z-index: 1;
+        }
+
+        .project-card__link--github,
+        .project-card__link--additional {
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            transform: translateY(-8px) scale(0.8);
+            transition: all var(--transition-base) ease-out;
+        }
+
+        .project-card:hover .project-card__link--github,
+        .project-card:hover .project-card__link--additional {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .project-card__content {
+            padding: var(--space-6);
+            flex: 1;
+        }
+
+        .project-card__title {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-gray-900);
+            margin-bottom: var(--space-3);
+        }
+
+        .project-card__description {
+            color: var(--color-gray-600);
+            font-size: var(--font-size-sm);
+            margin-bottom: var(--space-4);
+        }
+
+        .project-card__technologies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+        }
+
+        .project-card__tech-tag {
+            background: var(--color-gray-100);
+            color: var(--color-gray-700);
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-full);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-medium);
+        }
+
+        /* Mobile Touch Interactions */
+        @media (hover: none) and (pointer: coarse) {
+            .project-card {
+                cursor: pointer;
+            }
+
+            .project-card__overlay {
+                opacity: 0;
+                visibility: hidden;
+                transition: all var(--transition-base) ease-out;
+            }
+
+            .project-card.touch-active .project-card__overlay {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .project-card__link--github,
+            .project-card__link--additional {
+                opacity: 0;
+                transform: translateY(-8px) scale(0.8);
+                transition: all var(--transition-base) ease-out;
+            }
+
+            .project-card.touch-active .project-card__link--github,
+            .project-card.touch-active .project-card__link--additional {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+
+            .project-card__link {
+                width: 48px;
+                height: 48px;
+                min-height: 44px;
+                min-width: 44px;
+            }
+
+            .project-card__link:active {
+                transform: scale3d(0.95, 0.95, 1);
+                background: var(--color-primary);
+                color: var(--color-white);
+            }
+
+            .project-card:active {
+                transform: scale3d(0.98, 0.98, 1);
+            }
+        }
+
+        /* CV Viewer Styles */
+        .cv-viewer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 800px;
+            height: 100vh;
+            background: white;
+            box-shadow: var(--shadow-2xl);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .cv-viewer.open {
+            transform: translateX(0);
+        }
+
+        .cv-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            border-bottom: 1px solid var(--color-gray-200);
+            background: white;
+        }
+
+        .cv-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .cv-nav button {
+            padding: 8px 12px;
+            background: var(--color-gray-100);
+            border: none;
+            border-radius: var(--radius-base);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .cv-nav button:hover {
+            background: var(--color-gray-200);
+        }
+
+        .cv-nav button:active {
+            transform: scale(0.95);
+        }
+
+        .cv-nav button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .cv-close {
+            padding: 8px;
+            background: none;
+            border: none;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .cv-close:hover {
+            background: var(--color-gray-100);
+        }
+
+        .cv-close:active {
+            transform: scale(0.9);
+        }
+
+        .cv-content {
+            flex: 1;
+            overflow: auto;
+            padding: 16px;
+            background: var(--color-gray-50);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .cv-frame {
+            width: 100%;
+            height: 600px;
+            border: none;
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-base);
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .cv-viewer {
+                width: 100vw;
+                max-width: none;
+            }
+
+            .cv-header {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .cv-nav {
+                order: 2;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .cv-frame {
+                height: calc(100vh - 120px);
+            }
+        }
+
+        /* Test status indicators */
+        .test-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-medium);
+            margin-left: 10px;
+        }
+
+        .test-status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .test-status.pass {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .test-status.fail {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .test-instructions {
+            background: var(--color-gray-100);
+            padding: 15px;
+            border-radius: var(--radius-base);
+            margin-bottom: 15px;
+            font-size: var(--font-size-sm);
+        }
+
+        .test-instructions ol {
+            margin-left: 20px;
+        }
+
+        .test-instructions li {
+            margin-bottom: 5px;
+        }
+
+        .backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .backdrop.open {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-section">
+            <h1 class="test-title">Mobile Touch Interactions - Manual Testing</h1>
+            <p class="test-description">
+                This page tests mobile-specific touch interactions for the portfolio project.
+                Open this page on a mobile device or use browser dev tools to simulate touch.
+            </p>
+        </div>
+
+        <div class="test-section">
+            <h2 class="test-title">
+                Test 1: Project Card Touch Interactions
+                <span class="test-status pending" id="test1-status">Pending</span>
+            </h2>
+            <div class="test-instructions">
+                <p><strong>Instructions:</strong></p>
+                <ol>
+                    <li>Tap the project card below to activate touch mode</li>
+                    <li>Verify the overlay appears with links</li>
+                    <li>Tap the GitHub icon to test link navigation</li>
+                    <li>Tap outside to deactivate</li>
+                    <li>Try a quick tap on the main card area</li>
+                </ol>
+            </div>
+
+            <div class="project-card" id="test-card">
+                <div class="project-card__thumbnail">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='225' viewBox='0 0 400 225'%3E%3Crect width='400' height='225' fill='%23e5e7eb'/%3E%3Ctext x='200' y='112.5' text-anchor='middle' dy='.3em' fill='%236b7280' font-family='sans-serif' font-size='16'%3EProject Thumbnail%3C/text%3E%3C/svg%3E" alt="Test project thumbnail" class="project-card__image" />
+                    <div class="project-card__overlay">
+                        <a href="https://example.com" class="project-card__link project-card__link--main" target="_blank">
+                            <span style="position: absolute; width: 1px; height: 1px; overflow: hidden;">View Project</span>
+                        </a>
+                        <div class="project-card__corner-links">
+                            <a href="https://github.com/test" class="project-card__link project-card__link--github" target="_blank">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                </svg>
+                            </a>
+                            <a href="https://demo.com" class="project-card__link project-card__link--additional" target="_blank">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card__content">
+                    <h3 class="project-card__title">Test Project</h3>
+                    <p class="project-card__description">This is a test project for mobile touch interactions. Tap to activate touch mode and test the overlay functionality.</p>
+                    <div class="project-card__technologies">
+                        <span class="project-card__tech-tag">React</span>
+                        <span class="project-card__tech-tag">TypeScript</span>
+                        <span class="project-card__tech-tag">Tailwind</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2 class="test-title">
+                Test 2: CV Viewer Touch Navigation
+                <span class="test-status pending" id="test2-status">Pending</span>
+            </h2>
+            <div class="test-instructions">
+                <p><strong>Instructions:</strong></p>
+                <ol>
+                    <li>Tap "Open CV" button below</li>
+                    <li>Try swiping left/right to navigate pages</li>
+                    <li>Test the navigation buttons</li>
+                    <li>Verify touch targets are large enough</li>
+                    <li>Close by tapping the X or backdrop</li>
+                </ol>
+            </div>
+
+            <button onclick="openCV()" style="padding: 12px 24px; background: var(--color-primary); color: white; border: none; border-radius: var(--radius-lg); cursor: pointer; font-size: var(--font-size-base); min-height: 44px;">
+                Open CV Viewer
+            </button>
+        </div>
+
+        <div class="test-section">
+            <h2 class="test-title">
+                Test 3: Responsive Behavior
+                <span class="test-status pending" id="test3-status">Pending</span>
+            </h2>
+            <div class="test-instructions">
+                <p><strong>Instructions:</strong></p>
+                <ol>
+                    <li>Rotate device between portrait/landscape</li>
+                    <li>Test on different screen sizes</li>
+                    <li>Verify touch targets remain accessible</li>
+                    <li>Check that content doesn't overflow</li>
+                </ol>
+            </div>
+            <p>Current viewport: <span id="viewport-info">Loading...</span></p>
+        </div>
+    </div>
+
+    <!-- CV Viewer Modal -->
+    <div class="backdrop" id="cv-backdrop" onclick="closeCV()"></div>
+    <div class="cv-viewer" id="cv-viewer">
+        <div class="cv-header">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <h2>CV</h2>
+                <div class="cv-nav">
+                    <button onclick="previousPage()" id="prev-btn">←</button>
+                    <span id="page-info">1 / 3</span>
+                    <button onclick="nextPage()" id="next-btn">→</button>
+                </div>
+            </div>
+            <button class="cv-close" onclick="closeCV()">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="cv-content" id="cv-content">
+            <iframe class="cv-frame" src="data:text/html,%3Chtml%3E%3Cbody style='margin:0;padding:40px;font-family:sans-serif;background:%23f9fafb;'%3E%3Ch1%3ECV Page 1%3C/h1%3E%3Cp%3EThis is a mock CV page for testing touch interactions.%3C/p%3E%3Cp%3ETry swiping left/right or using the navigation buttons.%3C/p%3E%3C/body%3E%3C/html%3E" title="CV Document"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // Touch interaction handling for project cards
+        let touchStartTime = 0;
+        let touchActive = false;
+        let currentPage = 1;
+        let totalPages = 3;
+
+        // Project card touch handling
+        const testCard = document.getElementById('test-card');
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+        if (isTouchDevice) {
+            testCard.addEventListener('touchstart', handleTouchStart, { passive: true });
+            testCard.addEventListener('touchend', handleTouchEnd, { passive: false });
+            testCard.addEventListener('touchcancel', handleTouchCancel);
+        }
+
+        function handleTouchStart(event) {
+            touchStartTime = Date.now();
+            
+            if (!touchActive) {
+                touchActive = true;
+                testCard.classList.add('touch-active');
+                updateTestStatus('test1-status', 'pass', 'Touch activated');
+            }
+        }
+
+        function handleTouchEnd(event) {
+            const touchDuration = Date.now() - touchStartTime;
+            const target = event.target;
+            
+            if (touchDuration < 200) {
+                const link = target.closest('.project-card__link');
+                if (link && link.href) {
+                    console.log('Quick tap detected, would navigate to:', link.href);
+                    updateTestStatus('test1-status', 'pass', 'Quick tap works');
+                }
+            }
+            
+            setTimeout(() => {
+                if (touchActive) {
+                    touchActive = false;
+                    testCard.classList.remove('touch-active');
+                }
+            }, 3000);
+        }
+
+        function handleTouchCancel(event) {
+            touchActive = false;
+            testCard.classList.remove('touch-active');
+        }
+
+        // CV Viewer functionality
+        function openCV() {
+            document.getElementById('cv-backdrop').classList.add('open');
+            document.getElementById('cv-viewer').classList.add('open');
+            document.body.style.overflow = 'hidden';
+            updateTestStatus('test2-status', 'pass', 'CV opened');
+        }
+
+        function closeCV() {
+            document.getElementById('cv-backdrop').classList.remove('open');
+            document.getElementById('cv-viewer').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                updatePageInfo();
+                updateCVContent();
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                updatePageInfo();
+                updateCVContent();
+            }
+        }
+
+        function updatePageInfo() {
+            document.getElementById('page-info').textContent = `${currentPage} / ${totalPages}`;
+            document.getElementById('prev-btn').disabled = currentPage <= 1;
+            document.getElementById('next-btn').disabled = currentPage >= totalPages;
+        }
+
+        function updateCVContent() {
+            const iframe = document.querySelector('.cv-frame');
+            iframe.src = `data:text/html,%3Chtml%3E%3Cbody style='margin:0;padding:40px;font-family:sans-serif;background:%23f9fafb;'%3E%3Ch1%3ECV Page ${currentPage}%3C/h1%3E%3Cp%3EThis is page ${currentPage} of the mock CV.%3C/p%3E%3Cp%3ETry swiping or using navigation buttons.%3C/p%3E%3C/body%3E%3C/html%3E`;
+        }
+
+        // Touch swipe handling for CV viewer
+        let touchState = {
+            startX: 0,
+            startY: 0,
+            startTime: 0,
+            isDragging: false,
+            threshold: 50
+        };
+
+        const cvContent = document.getElementById('cv-content');
+        cvContent.addEventListener('touchstart', handleCVTouchStart, { passive: true });
+        cvContent.addEventListener('touchmove', handleCVTouchMove, { passive: false });
+        cvContent.addEventListener('touchend', handleCVTouchEnd, { passive: true });
+
+        function handleCVTouchStart(event) {
+            const touch = event.touches[0];
+            touchState = {
+                startX: touch.clientX,
+                startY: touch.clientY,
+                startTime: Date.now(),
+                isDragging: false,
+                threshold: 50
+            };
+        }
+
+        function handleCVTouchMove(event) {
+            if (!touchState.startX) return;
+            
+            const touch = event.touches[0];
+            const deltaX = Math.abs(touch.clientX - touchState.startX);
+            const deltaY = Math.abs(touch.clientY - touchState.startY);
+            
+            if (deltaX > deltaY && deltaX > 10) {
+                touchState.isDragging = true;
+                event.preventDefault();
+            }
+        }
+
+        function handleCVTouchEnd(event) {
+            if (!touchState.startX) return;
+            
+            const touch = event.changedTouches[0];
+            const deltaX = touch.clientX - touchState.startX;
+            const deltaTime = Date.now() - touchState.startTime;
+            
+            if (Math.abs(deltaX) > touchState.threshold && 
+                Math.abs(deltaX) > Math.abs(touch.clientY - touchState.startY) && 
+                deltaTime < 500) {
+                
+                if (deltaX > 0) {
+                    previousPage();
+                    updateTestStatus('test2-status', 'pass', 'Swipe navigation works');
+                } else {
+                    nextPage();
+                    updateTestStatus('test2-status', 'pass', 'Swipe navigation works');
+                }
+            }
+            
+            touchState = { startX: 0, startY: 0, startTime: 0, isDragging: false, threshold: 50 };
+        }
+
+        // Utility functions
+        function updateTestStatus(elementId, status, message) {
+            const element = document.getElementById(elementId);
+            element.className = `test-status ${status}`;
+            element.textContent = message;
+        }
+
+        function updateViewportInfo() {
+            const info = document.getElementById('viewport-info');
+            info.textContent = `${window.innerWidth}x${window.innerHeight}`;
+            
+            if (window.innerWidth <= 480) {
+                updateTestStatus('test3-status', 'pass', 'Small screen detected');
+            } else if (window.innerWidth <= 768) {
+                updateTestStatus('test3-status', 'pass', 'Mobile screen detected');
+            } else {
+                updateTestStatus('test3-status', 'pending', 'Desktop screen');
+            }
+        }
+
+        // Initialize
+        updatePageInfo();
+        updateViewportInfo();
+        window.addEventListener('resize', updateViewportInfo);
+
+        // Keyboard support
+        document.addEventListener('keydown', (event) => {
+            if (document.getElementById('cv-viewer').classList.contains('open')) {
+                switch (event.key) {
+                    case 'Escape':
+                        closeCV();
+                        break;
+                    case 'ArrowLeft':
+                        previousPage();
+                        break;
+                    case 'ArrowRight':
+                        nextPage();
+                        break;
+                }
+            }
+        });
+
+        console.log('Mobile touch interactions test page loaded');
+        console.log('Touch device detected:', isTouchDevice);
+        console.log('Viewport:', window.innerWidth + 'x' + window.innerHeight);
+    </script>
+</body>
+</html>

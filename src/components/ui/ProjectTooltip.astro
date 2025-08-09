@@ -237,12 +237,84 @@ const { title, description, technologies, featured = false } = Astro.props;
     }
   }
   
+  /* Mobile touch device optimizations */
+  @media (hover: none) and (pointer: coarse) {
+    .project-tooltip {
+      /* Make tooltip more prominent on touch devices */
+      box-shadow: var(--shadow-2xl);
+      border: 2px solid var(--color-primary-light);
+      max-width: 300px;
+      min-width: 260px;
+      
+      /* Better positioning for touch */
+      transform: translateY(0) scale(1);
+      transition: all var(--transition-fast) ease-out;
+    }
+    
+    .project-tooltip.show {
+      /* More dramatic entrance on mobile */
+      animation: mobileTooltipShow 0.3s ease-out forwards;
+    }
+    
+    @keyframes mobileTooltipShow {
+      0% {
+        opacity: 0;
+        transform: translateY(12px) scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    /* Larger touch-friendly elements */
+    .project-tooltip__content {
+      padding: var(--space-1);
+    }
+    
+    .project-tooltip__title {
+      font-size: var(--font-size-lg);
+      line-height: var(--line-height-snug);
+    }
+    
+    .project-tooltip__description {
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-relaxed);
+    }
+    
+    .project-tooltip__tech-tag {
+      padding: var(--space-2) var(--space-3);
+      font-size: var(--font-size-xs);
+      border-radius: var(--radius-lg);
+    }
+    
+    /* Add close indicator for mobile */
+    .project-tooltip::before {
+      content: 'Tap anywhere to close';
+      position: absolute;
+      top: -24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-gray-800);
+      color: var(--color-white);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-base);
+      font-size: 0.625rem;
+      white-space: nowrap;
+      opacity: 0.8;
+      z-index: 1;
+    }
+  }
+
   /* Mobile responsive adjustments */
   @media (max-width: 640px) {
     .project-tooltip {
-      max-width: 280px;
-      min-width: 240px;
-      padding: var(--space-3);
+      max-width: calc(100vw - 40px);
+      min-width: 280px;
+      padding: var(--space-4);
+      left: 20px !important;
+      right: 20px !important;
+      width: auto !important;
     }
     
     .project-tooltip__title {
@@ -251,11 +323,49 @@ const { title, description, technologies, featured = false } = Astro.props;
     
     .project-tooltip__description {
       font-size: var(--font-size-xs);
+      margin-bottom: var(--space-3);
     }
     
     .project-tooltip__tech-tag {
       font-size: 0.625rem;
       padding: 0.125rem var(--space-1);
+    }
+    
+    .project-tooltip__header {
+      margin-bottom: var(--space-2);
+    }
+    
+    .project-tooltip__technologies {
+      padding-top: var(--space-2);
+    }
+  }
+  
+  /* Very small screens */
+  @media (max-width: 480px) {
+    .project-tooltip {
+      max-width: calc(100vw - 20px);
+      min-width: 260px;
+      padding: var(--space-3);
+      left: 10px !important;
+      right: 10px !important;
+    }
+    
+    .project-tooltip__title {
+      font-size: var(--font-size-sm);
+    }
+    
+    .project-tooltip__description {
+      font-size: 0.75rem;
+      line-height: 1.4;
+    }
+    
+    .project-tooltip__tech-list {
+      gap: 0.25rem;
+    }
+    
+    .project-tooltip__tech-tag {
+      font-size: 0.625rem;
+      padding: 0.125rem 0.375rem;
     }
   }
 </style>

@@ -297,31 +297,69 @@ const { title, description, technologies, thumbnail, links, featured = false } =
   
   /* Mobile Touch Interactions */
   @media (hover: none) and (pointer: coarse) {
+    .project-card {
+      cursor: pointer;
+    }
+    
     .project-card__overlay {
-      opacity: 1;
-      visibility: visible;
+      opacity: 0;
+      visibility: hidden;
       background: linear-gradient(
         135deg,
-        rgba(0, 0, 0, 0.4) 0%,
-        rgba(0, 0, 0, 0.2) 50%,
-        rgba(0, 0, 0, 0.4) 100%
+        rgba(0, 0, 0, 0.8) 0%,
+        rgba(0, 0, 0, 0.6) 50%,
+        rgba(0, 0, 0, 0.8) 100%
       );
+      transition: all var(--transition-base) ease-out;
+    }
+    
+    .project-card.touch-active .project-card__overlay {
+      opacity: 1;
+      visibility: visible;
     }
     
     .project-card__link--github,
     .project-card__link--additional {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.8);
+      transition: all var(--transition-base) ease-out;
+    }
+    
+    .project-card.touch-active .project-card__link--github,
+    .project-card.touch-active .project-card__link--additional {
       opacity: 1;
       transform: translateY(0) scale(1);
+    }
+    
+    .project-card.touch-active .project-card__link--github {
+      transition-delay: 0.1s;
+    }
+    
+    .project-card.touch-active .project-card__link--additional {
+      transition-delay: 0.15s;
     }
     
     .project-card__link {
       width: 48px;
       height: 48px;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
+      min-height: 44px; /* Minimum touch target size */
+      min-width: 44px;
     }
     
     .project-card__link:active {
       transform: scale3d(0.95, 0.95, 1) translateZ(0);
+      background: var(--color-primary);
+      color: var(--color-white);
+    }
+    
+    /* Touch feedback for the entire card */
+    .project-card:active {
+      transform: scale3d(0.98, 0.98, 1);
+    }
+    
+    .project-card.touch-active:active {
+      transform: scale3d(0.98, 0.98, 1) translateY(-2px);
     }
   }
   
@@ -408,6 +446,7 @@ const { title, description, technologies, thumbnail, links, featured = false } =
       this.tooltips = new Map();
       this.showDelay = 300;
       this.hideDelay = 100;
+      this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
       this.init();
     }
 
@@ -432,20 +471,89 @@ const { title, description, technologies, thumbnail, links, featured = false } =
           card: card,
           showTimeout: null,
           hideTimeout: null,
-          isVisible: false
+          isVisible: false,
+          touchActive: false,
+          touchStartTime: 0
         };
 
         this.tooltips.set(card, tooltipData);
 
-        // Add event listeners
-        card.addEventListener('mouseenter', (e) => this.handleMouseEnter(e, tooltipData));
-        card.addEventListener('mouseleave', (e) => this.handleMouseLeave(e, tooltipData));
-        card.addEventListener('mousemove', (e) => this.handleMouseMove(e, tooltipData));
+        if (this.isTouchDevice) {
+          // Touch event listeners for mobile
+          card.addEventListener('touchstart', (e) => this.handleTouchStart(e, tooltipData), { passive: true });
+          card.addEventListener('touchend', (e) => this.handleTouchEnd(e, tooltipData), { passive: false });
+          card.addEventListener('touchcancel', (e) => this.handleTouchCancel(e, tooltipData));
+          
+          // Prevent context menu on long press for better UX
+          card.addEventListener('contextmenu', (e) => {
+            if (tooltipData.touchActive) {
+              e.preventDefault();
+            }
+          });
+        } else {
+          // Mouse event listeners for desktop
+          card.addEventListener('mouseenter', (e) => this.handleMouseEnter(e, tooltipData));
+          card.addEventListener('mouseleave', (e) => this.handleMouseLeave(e, tooltipData));
+          card.addEventListener('mousemove', (e) => this.handleMouseMove(e, tooltipData));
+        }
         
-        // Handle focus for accessibility
+        // Handle focus for accessibility (both touch and mouse)
         card.addEventListener('focusin', (e) => this.handleFocusIn(e, tooltipData));
         card.addEventListener('focusout', (e) => this.handleFocusOut(e, tooltipData));
       });
+    }
+
+    // Touch event handlers
+    handleTouchStart(event, tooltipData) {
+      tooltipData.touchStartTime = Date.now();
+      
+      // If card is not active, activate it on first touch
+      if (!tooltipData.touchActive) {
+        tooltipData.touchActive = true;
+        tooltipData.card.classList.add('touch-active');
+        
+        // Show tooltip immediately on touch
+        this.showTooltip(tooltipData, event);
+        
+        // Prevent default to avoid triggering hover states
+        event.preventDefault();
+      }
+    }
+
+    handleTouchEnd(event, tooltipData) {
+      const touchDuration = Date.now() - tooltipData.touchStartTime;
+      const target = event.target;
+      
+      // If touch was very short (tap), handle link navigation
+      if (touchDuration < 200) {
+        // Check if the tap was on a link
+        const link = target.closest('.project-card__link');
+        if (link && link.href) {
+          // Allow the link to be followed
+          window.open(link.href, link.target || '_blank');
+        } else if (target.closest('.project-card__link--main')) {
+          // Handle main link
+          const mainLink = tooltipData.card.querySelector('.project-card__link--main');
+          if (mainLink && mainLink.href) {
+            window.open(mainLink.href, mainLink.target || '_blank');
+          }
+        }
+      }
+      
+      // Set timeout to deactivate touch state
+      setTimeout(() => {
+        if (tooltipData.touchActive) {
+          tooltipData.touchActive = false;
+          tooltipData.card.classList.remove('touch-active');
+          this.hideTooltip(tooltipData);
+        }
+      }, 3000); // Keep active for 3 seconds after touch
+    }
+
+    handleTouchCancel(event, tooltipData) {
+      tooltipData.touchActive = false;
+      tooltipData.card.classList.remove('touch-active');
+      this.hideTooltip(tooltipData);
     }
 
     handleMouseEnter(event, tooltipData) {
