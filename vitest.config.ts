@@ -8,10 +8,12 @@ export default defineConfig({
     globals: true,
     include: ['src/**/*.test.ts', 'src/**/*.test.js'],
     exclude: ['node_modules', 'dist', '.astro'],
+    setupFiles: ['src/test/setup.ts'],
   },
   resolve: {
     alias: {
       '~': new URL('./src', import.meta.url).pathname,
+      'astro:content': new URL('./src/test/mocks/astro-content.ts', import.meta.url).pathname,
     },
   },
 });

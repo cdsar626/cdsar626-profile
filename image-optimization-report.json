@@ -1,0 +1,60 @@
+{
+  "timestamp": "2025-08-11T11:43:20.693Z",
+  "totalImages": 72,
+  "totalInputSize": 61464,
+  "totalOutputSize": 43056,
+  "totalSavings": 18408,
+  "formatBreakdown": {
+    "webp": {
+      "count": 36,
+      "inputSize": 30732,
+      "outputSize": 21528,
+      "savings": 9204
+    },
+    "avif": {
+      "count": 36,
+      "inputSize": 30732,
+      "outputSize": 21528,
+      "savings": 9204
+    }
+  },
+  "sizeBreakdown": {
+    "320w": {
+      "count": 12,
+      "inputSize": 10244,
+      "outputSize": 7176,
+      "savings": 3068
+    },
+    "640w": {
+      "count": 12,
+      "inputSize": 10244,
+      "outputSize": 7176,
+      "savings": 3068
+    },
+    "768w": {
+      "count": 12,
+      "inputSize": 10244,
+      "outputSize": 7176,
+      "savings": 3068
+    },
+    "1024w": {
+      "count": 12,
+      "inputSize": 10244,
+      "outputSize": 7176,
+      "savings": 3068
+    },
+    "1280w": {
+      "count": 12,
+      "inputSize": 10244,
+      "outputSize": 7176,
+      "savings": 3068
+    },
+    "1536w": {
+      "count": 12,
+      "inputSize": 10244,
+      "outputSize": 7176,
+      "savings": 3068
+    }
+  },
+  "savingsPercentage": 29.949238578680205
+}

@@ -9,10 +9,26 @@
     "astro": "astro",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "test:unit": "vitest run src/test/utils-*.test.ts",
+    "test:integration": "vitest run src/test/integration-*.test.ts src/test/content-collections.test.ts",
+    "test:accessibility": "vitest run src/test/accessibility*.test.ts",
+    "test:visual": "vitest run src/test/visual-regression.test.ts",
+    "test:components": "vitest run src/test/*-section.test.ts src/test/project-*.test.ts src/test/cv-*.test.ts src/test/header.test.ts",
+    "test:coverage": "vitest run --coverage",
+    "test:comprehensive": "vitest run src/test/test-suite-runner.test.ts",
+    "build:optimize": "astro build && node scripts/build-performance.js",
+    "build:analyze": "npm run build && node scripts/build-performance.js",
+    "deploy:netlify": "npm run build:optimize && netlify deploy --prod",
+    "deploy:vercel": "npm run build:optimize && vercel --prod",
+    "deploy:firebase": "npm run build:optimize && firebase deploy",
+    "validate:build": "node scripts/build-performance.js",
+    "optimize:images": "node scripts/optimize-images.js",
+    "generate:configs": "node scripts/deploy-config.js"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
+    "@astrojs/sitemap": "^3.4.2",
     "@astrojs/vue": "^5.1.0",
     "@tailwindcss/vite": "^4.1.11",
     "astro": "^5.12.8",
@@ -22,12 +38,17 @@
     "vue": "^3.5.18"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.54.2",
     "@types/jsdom": "^21.1.7",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vitest/ui": "^3.2.4",
     "@vue/test-utils": "^2.4.6",
+    "axe-core": "^4.10.3",
     "gray-matter": "^4.0.3",
+    "happy-dom": "^18.0.1",
     "jsdom": "^26.1.0",
+    "playwright": "^1.54.2",
     "vitest": "^3.2.4"
   }
 }

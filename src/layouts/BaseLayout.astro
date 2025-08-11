@@ -9,16 +9,45 @@ export interface Props {
   description?: string;
   image?: string;
   keywords?: string[];
+  type?: 'website' | 'article' | 'profile';
+  author?: string;
+  publishDate?: Date;
+  modifiedDate?: Date;
+  noindex?: boolean;
+  nofollow?: boolean;
 }
 
 const {
   title = "Portfolio - Full Stack Developer",
-  description = "Modern portfolio showcasing full-stack development projects and expertise",
-  image = "/favicon.svg",
-  keywords = ["developer", "portfolio", "full-stack", "web development", "software engineer"]
+  description = "Modern portfolio showcasing full-stack development projects and expertise in React, Vue.js, Node.js, and modern web technologies",
+  image = "/images/og-image.svg",
+  keywords = ["developer", "portfolio", "full-stack", "web development", "software engineer", "React", "Vue.js", "Node.js", "TypeScript"],
+  type = "website",
+  author = "John Developer",
+  publishDate,
+  modifiedDate,
+  noindex = false,
+  nofollow = false
 } = Astro.props;
 
 const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astro.url;
+const fullImageURL = Astro.site ? new URL(image, Astro.site) : image;
+
+// SEO Configuration
+const siteConfig = {
+  name: "John Developer - Portfolio",
+  url: Astro.site?.toString() || Astro.url.origin,
+  author: {
+    name: author,
+    email: "john@example.com",
+    url: canonicalURL.toString()
+  },
+  social: {
+    github: "https://github.com/johndeveloper",
+    linkedin: "https://linkedin.com/in/johndeveloper",
+    twitter: "@johndeveloper"
+  }
+};
 ---
 
 <!DOCTYPE html>
@@ -33,21 +62,53 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astr
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords.join(", ")} />
+    <meta name="author" content={author} />
     <link rel="canonical" href={canonicalURL} />
     
+    <!-- Robots Meta Tags -->
+    {noindex || nofollow ? (
+      <meta name="robots" content={`${noindex ? 'noindex' : 'index'}${noindex && nofollow ? ',' : ''}${nofollow ? 'nofollow' : ''}`} />
+    ) : (
+      <meta name="robots" content="index,follow" />
+    )}
+    <meta name="googlebot" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" />
+    
+    <!-- Language and Locale -->
+    <meta name="language" content="en-US" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Publication Dates -->
+    {publishDate && <meta name="article:published_time" content={publishDate.toISOString()} />}
+    {modifiedDate && <meta name="article:modified_time" content={modifiedDate.toISOString()} />}
+    
     <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.url} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={Astro.site ? new URL(image, Astro.site) : image} />
+    <meta property="og:image" content={fullImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${title} - Portfolio Preview`} />
+    <meta property="og:site_name" content={siteConfig.name} />
+    {author && <meta property="og:article:author" content={author} />}
     
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={Astro.url} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={Astro.site ? new URL(image, Astro.site) : image} />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={siteConfig.social.twitter} />
+    <meta name="twitter:creator" content={siteConfig.social.twitter} />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={fullImageURL} />
+    <meta name="twitter:image:alt" content={`${title} - Portfolio Preview`} />
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content={siteConfig.name} />
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -137,16 +198,92 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astr
     <meta name="theme-color" content="#1f2937" />
     
     <!-- Structured Data -->
-    <script type="application/ld+json" is:inline>
-      {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Full Stack Developer",
-        "jobTitle": "Software Developer",
-        "url": "{Astro.url}",
-        "sameAs": []
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": siteConfig.author.name,
+      "jobTitle": "Full Stack Software Developer",
+      "description": description,
+      "url": siteConfig.url,
+      "email": siteConfig.author.email,
+      "image": fullImageURL.toString(),
+      "sameAs": [
+        siteConfig.social.github,
+        siteConfig.social.linkedin,
+        siteConfig.social.twitter
+      ],
+      "knowsAbout": [
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "Vue.js",
+        "Node.js",
+        "Full Stack Development",
+        "Web Development",
+        "Software Engineering"
+      ],
+      "hasOccupation": {
+        "@type": "Occupation",
+        "name": "Software Developer",
+        "occupationLocation": {
+          "@type": "Place",
+          "name": "Remote"
+        },
+        "skills": [
+          "JavaScript",
+          "TypeScript",
+          "React",
+          "Vue.js",
+          "Node.js",
+          "HTML",
+          "CSS",
+          "Git",
+          "Agile Development"
+        ]
+      },
+      "alumniOf": {
+        "@type": "EducationalOrganization",
+        "name": "Computer Science Education"
       }
-    </script>
+    })}></script>
+    
+    <!-- Website Structured Data -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": siteConfig.name,
+      "url": siteConfig.url,
+      "description": description,
+      "author": {
+        "@type": "Person",
+        "name": siteConfig.author.name,
+        "url": siteConfig.author.url
+      },
+      "inLanguage": "en-US",
+      "copyrightYear": "2024",
+      "copyrightHolder": {
+        "@type": "Person",
+        "name": siteConfig.author.name
+      }
+    })}></script>
+    
+    <!-- Portfolio/Creative Work Structured Data -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      "name": "Developer Portfolio",
+      "description": "A showcase of full-stack development projects and technical expertise",
+      "author": {
+        "@type": "Person",
+        "name": siteConfig.author.name,
+        "jobTitle": "Full Stack Software Developer"
+      },
+      "dateCreated": "2024-01-01",
+      "dateModified": modifiedDate ? modifiedDate.toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+      "keywords": keywords.join(', '),
+      "genre": "Portfolio",
+      "inLanguage": "en-US"
+    })}></script>
   </head>
   <body>
     <Header />
@@ -287,13 +424,12 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astr
     </script>
     
         
-        <!-- Simple Tooltip Setup with Tippy.js -->
+        <!-- Enhanced Tooltip Setup with Tippy.js -->
         <script>
           // @ts-nocheck
           import tippy, {followCursor} from 'tippy.js';
           document.addEventListener('DOMContentLoaded', () => {
-            console.log('Setting up Tippy.js tooltips...');
-            
+            console.log('Setting up enhanced Tippy.js tooltips...');
             
             // Find all project cards
             const projectCards = document.querySelectorAll('.project-card');
@@ -315,35 +451,47 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astr
               
               console.log(`Card ${index + 1} data:`, { title, description, techTags, isFeatured });
               
-              // Create simple tooltip content for testing
+              // Create enhanced tooltip content with proper styling
+              const featuredBadge = isFeatured ? `<span class="tooltip-badge">Featured</span>` : '';
+              const techTagsHtml = techTags.length > 0 
+                ? techTags.map(tech => `<span class="tooltip-tech-tag">${tech}</span>`).join('')
+                : '<span class="tooltip-tech-tag">No technologies specified</span>';
+              
               const tooltipContent = `
-                <div style="padding: 12px; max-width: 300px;">
-                  <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600;">${title}</h4>
-                  <p style="margin: 0 0 8px 0; font-size: 14px; color: #666;">${description}</p>
-                  <div style="font-size: 12px; color: #888;">
-                    Technologies: ${techTags.join(', ') || 'None specified'}
+                <div class="tooltip-content">
+                  <div class="tooltip-header">
+                    <h4 class="tooltip-title">${title}</h4>
+                    ${featuredBadge}
+                  </div>
+                  <p class="tooltip-description">${description}</p>
+                  <div class="tooltip-technologies">
+                    <span class="tooltip-tech-label">Technologies:</span>
+                    <div class="tooltip-tech-list">
+                      ${techTagsHtml}
+                    </div>
                   </div>
                 </div>
               `;
               
               try {
-                // Initialize Tippy.js tooltip with simple settings
+                // Initialize Tippy.js tooltip with custom theme
                 const instance = tippy(card, {
                   content: tooltipContent,
                   plugins: [followCursor],
                   allowHTML: true,
-                  theme: 'light',
+                  theme: 'portfolio',
                   followCursor: true,
-                  animation: 'fade',
-                  duration: [200, 150],
-                  delay: [200, 100],
+                  animation: 'scale-subtle',
+                  duration: [250, 200],
+                  delay: [300, 150],
                   arrow: true,
                   interactive: false,
                   hideOnClick: true,
                   trigger: 'mouseenter focus',
-                  zIndex: 9999,
+                  zIndex: 1070,
                   maxWidth: 320,
-                  offset: [0, 12],
+                  offset: [0, 16],
+                  placement: 'top',
                   onShow(instance) {
                     console.log('✅ Showing tooltip for:', title);
                   },
@@ -362,7 +510,7 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astr
               }
             });
             
-            console.log('🎉 Tippy.js tooltips setup complete!');
+            console.log('🎉 Enhanced Tippy.js tooltips setup complete!');
           });
         </script>
 
@@ -392,6 +540,209 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astr
         background-size: 200px 100%;
         animation: shimmer 2s infinite;
         min-height: 200px;
+      }
+      
+      /* Custom Tippy.js Portfolio Theme */
+      .tippy-box[data-theme~='portfolio'] {
+        background: var(--color-white);
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-xl);
+        backdrop-filter: blur(8px);
+        font-family: var(--font-family-sans);
+        font-size: var(--font-size-sm);
+        line-height: var(--line-height-normal);
+        padding: 0;
+        max-width: 320px;
+        min-width: 280px;
+      }
+      
+      .tippy-box[data-theme~='portfolio'] .tippy-content {
+        padding: var(--space-4);
+      }
+      
+      .tippy-box[data-theme~='portfolio'] .tippy-arrow {
+        color: var(--color-white);
+      }
+      
+      .tippy-box[data-theme~='portfolio'] .tippy-arrow::before {
+        border-color: var(--color-gray-200);
+      }
+      
+      /* Tooltip content styles */
+      .tooltip-content {
+        position: relative;
+      }
+      
+      .tooltip-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: var(--space-3);
+        margin-bottom: var(--space-3);
+      }
+      
+      .tooltip-title {
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-gray-900);
+        line-height: var(--line-height-tight);
+        margin: 0;
+        flex: 1;
+      }
+      
+      .tooltip-badge {
+        background: var(--color-primary);
+        color: var(--color-white);
+        padding: var(--space-1) var(--space-2);
+        border-radius: var(--radius-base);
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-semibold);
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      
+      .tooltip-description {
+        color: var(--color-gray-700);
+        font-size: var(--font-size-sm);
+        line-height: var(--line-height-relaxed);
+        margin: 0 0 var(--space-4) 0;
+      }
+      
+      .tooltip-technologies {
+        border-top: 1px solid var(--color-gray-200);
+        padding-top: var(--space-3);
+      }
+      
+      .tooltip-tech-label {
+        display: block;
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-gray-600);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: var(--space-2);
+      }
+      
+      .tooltip-tech-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-1);
+      }
+      
+      .tooltip-tech-tag {
+        background: var(--color-gray-100);
+        color: var(--color-gray-700);
+        padding: var(--space-1) var(--space-3);
+        border-radius: var(--radius-full);
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-medium);
+        transition: all var(--transition-fast);
+      }
+      
+      /* Dark mode support for tooltips */
+      @media (prefers-color-scheme: dark) {
+        .tippy-box[data-theme~='portfolio'] {
+          background: var(--color-gray-800);
+          border-color: var(--color-gray-700);
+        }
+        
+        .tippy-box[data-theme~='portfolio'] .tippy-arrow {
+          color: var(--color-gray-800);
+        }
+        
+        .tippy-box[data-theme~='portfolio'] .tippy-arrow::before {
+          border-color: var(--color-gray-700);
+        }
+        
+        .tooltip-title {
+          color: var(--color-gray-100);
+        }
+        
+        .tooltip-description {
+          color: var(--color-gray-300);
+        }
+        
+        .tooltip-tech-label {
+          color: var(--color-gray-400);
+        }
+        
+        .tooltip-tech-tag {
+          background: var(--color-gray-700);
+          color: var(--color-gray-200);
+        }
+        
+        .tooltip-technologies {
+          border-color: var(--color-gray-700);
+        }
+      }
+      
+      /* High contrast mode support */
+      @media (prefers-contrast: high) {
+        .tippy-box[data-theme~='portfolio'] {
+          border: 2px solid var(--color-gray-900);
+          box-shadow: var(--shadow-2xl);
+        }
+        
+        .tooltip-tech-tag {
+          border: 1px solid var(--color-gray-900);
+        }
+      }
+      
+      /* Mobile responsive adjustments for tooltips */
+      @media (max-width: 640px) {
+        .tippy-box[data-theme~='portfolio'] {
+          max-width: calc(100vw - 40px);
+          min-width: 280px;
+        }
+        
+        .tooltip-title {
+          font-size: var(--font-size-base);
+        }
+        
+        .tooltip-description {
+          font-size: var(--font-size-xs);
+          margin-bottom: var(--space-3);
+        }
+        
+        .tooltip-tech-tag {
+          font-size: 0.625rem;
+          padding: 0.125rem var(--space-2);
+        }
+        
+        .tooltip-header {
+          margin-bottom: var(--space-2);
+        }
+        
+        .tooltip-technologies {
+          padding-top: var(--space-2);
+        }
+      }
+      
+      /* Very small screens */
+      @media (max-width: 480px) {
+        .tippy-box[data-theme~='portfolio'] {
+          max-width: calc(100vw - 20px);
+          min-width: 260px;
+        }
+        
+        .tooltip-title {
+          font-size: var(--font-size-sm);
+        }
+        
+        .tooltip-description {
+          font-size: 0.75rem;
+          line-height: 1.4;
+        }
+        
+        .tooltip-tech-list {
+          gap: 0.25rem;
+        }
+        
+        .tooltip-tech-tag {
+          font-size: 0.625rem;
+          padding: 0.125rem var(--space-2);
+        }
       }
       
       /* Reduced motion override */
@@ -425,6 +776,11 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astr
         img.loading-shimmer {
           animation: none;
           background: #f0f0f0;
+        }
+        
+        /* Disable tooltip animations for reduced motion */
+        .tippy-box[data-theme~='portfolio'] {
+          transition: none !important;
         }
       }
     </style>
