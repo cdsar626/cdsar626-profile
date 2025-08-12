@@ -1,0 +1,319 @@
+---
+// This component handles the tooltip setup
+---
+
+<style is:global>
+  /* Custom Tippy.js Theme - Card */
+  .tippy-box[data-theme~="card"] {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 16px !important;
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.12),
+      0 8px 25px rgba(0, 0, 0, 0.08) !important;
+    backdrop-filter: blur(20px) !important;
+    font-family:
+      "Inter",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      sans-serif !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    padding: 0 !important;
+    max-width: 320px !important;
+    min-width: 280px !important;
+    transform: translateY(-4px) !important;
+  }
+
+  .tippy-box[data-theme~="card"] .tippy-content {
+    padding: 20px !important;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+    border-radius: 16px !important;
+  }
+
+  .tippy-box[data-theme~="card"] .tippy-arrow {
+    width: 16px !important;
+    height: 16px !important;
+    color: #ffffff !important;
+  }
+
+  .tippy-box[data-theme~="card"] .tippy-arrow::before {
+    content: "" !important;
+    position: absolute !important;
+    border-color: transparent !important;
+    border-style: solid !important;
+  }
+
+  /* Arrow positioning and styling for different placements */
+  .tippy-box[data-theme~="card"][data-placement^="top"] > .tippy-arrow::before {
+    bottom: -7px !important;
+    left: 0 !important;
+    border-width: 8px 8px 0 !important;
+    border-top-color: #ffffff !important;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1)) !important;
+  }
+
+  .tippy-box[data-theme~="card"][data-placement^="bottom"]
+    > .tippy-arrow::before {
+    top: -7px !important;
+    left: 0 !important;
+    border-width: 0 8px 8px !important;
+    border-bottom-color: #ffffff !important;
+    filter: drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.1)) !important;
+  }
+
+  .tippy-box[data-theme~="card"][data-placement^="left"]
+    > .tippy-arrow::before {
+    right: -7px !important;
+    top: 0 !important;
+    border-width: 8px 0 8px 8px !important;
+    border-left-color: #ffffff !important;
+    filter: drop-shadow(2px 0 4px rgba(0, 0, 0, 0.1)) !important;
+  }
+
+  .tippy-box[data-theme~="card"][data-placement^="right"]
+    > .tippy-arrow::before {
+    left: -7px !important;
+    top: 0 !important;
+    border-width: 8px 8px 8px 0 !important;
+    border-right-color: #ffffff !important;
+    filter: drop-shadow(-2px 0 4px rgba(0, 0, 0, 0.1)) !important;
+  }
+
+  /* Arrow border effect */
+  .tippy-box[data-theme~="card"] .tippy-arrow::after {
+    content: "" !important;
+    position: absolute !important;
+    border-color: transparent !important;
+    border-style: solid !important;
+  }
+
+  .tippy-box[data-theme~="card"][data-placement^="top"] > .tippy-arrow::after {
+    bottom: -8px !important;
+    left: 0 !important;
+    border-width: 8px 8px 0 !important;
+    border-top-color: #e5e7eb !important;
+    z-index: -1 !important;
+  }
+
+  .tippy-box[data-theme~="card"][data-placement^="bottom"]
+    > .tippy-arrow::after {
+    top: -8px !important;
+    left: 0 !important;
+    border-width: 0 8px 8px !important;
+    border-bottom-color: #e5e7eb !important;
+    z-index: -1 !important;
+  }
+
+  .tippy-box[data-theme~="card"][data-placement^="left"] > .tippy-arrow::after {
+    right: -8px !important;
+    top: 0 !important;
+    border-width: 8px 0 8px 8px !important;
+    border-left-color: #e5e7eb !important;
+    z-index: -1 !important;
+  }
+
+  .tippy-box[data-theme~="card"][data-placement^="right"]
+    > .tippy-arrow::after {
+    left: -8px !important;
+    top: 0 !important;
+    border-width: 8px 8px 8px 0 !important;
+    border-right-color: #e5e7eb !important;
+    z-index: -1 !important;
+  }
+
+  /* Tooltip content styles */
+  .tooltip-header {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 0.75rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .tooltip-title {
+    font-size: 1.125rem !important;
+    font-weight: 600 !important;
+    color: #111827 !important;
+    line-height: 1.25 !important;
+    margin: 0 !important;
+    flex: 1 !important;
+  }
+
+  .tooltip-badge {
+    background: #3b82f6 !important;
+    color: #ffffff !important;
+    padding: 0.25rem 0.5rem !important;
+    border-radius: 0.375rem !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+
+  .tooltip-card {
+    position: relative !important;
+  }
+
+  .tooltip-description {
+    color: #374151 !important;
+    font-size: 0.875rem !important;
+    line-height: 1.625 !important;
+    margin: 0 0 0.75rem 0 !important;
+    text-align: left !important;
+  }
+
+  .tooltip-technologies {
+    border-top: 1px solid #e5e7eb !important;
+    padding-top: 0.75rem !important;
+    margin-top: 0.75rem !important;
+  }
+
+  .tooltip-tech-label {
+    display: block !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    color: #6b7280 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .tooltip-tech-list {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.25rem !important;
+  }
+
+  .tooltip-tech-tag {
+    background: #f3f4f6 !important;
+    color: #374151 !important;
+    padding: 0.25rem 0.75rem !important;
+    border-radius: 9999px !important;
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    transition: all 0.15s ease-in-out !important;
+  }
+</style>
+
+<script>
+  import tippy, { followCursor } from "tippy.js";
+  import "tippy.js/dist/tippy.css";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    console.log("Setting up enhanced Tippy.js tooltips...");
+
+    // Find all project cards
+    const projectCards = document.querySelectorAll(".project-card");
+    console.log(`Found ${projectCards.length} project cards`);
+
+    if (projectCards.length === 0) {
+      console.warn("No project cards found!");
+      return;
+    }
+
+    projectCards.forEach((card, index) => {
+      console.log(`Setting up tooltip for card ${index + 1}`);
+
+      // Get tooltip data from the hidden tooltip data div
+      const title =
+        card.querySelector(".project-card__title")?.textContent?.trim() ||
+        "No Title";
+      const tooltipData = card.querySelector(".project-tooltip-data");
+
+      if (!tooltipData) {
+        console.warn(`No tooltip data found for card ${index + 1}`);
+        return;
+      }
+
+      const description =
+        tooltipData
+          .querySelector(".project-tooltip__description")
+          ?.textContent?.trim() || "No description available";
+      const techTags = Array.from(
+        tooltipData.querySelectorAll(".project-tooltip__tech-tag"),
+      )
+        .map((tag) => tag.textContent?.trim())
+        .filter(Boolean);
+      const isFeatured =
+        card.hasAttribute("data-featured") &&
+        card.getAttribute("data-featured") === "true";
+
+      console.log(`Card ${index + 1} data:`, {
+        title,
+        description,
+        techTags,
+        isFeatured,
+      });
+
+      // Create enhanced tooltip content with proper styling
+      const featuredBadge = isFeatured
+        ? `<span class="tooltip-badge">Featured</span>`
+        : "";
+      const techTagsHtml =
+        techTags.length > 0
+          ? techTags
+              .map((tech) => `<span class="tooltip-tech-tag">${tech}</span>`)
+              .join("")
+          : '<span class="tooltip-tech-tag">No technologies specified</span>';
+
+      const tooltipContent = `
+        <div class="tooltip-card">
+          <div class="tooltip-header">
+            <h4 class="tooltip-title">${title}</h4>
+            ${featuredBadge}
+          </div>
+          <p class="tooltip-description">${description}</p>
+          <div class="tooltip-technologies">
+            <span class="tooltip-tech-label">Technologies</span>
+            <div class="tooltip-tech-list">
+              ${techTagsHtml}
+            </div>
+          </div>
+        </div>
+      `;
+
+      try {
+        // Initialize Tippy.js tooltip with custom card theme
+        const instance = tippy(card, {
+          content: tooltipContent,
+          followCursor: true,
+          plugins: [followCursor],
+          allowHTML: true,
+          theme: "card",
+          animation: "scale",
+          duration: [250, 200],
+          delay: [150, 0],
+          arrow: true,
+          interactive: true,
+          hideOnClick: true,
+          trigger: "mouseenter focus",
+          zIndex: 1070,
+          maxWidth: 300,
+          offset: [0, 12],
+          placement: "top",
+          onShow(instance) {
+            console.log("✅ Showing tooltip for:", title);
+          },
+          onHide(instance) {
+            console.log("❌ Hiding tooltip for:", title);
+          },
+          onCreate(instance) {
+            console.log("🎯 Tooltip created for:", title);
+          },
+        });
+
+        console.log(`✅ Tooltip initialized for card ${index + 1}:`, instance);
+      } catch (error) {
+        console.error(
+          `❌ Error initializing tooltip for card ${index + 1}:`,
+          error,
+        );
+      }
+    });
+
+    console.log("🎉 Enhanced Tippy.js tooltips setup complete!");
+  });
+</script>

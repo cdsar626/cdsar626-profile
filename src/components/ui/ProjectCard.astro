@@ -267,7 +267,7 @@ const { title, description, technologies, thumbnail, links, featured = false } =
   }
   
   .project-card__content {
-    padding: var(--space-6);
+    padding: var(--space-3);
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -276,8 +276,8 @@ const { title, description, technologies, thumbnail, links, featured = false } =
   .project-card__title {
     font-size: var(--font-size-xl);
     font-weight: var(--font-weight-semibold);
-    color: var(--color-gray-900);
-    margin-bottom: var(--space-4);
+    color: #111827 !important; /* Force dark color */
+    margin-bottom: var(--space-2);
     line-height: var(--line-height-tight);
     flex: 1;
   }
@@ -300,8 +300,8 @@ const { title, description, technologies, thumbnail, links, featured = false } =
   }
   
   .project-card:hover .project-card__tech-tag {
-    background: var(--color-primary-light);
-    color: var(--color-primary-dark);
+    background: var(--color-primary-light, #60a5fa);
+    color: var(--color-primary-dark, #1d4ed8);
   }
   
   /* Mobile Touch Interactions */
@@ -451,8 +451,14 @@ const { title, description, technologies, thumbnail, links, featured = false } =
       background: rgba(0, 0, 0, 0.9);
     }
     
+    .project-card__title {
+      color: #000000 !important;
+    }
+    
     .project-card__tech-tag {
       border: 1px solid var(--color-gray-700);
+      color: #000000 !important;
+      background: #ffffff !important;
     }
   }
   
