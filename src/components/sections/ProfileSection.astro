@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import profileImage from '../../assets/images/profile/profile-placeholder.svg';
+import CVViewer from '../ui/CVViewer.vue';
 
 export interface Props {
   name?: string;
@@ -51,9 +52,53 @@ const {
     <div class="profile-info">
       <h1 id="profile-heading" class="profile-name">{name}</h1>
       <p class="profile-role" aria-describedby="profile-heading">{role}</p>
+      <div class="profile-actions">
+        <button 
+          id="cv-button"
+          class="cv-button"
+          type="button"
+          aria-label="View CV document"
+        >
+          <svg class="cv-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          View CV
+        </button>
+      </div>
     </div>
   </div>
+
+  <!-- CV Viewer Component -->
+  <CVViewer 
+    client:only="vue"
+    defaultCvPath="/cv/sample-cv.pdf"
+  />
 </section>
+
+<script>
+  // CV Button functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const cvButton = document.getElementById('cv-button');
+    
+    if (cvButton) {
+      cvButton.addEventListener('click', (event) => {
+        // Prevent default button behavior and page scrolling
+        event.preventDefault();
+        event.stopPropagation();
+        
+        console.log('CV button clicked, dispatching event...');
+        
+        // Dispatch a custom event that the Vue component can listen to
+        const customEvent = new CustomEvent('open-cv-viewer', {
+          detail: { open: true }
+        });
+        document.dispatchEvent(customEvent);
+        
+        console.log('CV viewer event dispatched');
+      });
+    }
+  });
+</script>
 
 <style>
   .profile-section {
@@ -122,8 +167,53 @@ const {
     font-size: var(--font-size-xl);
     font-weight: var(--font-weight-medium);
     color: var(--color-gray-600);
-    margin-bottom: 0;
+    margin-bottom: var(--space-6);
     line-height: var(--line-height-relaxed);
+  }
+
+  .profile-actions {
+    opacity: 0;
+    transform: translateY(1rem);
+    animation: profileActionsFadeIn 0.6s ease-out 0.8s forwards;
+  }
+
+  .cv-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    background: var(--color-primary, #3b82f6);
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-md);
+    text-decoration: none;
+  }
+
+  .cv-button:hover {
+    background: var(--color-primary-dark, #2563eb);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .cv-button:focus {
+    outline: 2px solid var(--color-primary, #3b82f6);
+    outline-offset: 2px;
+  }
+
+  .cv-button:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-md);
+  }
+
+  .cv-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
   }
 
   /* Animations */
@@ -142,6 +232,13 @@ const {
   }
 
   @keyframes profileInfoFadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes profileActionsFadeIn {
     to {
       opacity: 1;
       transform: translateY(0);
@@ -190,6 +287,16 @@ const {
     .profile-role {
       font-size: var(--font-size-base);
     }
+
+    .cv-button {
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--font-size-sm);
+    }
+
+    .cv-icon {
+      width: 16px;
+      height: 16px;
+    }
   }
 
   /* Tablet and larger screens */
@@ -228,17 +335,20 @@ const {
   @media (prefers-reduced-motion: reduce) {
     .profile-container,
     .profile-image-wrapper,
-    .profile-info {
+    .profile-info,
+    .profile-actions {
       animation: none;
       opacity: 1;
       transform: none;
     }
 
-    .profile-image {
+    .profile-image,
+    .cv-button {
       transition: none;
     }
 
-    .profile-image:hover {
+    .profile-image:hover,
+    .cv-button:hover {
       transform: none;
     }
   }

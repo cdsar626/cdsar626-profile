@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Button Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .cv-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-decoration: none;
+        }
+        .cv-button:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .cv-icon {
+            width: 20px;
+            height: 20px;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>CV Button Functionality Test</h1>
+        <p>This page tests the CV button functionality without the full Astro framework.</p>
+        
+        <button id="cv-button" class="cv-button" type="button">
+            <svg class="cv-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            View CV
+        </button>
+        
+        <div id="status" class="status" style="display: none;"></div>
+        
+        <div style="margin-top: 30px;">
+            <h3>Test Instructions:</h3>
+            <ol style="text-align: left; max-width: 400px; margin: 0 auto;">
+                <li>Click the "View CV" button above</li>
+                <li>Check if the custom event is dispatched</li>
+                <li>Verify the event contains the correct data</li>
+                <li>Confirm no JavaScript errors occur</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // Test the CV button functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const cvButton = document.getElementById('cv-button');
+            const statusDiv = document.getElementById('status');
+            
+            // Listen for the custom event to verify it's working
+            document.addEventListener('open-cv-viewer', (event) => {
+                console.log('CV Viewer event received:', event);
+                statusDiv.style.display = 'block';
+                statusDiv.className = 'status success';
+                statusDiv.textContent = '✅ Success! CV viewer event was dispatched correctly.';
+                
+                // Log event details
+                console.log('Event detail:', event.detail);
+            });
+            
+            if (cvButton) {
+                cvButton.addEventListener('click', () => {
+                    try {
+                        // Dispatch the same event as in the actual component
+                        const event = new CustomEvent('open-cv-viewer', {
+                            detail: { open: true }
+                        });
+                        document.dispatchEvent(event);
+                        
+                        console.log('CV button clicked, event dispatched');
+                    } catch (error) {
+                        console.error('Error dispatching CV event:', error);
+                        statusDiv.style.display = 'block';
+                        statusDiv.className = 'status error';
+                        statusDiv.textContent = '❌ Error: ' + error.message;
+                    }
+                });
+            } else {
+                statusDiv.style.display = 'block';
+                statusDiv.className = 'status error';
+                statusDiv.textContent = '❌ Error: CV button not found';
+            }
+        });
+    </script>
+</body>
+</html>
