@@ -2,750 +2,750 @@
 
 /* Responsive image: favicon */
 .favicon {
-  background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon.jpg');
+  background-image: url('/favicon.jpg');
 }
 
 @supports (background-image: url('image.webp')) {
   .favicon {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon.webp');
+    background-image: url('/favicon.webp');
   }
 }
 
 @supports (background-image: url('image.avif')) {
   .favicon {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon.avif');
+    background-image: url('/favicon.avif');
   }
 }
 
 @media (max-width: 640px) {
   .favicon {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon-320w.jpg');
+    background-image: url('/favicon-320w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .favicon {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon-320w.webp');
+      background-image: url('/favicon-320w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .favicon {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon-320w.avif');
+      background-image: url('/favicon-320w.avif');
     }
   }
 }
 
 @media (max-width: 768px) {
   .favicon {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon-640w.jpg');
+    background-image: url('/favicon-640w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .favicon {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon-640w.webp');
+      background-image: url('/favicon-640w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .favicon {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon-640w.avif');
+      background-image: url('/favicon-640w.avif');
     }
   }
 }
 
 @media (max-width: 1024px) {
   .favicon {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon-768w.jpg');
+    background-image: url('/favicon-768w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .favicon {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon-768w.webp');
+      background-image: url('/favicon-768w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .favicon {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon-768w.avif');
+      background-image: url('/favicon-768w.avif');
     }
   }
 }
 
 @media (max-width: 1280px) {
   .favicon {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon-1024w.jpg');
+    background-image: url('/favicon-1024w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .favicon {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon-1024w.webp');
+      background-image: url('/favicon-1024w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .favicon {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon-1024w.avif');
+      background-image: url('/favicon-1024w.avif');
     }
   }
 }
 
 @media (max-width: 1536px) {
   .favicon {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon-1280w.jpg');
+    background-image: url('/favicon-1280w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .favicon {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon-1280w.webp');
+      background-image: url('/favicon-1280w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .favicon {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon-1280w.avif');
+      background-image: url('/favicon-1280w.avif');
     }
   }
 }
 
 @media (min-width: 1536px) {
   .favicon {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon-1536w.jpg');
+    background-image: url('/favicon-1536w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .favicon {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon-1536w.webp');
+      background-image: url('/favicon-1536w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .favicon {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public/favicon-1536w.avif');
+      background-image: url('/favicon-1536w.avif');
     }
   }
 }
 
 /* Responsive image: og-image */
 .og-image {
-  background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image.jpg');
+  background-image: url('/images/og-image.jpg');
 }
 
 @supports (background-image: url('image.webp')) {
   .og-image {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image.webp');
+    background-image: url('/images/og-image.webp');
   }
 }
 
 @supports (background-image: url('image.avif')) {
   .og-image {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image.avif');
+    background-image: url('/images/og-image.avif');
   }
 }
 
 @media (max-width: 640px) {
   .og-image {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image-320w.jpg');
+    background-image: url('/images/og-image-320w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .og-image {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image-320w.webp');
+      background-image: url('/images/og-image-320w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .og-image {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image-320w.avif');
+      background-image: url('/images/og-image-320w.avif');
     }
   }
 }
 
 @media (max-width: 768px) {
   .og-image {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image-640w.jpg');
+    background-image: url('/images/og-image-640w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .og-image {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image-640w.webp');
+      background-image: url('/images/og-image-640w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .og-image {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image-640w.avif');
+      background-image: url('/images/og-image-640w.avif');
     }
   }
 }
 
 @media (max-width: 1024px) {
   .og-image {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image-768w.jpg');
+    background-image: url('/images/og-image-768w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .og-image {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image-768w.webp');
+      background-image: url('/images/og-image-768w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .og-image {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image-768w.avif');
+      background-image: url('/images/og-image-768w.avif');
     }
   }
 }
 
 @media (max-width: 1280px) {
   .og-image {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image-1024w.jpg');
+    background-image: url('/images/og-image-1024w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .og-image {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image-1024w.webp');
+      background-image: url('/images/og-image-1024w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .og-image {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image-1024w.avif');
+      background-image: url('/images/og-image-1024w.avif');
     }
   }
 }
 
 @media (max-width: 1536px) {
   .og-image {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image-1280w.jpg');
+    background-image: url('/images/og-image-1280w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .og-image {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image-1280w.webp');
+      background-image: url('/images/og-image-1280w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .og-image {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image-1280w.avif');
+      background-image: url('/images/og-image-1280w.avif');
     }
   }
 }
 
 @media (min-width: 1536px) {
   .og-image {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image-1536w.jpg');
+    background-image: url('/images/og-image-1536w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .og-image {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image-1536w.webp');
+      background-image: url('/images/og-image-1536w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .og-image {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images/og-image-1536w.avif');
+      background-image: url('/images/og-image-1536w.avif');
     }
   }
 }
 
 /* Responsive image: ecommerce-thumbnail */
 .ecommerce-thumbnail {
-  background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail.jpg');
+  background-image: url('/images/projects/ecommerce-thumbnail.jpg');
 }
 
 @supports (background-image: url('image.webp')) {
   .ecommerce-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail.webp');
+    background-image: url('/images/projects/ecommerce-thumbnail.webp');
   }
 }
 
 @supports (background-image: url('image.avif')) {
   .ecommerce-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail.avif');
+    background-image: url('/images/projects/ecommerce-thumbnail.avif');
   }
 }
 
 @media (max-width: 640px) {
   .ecommerce-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail-320w.jpg');
+    background-image: url('/images/projects/ecommerce-thumbnail-320w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .ecommerce-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail-320w.webp');
+      background-image: url('/images/projects/ecommerce-thumbnail-320w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .ecommerce-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail-320w.avif');
+      background-image: url('/images/projects/ecommerce-thumbnail-320w.avif');
     }
   }
 }
 
 @media (max-width: 768px) {
   .ecommerce-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail-640w.jpg');
+    background-image: url('/images/projects/ecommerce-thumbnail-640w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .ecommerce-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail-640w.webp');
+      background-image: url('/images/projects/ecommerce-thumbnail-640w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .ecommerce-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail-640w.avif');
+      background-image: url('/images/projects/ecommerce-thumbnail-640w.avif');
     }
   }
 }
 
 @media (max-width: 1024px) {
   .ecommerce-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail-768w.jpg');
+    background-image: url('/images/projects/ecommerce-thumbnail-768w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .ecommerce-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail-768w.webp');
+      background-image: url('/images/projects/ecommerce-thumbnail-768w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .ecommerce-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail-768w.avif');
+      background-image: url('/images/projects/ecommerce-thumbnail-768w.avif');
     }
   }
 }
 
 @media (max-width: 1280px) {
   .ecommerce-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail-1024w.jpg');
+    background-image: url('/images/projects/ecommerce-thumbnail-1024w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .ecommerce-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail-1024w.webp');
+      background-image: url('/images/projects/ecommerce-thumbnail-1024w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .ecommerce-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail-1024w.avif');
+      background-image: url('/images/projects/ecommerce-thumbnail-1024w.avif');
     }
   }
 }
 
 @media (max-width: 1536px) {
   .ecommerce-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail-1280w.jpg');
+    background-image: url('/images/projects/ecommerce-thumbnail-1280w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .ecommerce-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail-1280w.webp');
+      background-image: url('/images/projects/ecommerce-thumbnail-1280w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .ecommerce-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail-1280w.avif');
+      background-image: url('/images/projects/ecommerce-thumbnail-1280w.avif');
     }
   }
 }
 
 @media (min-width: 1536px) {
   .ecommerce-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail-1536w.jpg');
+    background-image: url('/images/projects/ecommerce-thumbnail-1536w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .ecommerce-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail-1536w.webp');
+      background-image: url('/images/projects/ecommerce-thumbnail-1536w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .ecommerce-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/ecommerce-thumbnail-1536w.avif');
+      background-image: url('/images/projects/ecommerce-thumbnail-1536w.avif');
     }
   }
 }
 
 /* Responsive image: portfolio-thumbnail */
 .portfolio-thumbnail {
-  background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail.jpg');
+  background-image: url('/images/projects/portfolio-thumbnail.jpg');
 }
 
 @supports (background-image: url('image.webp')) {
   .portfolio-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail.webp');
+    background-image: url('/images/projects/portfolio-thumbnail.webp');
   }
 }
 
 @supports (background-image: url('image.avif')) {
   .portfolio-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail.avif');
+    background-image: url('/images/projects/portfolio-thumbnail.avif');
   }
 }
 
 @media (max-width: 640px) {
   .portfolio-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail-320w.jpg');
+    background-image: url('/images/projects/portfolio-thumbnail-320w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .portfolio-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail-320w.webp');
+      background-image: url('/images/projects/portfolio-thumbnail-320w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .portfolio-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail-320w.avif');
+      background-image: url('/images/projects/portfolio-thumbnail-320w.avif');
     }
   }
 }
 
 @media (max-width: 768px) {
   .portfolio-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail-640w.jpg');
+    background-image: url('/images/projects/portfolio-thumbnail-640w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .portfolio-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail-640w.webp');
+      background-image: url('/images/projects/portfolio-thumbnail-640w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .portfolio-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail-640w.avif');
+      background-image: url('/images/projects/portfolio-thumbnail-640w.avif');
     }
   }
 }
 
 @media (max-width: 1024px) {
   .portfolio-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail-768w.jpg');
+    background-image: url('/images/projects/portfolio-thumbnail-768w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .portfolio-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail-768w.webp');
+      background-image: url('/images/projects/portfolio-thumbnail-768w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .portfolio-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail-768w.avif');
+      background-image: url('/images/projects/portfolio-thumbnail-768w.avif');
     }
   }
 }
 
 @media (max-width: 1280px) {
   .portfolio-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail-1024w.jpg');
+    background-image: url('/images/projects/portfolio-thumbnail-1024w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .portfolio-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail-1024w.webp');
+      background-image: url('/images/projects/portfolio-thumbnail-1024w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .portfolio-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail-1024w.avif');
+      background-image: url('/images/projects/portfolio-thumbnail-1024w.avif');
     }
   }
 }
 
 @media (max-width: 1536px) {
   .portfolio-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail-1280w.jpg');
+    background-image: url('/images/projects/portfolio-thumbnail-1280w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .portfolio-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail-1280w.webp');
+      background-image: url('/images/projects/portfolio-thumbnail-1280w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .portfolio-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail-1280w.avif');
+      background-image: url('/images/projects/portfolio-thumbnail-1280w.avif');
     }
   }
 }
 
 @media (min-width: 1536px) {
   .portfolio-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail-1536w.jpg');
+    background-image: url('/images/projects/portfolio-thumbnail-1536w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .portfolio-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail-1536w.webp');
+      background-image: url('/images/projects/portfolio-thumbnail-1536w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .portfolio-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/portfolio-thumbnail-1536w.avif');
+      background-image: url('/images/projects/portfolio-thumbnail-1536w.avif');
     }
   }
 }
 
 /* Responsive image: weather-thumbnail */
 .weather-thumbnail {
-  background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail.jpg');
+  background-image: url('/images/projects/weather-thumbnail.jpg');
 }
 
 @supports (background-image: url('image.webp')) {
   .weather-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail.webp');
+    background-image: url('/images/projects/weather-thumbnail.webp');
   }
 }
 
 @supports (background-image: url('image.avif')) {
   .weather-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail.avif');
+    background-image: url('/images/projects/weather-thumbnail.avif');
   }
 }
 
 @media (max-width: 640px) {
   .weather-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail-320w.jpg');
+    background-image: url('/images/projects/weather-thumbnail-320w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .weather-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail-320w.webp');
+      background-image: url('/images/projects/weather-thumbnail-320w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .weather-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail-320w.avif');
+      background-image: url('/images/projects/weather-thumbnail-320w.avif');
     }
   }
 }
 
 @media (max-width: 768px) {
   .weather-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail-640w.jpg');
+    background-image: url('/images/projects/weather-thumbnail-640w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .weather-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail-640w.webp');
+      background-image: url('/images/projects/weather-thumbnail-640w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .weather-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail-640w.avif');
+      background-image: url('/images/projects/weather-thumbnail-640w.avif');
     }
   }
 }
 
 @media (max-width: 1024px) {
   .weather-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail-768w.jpg');
+    background-image: url('/images/projects/weather-thumbnail-768w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .weather-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail-768w.webp');
+      background-image: url('/images/projects/weather-thumbnail-768w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .weather-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail-768w.avif');
+      background-image: url('/images/projects/weather-thumbnail-768w.avif');
     }
   }
 }
 
 @media (max-width: 1280px) {
   .weather-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail-1024w.jpg');
+    background-image: url('/images/projects/weather-thumbnail-1024w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .weather-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail-1024w.webp');
+      background-image: url('/images/projects/weather-thumbnail-1024w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .weather-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail-1024w.avif');
+      background-image: url('/images/projects/weather-thumbnail-1024w.avif');
     }
   }
 }
 
 @media (max-width: 1536px) {
   .weather-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail-1280w.jpg');
+    background-image: url('/images/projects/weather-thumbnail-1280w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .weather-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail-1280w.webp');
+      background-image: url('/images/projects/weather-thumbnail-1280w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .weather-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail-1280w.avif');
+      background-image: url('/images/projects/weather-thumbnail-1280w.avif');
     }
   }
 }
 
 @media (min-width: 1536px) {
   .weather-thumbnail {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail-1536w.jpg');
+    background-image: url('/images/projects/weather-thumbnail-1536w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .weather-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail-1536w.webp');
+      background-image: url('/images/projects/weather-thumbnail-1536w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .weather-thumbnail {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\public\images\projects/weather-thumbnail-1536w.avif');
+      background-image: url('/images/projects/weather-thumbnail-1536w.avif');
     }
   }
 }
 
 /* Responsive image: profile-placeholder */
 .profile-placeholder {
-  background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder.jpg');
+  background-image: url('/src/assets/images/profile/profile-placeholder.jpg');
 }
 
 @supports (background-image: url('image.webp')) {
   .profile-placeholder {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder.webp');
+    background-image: url('/src/assets/images/profile/profile-placeholder.webp');
   }
 }
 
 @supports (background-image: url('image.avif')) {
   .profile-placeholder {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder.avif');
+    background-image: url('/src/assets/images/profile/profile-placeholder.avif');
   }
 }
 
 @media (max-width: 640px) {
   .profile-placeholder {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder-320w.jpg');
+    background-image: url('/src/assets/images/profile/profile-placeholder-320w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .profile-placeholder {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder-320w.webp');
+      background-image: url('/src/assets/images/profile/profile-placeholder-320w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .profile-placeholder {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder-320w.avif');
+      background-image: url('/src/assets/images/profile/profile-placeholder-320w.avif');
     }
   }
 }
 
 @media (max-width: 768px) {
   .profile-placeholder {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder-640w.jpg');
+    background-image: url('/src/assets/images/profile/profile-placeholder-640w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .profile-placeholder {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder-640w.webp');
+      background-image: url('/src/assets/images/profile/profile-placeholder-640w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .profile-placeholder {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder-640w.avif');
+      background-image: url('/src/assets/images/profile/profile-placeholder-640w.avif');
     }
   }
 }
 
 @media (max-width: 1024px) {
   .profile-placeholder {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder-768w.jpg');
+    background-image: url('/src/assets/images/profile/profile-placeholder-768w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .profile-placeholder {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder-768w.webp');
+      background-image: url('/src/assets/images/profile/profile-placeholder-768w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .profile-placeholder {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder-768w.avif');
+      background-image: url('/src/assets/images/profile/profile-placeholder-768w.avif');
     }
   }
 }
 
 @media (max-width: 1280px) {
   .profile-placeholder {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder-1024w.jpg');
+    background-image: url('/src/assets/images/profile/profile-placeholder-1024w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .profile-placeholder {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder-1024w.webp');
+      background-image: url('/src/assets/images/profile/profile-placeholder-1024w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .profile-placeholder {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder-1024w.avif');
+      background-image: url('/src/assets/images/profile/profile-placeholder-1024w.avif');
     }
   }
 }
 
 @media (max-width: 1536px) {
   .profile-placeholder {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder-1280w.jpg');
+    background-image: url('/src/assets/images/profile/profile-placeholder-1280w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .profile-placeholder {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder-1280w.webp');
+      background-image: url('/src/assets/images/profile/profile-placeholder-1280w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .profile-placeholder {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder-1280w.avif');
+      background-image: url('/src/assets/images/profile/profile-placeholder-1280w.avif');
     }
   }
 }
 
 @media (min-width: 1536px) {
   .profile-placeholder {
-    background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder-1536w.jpg');
+    background-image: url('/src/assets/images/profile/profile-placeholder-1536w.jpg');
   }
   
   @supports (background-image: url('image.webp')) {
     .profile-placeholder {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder-1536w.webp');
+      background-image: url('/src/assets/images/profile/profile-placeholder-1536w.webp');
     }
   }
   
   @supports (background-image: url('image.avif')) {
     .profile-placeholder {
-      background-image: url('L:\Proyectos\IA_projects\presentation\callous-centauri\src\assets\images\profile/profile-placeholder-1536w.avif');
+      background-image: url('/src/assets/images/profile/profile-placeholder-1536w.avif');
     }
   }
 }

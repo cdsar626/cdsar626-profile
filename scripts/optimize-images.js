@@ -103,26 +103,41 @@ function getImageFiles(dir, imageFiles = []) {
 // Generate responsive image HTML
 function generateResponsiveImageHTML(imagePath, alt = '') {
   const baseName = path.basename(imagePath, path.extname(imagePath));
-  const dir = path.dirname(imagePath);
+  // Convert absolute path to relative path from public directory
+  const relativePath = path.relative(PROJECT_ROOT, imagePath);
+  let dir = path.dirname(relativePath).replace(/^public/, '').replace(/\\/g, '/');
+  // Clean up the directory path
+  if (dir === '' || dir === '.') {
+    dir = '';
+  } else if (!dir.startsWith('/')) {
+    dir = '/' + dir;
+  }
+  // Remove double slashes and create final path
+  const dirPath = dir.replace(/\/+/g, '/') || '';
+  const finalPath = dirPath ? `${dirPath}/` : '/';
+  
+  // Convert the main image path to relative as well
+  const relativeImagePath = relativePath.replace(/^public/, '').replace(/\\/g, '/');
+  const finalImagePath = relativeImagePath.startsWith('/') ? relativeImagePath : '/' + relativeImagePath;
   
   // Generate srcset for different formats and sizes
   const webpSrcset = optimizationConfig.breakpoints
-    .map(width => `${dir}/${baseName}-${width}w.webp ${width}w`)
+    .map(width => `${finalPath}${baseName}-${width}w.webp ${width}w`)
     .join(', ');
     
   const avifSrcset = optimizationConfig.breakpoints
-    .map(width => `${dir}/${baseName}-${width}w.avif ${width}w`)
+    .map(width => `${finalPath}${baseName}-${width}w.avif ${width}w`)
     .join(', ');
   
   const fallbackSrcset = optimizationConfig.breakpoints
-    .map(width => `${dir}/${baseName}-${width}w.jpg ${width}w`)
+    .map(width => `${finalPath}${baseName}-${width}w.jpg ${width}w`)
     .join(', ');
   
   return `<picture>
   <source srcset="${avifSrcset}" type="image/avif">
   <source srcset="${webpSrcset}" type="image/webp">
   <img 
-    src="${imagePath}" 
+    src="${finalImagePath}" 
     srcset="${fallbackSrcset}"
     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
     alt="${alt}"
@@ -135,24 +150,37 @@ function generateResponsiveImageHTML(imagePath, alt = '') {
 // Generate CSS for responsive images
 function generateResponsiveImageCSS(imagePath) {
   const baseName = path.basename(imagePath, path.extname(imagePath));
-  const dir = path.dirname(imagePath).replace(/^.*\/public/, '');
+  // Convert absolute path to relative path from public directory
+  const relativePath = path.relative(PROJECT_ROOT, imagePath);
+  let dir = path.dirname(relativePath).replace(/^public/, '').replace(/\\/g, '/');
+  // Clean up the directory path
+  if (dir === '' || dir === '.') {
+    dir = '';
+  } else if (!dir.startsWith('/')) {
+    dir = '/' + dir;
+  }
+  // Remove double slashes
+  const dirPath = dir.replace(/\/+/g, '/') || '';
+  
+  // Create the final path - add leading slash only if dirPath is not empty
+  const finalPath = dirPath ? `${dirPath}/` : '/';
   
   let css = `/* Responsive image: ${baseName} */\n`;
   css += `.${baseName} {\n`;
-  css += `  background-image: url('${dir}/${baseName}.jpg');\n`;
+  css += `  background-image: url('${finalPath}${baseName}.jpg');\n`;
   css += `}\n\n`;
   
   // Add WebP support
   css += `@supports (background-image: url('image.webp')) {\n`;
   css += `  .${baseName} {\n`;
-  css += `    background-image: url('${dir}/${baseName}.webp');\n`;
+  css += `    background-image: url('${finalPath}${baseName}.webp');\n`;
   css += `  }\n`;
   css += `}\n\n`;
   
   // Add AVIF support
   css += `@supports (background-image: url('image.avif')) {\n`;
   css += `  .${baseName} {\n`;
-  css += `    background-image: url('${dir}/${baseName}.avif');\n`;
+  css += `    background-image: url('${finalPath}${baseName}.avif');\n`;
   css += `  }\n`;
   css += `}\n\n`;
   
@@ -163,18 +191,18 @@ function generateResponsiveImageCSS(imagePath) {
     
     css += `@media ${mediaQuery} {\n`;
     css += `  .${baseName} {\n`;
-    css += `    background-image: url('${dir}/${baseName}-${width}w.jpg');\n`;
+    css += `    background-image: url('${finalPath}${baseName}-${width}w.jpg');\n`;
     css += `  }\n`;
     css += `  \n`;
     css += `  @supports (background-image: url('image.webp')) {\n`;
     css += `    .${baseName} {\n`;
-    css += `      background-image: url('${dir}/${baseName}-${width}w.webp');\n`;
+    css += `      background-image: url('${finalPath}${baseName}-${width}w.webp');\n`;
     css += `    }\n`;
     css += `  }\n`;
     css += `  \n`;
     css += `  @supports (background-image: url('image.avif')) {\n`;
     css += `    .${baseName} {\n`;
-    css += `      background-image: url('${dir}/${baseName}-${width}w.avif');\n`;
+    css += `      background-image: url('${finalPath}${baseName}-${width}w.avif');\n`;
     css += `    }\n`;
     css += `  }\n`;
     css += `}\n\n`;

@@ -33,7 +33,7 @@ This document verifies the implementation of mobile-specific touch interactions 
 - **Touch Targets**: All interactive elements meet 44px minimum size requirement
 
 #### Code Location:
-- `callous-centauri/src/components/ui/ProjectCard.astro`
+- `cdsar626-profile/src/components/ui/ProjectCard.astro`
 - CSS media query: `@media (hover: none) and (pointer: coarse)`
 - JavaScript: `ProjectTooltipManager` class with touch handling
 
@@ -54,7 +54,7 @@ This document verifies the implementation of mobile-specific touch interactions 
 - **Performance**: Passive event listeners where appropriate
 
 #### Code Location:
-- `callous-centauri/src/components/ui/CVViewer.vue`
+- `cdsar626-profile/src/components/ui/CVViewer.vue`
 - Touch methods: `handleTouchStart`, `handleTouchMove`, `handleTouchEnd`
 - Mobile styles: `@media (hover: none) and (pointer: coarse)`
 
@@ -95,12 +95,12 @@ if (Math.abs(deltaX) > threshold &&
 ## Testing Implementation
 
 ### 1. Automated Tests
-- **Location**: `callous-centauri/src/test/mobile-touch-interactions.test.ts`
+- **Location**: `cdsar626-profile/src/test/mobile-touch-interactions.test.ts`
 - **Coverage**: Touch event handling, gesture recognition, responsive behavior
 - **Framework**: Vitest with mock touch events
 
 ### 2. Manual Testing
-- **Location**: `callous-centauri/src/test/mobile-touch-manual.html`
+- **Location**: `cdsar626-profile/src/test/mobile-touch-manual.html`
 - **Features**: Interactive test page with real touch events
 - **Scenarios**: Project card interactions, CV viewer navigation, responsive behavior
 
@@ -186,7 +186,7 @@ const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
 ### For Developers:
 1. Run automated tests: `npm test mobile-touch-interactions.test.ts`
-2. Open manual test page: `callous-centauri/src/test/mobile-touch-manual.html`
+2. Open manual test page: `cdsar626-profile/src/test/mobile-touch-manual.html`
 3. Test on actual mobile devices or browser dev tools
 4. Verify all touch interactions work as expected
 
