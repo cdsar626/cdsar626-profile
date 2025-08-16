@@ -1,0 +1,45 @@
+---
+export interface Props {
+  src: string;
+  alt: string;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  sizes?: string;
+}
+
+const { src, alt, class: className = '', loading = 'lazy', sizes = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw' } = Astro.props;
+
+// Extract filename without extension and directory
+const pathParts = src.split('/');
+const filename = pathParts[pathParts.length - 1];
+const baseName = filename.split('.')[0];
+const directory = pathParts.slice(0, -1).join('/');
+
+// Generate responsive image paths
+const breakpoints = [320, 640, 768, 1024, 1280, 1536];
+
+const generateSrcset = (format: string) => {
+  return breakpoints
+    .map(width => `${directory}/${baseName}-${width}w.${format} ${width}w`)
+    .join(', ');
+};
+
+const webpSrcset = generateSrcset('webp');
+const avifSrcset = generateSrcset('avif');
+const fallbackSrcset = breakpoints
+  .map(width => `${directory}/${baseName}-${width}w.jpg ${width}w`)
+  .join(', ');
+---
+
+<picture class={className}>
+  <source srcset={avifSrcset} type="image/avif" />
+  <source srcset={webpSrcset} type="image/webp" />
+  <img 
+    src={src} 
+    srcset={fallbackSrcset}
+    sizes={sizes}
+    alt={alt}
+    loading={loading}
+    decoding="async"
+  />
+</picture>

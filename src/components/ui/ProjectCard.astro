@@ -1,4 +1,7 @@
 ---
+import ProjectImagePlaceholder from './ProjectImagePlaceholder.astro';
+import ResponsiveImage from '../ResponsiveImage.astro';
+
 export interface Props {
   title: string;
   description: string;
@@ -23,16 +26,16 @@ const { title, description, technologies, thumbnail, links, featured = false } =
   tabindex="0"
 >
   <div class="project-card__thumbnail">
-    <img 
+    <ResponsiveImage 
       src={thumbnail} 
       alt={`Screenshot of ${title} project showing the main interface`}
-      loading="lazy"
-      decoding="async"
       class="project-card__image"
       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-      width="400"
-      height="225"
+      loading="lazy"
     />
+    <div class="project-card__placeholder" style="display: none;">
+      <ProjectImagePlaceholder title={title} />
+    </div>
     <div class="project-card__overlay" aria-hidden="true">
       {/* Main link covering entire card */}
       {links.main && (
@@ -159,7 +162,24 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     will-change: transform;
   }
   
+  .project-card__placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-gray-50);
+    transition: transform var(--transition-base) ease-out;
+    will-change: transform;
+  }
+  
   .project-card:hover .project-card__image {
+    transform: scale3d(1.05, 1.05, 1);
+  }
+  
+  .project-card:hover .project-card__placeholder {
     transform: scale3d(1.05, 1.05, 1);
   }
   

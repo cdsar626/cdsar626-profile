@@ -1,14 +1,14 @@
 ---
 title: "Portfolio Website"
 description: "A modern, responsive portfolio website built with Astro framework, featuring smooth animations, project showcase, and integrated CV viewer."
-technologies: ["Astro", "Vue.js", "TypeScript", "Tailwind CSS", "CSS Animations", "Content Collections"]
-thumbnail: "/images/projects/portfolio-thumbnail.jpg"
+technologies: ["Astro", "Vue.js", "TypeScript", "CSS Animations", "Content Collections"]
+thumbnail: "/images/projects/portfolio-image.png"
 featured: false
 order: 5
 links:
-  main: "https://portfolio.example.com"
-  github: "https://github.com/username/portfolio-website"
-publishDate: 2024-04-01
+  main: "https://cdsar626.com"
+  github: "https://github.com/cdsar626/cdsar626-profile"
+publishDate: 2025-09-01
 ---
 
 # Portfolio Website

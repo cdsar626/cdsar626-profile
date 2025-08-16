@@ -250,6 +250,131 @@
   }
 }
 
+/* Responsive image: blog-cms-thumbnail */
+.blog-cms-thumbnail {
+  background-image: url('/images/projects/blog-cms-thumbnail.jpg');
+}
+
+@supports (background-image: url('image.webp')) {
+  .blog-cms-thumbnail {
+    background-image: url('/images/projects/blog-cms-thumbnail.webp');
+  }
+}
+
+@supports (background-image: url('image.avif')) {
+  .blog-cms-thumbnail {
+    background-image: url('/images/projects/blog-cms-thumbnail.avif');
+  }
+}
+
+@media (max-width: 640px) {
+  .blog-cms-thumbnail {
+    background-image: url('/images/projects/blog-cms-thumbnail-320w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .blog-cms-thumbnail {
+      background-image: url('/images/projects/blog-cms-thumbnail-320w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .blog-cms-thumbnail {
+      background-image: url('/images/projects/blog-cms-thumbnail-320w.avif');
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .blog-cms-thumbnail {
+    background-image: url('/images/projects/blog-cms-thumbnail-640w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .blog-cms-thumbnail {
+      background-image: url('/images/projects/blog-cms-thumbnail-640w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .blog-cms-thumbnail {
+      background-image: url('/images/projects/blog-cms-thumbnail-640w.avif');
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .blog-cms-thumbnail {
+    background-image: url('/images/projects/blog-cms-thumbnail-768w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .blog-cms-thumbnail {
+      background-image: url('/images/projects/blog-cms-thumbnail-768w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .blog-cms-thumbnail {
+      background-image: url('/images/projects/blog-cms-thumbnail-768w.avif');
+    }
+  }
+}
+
+@media (max-width: 1280px) {
+  .blog-cms-thumbnail {
+    background-image: url('/images/projects/blog-cms-thumbnail-1024w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .blog-cms-thumbnail {
+      background-image: url('/images/projects/blog-cms-thumbnail-1024w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .blog-cms-thumbnail {
+      background-image: url('/images/projects/blog-cms-thumbnail-1024w.avif');
+    }
+  }
+}
+
+@media (max-width: 1536px) {
+  .blog-cms-thumbnail {
+    background-image: url('/images/projects/blog-cms-thumbnail-1280w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .blog-cms-thumbnail {
+      background-image: url('/images/projects/blog-cms-thumbnail-1280w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .blog-cms-thumbnail {
+      background-image: url('/images/projects/blog-cms-thumbnail-1280w.avif');
+    }
+  }
+}
+
+@media (min-width: 1536px) {
+  .blog-cms-thumbnail {
+    background-image: url('/images/projects/blog-cms-thumbnail-1536w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .blog-cms-thumbnail {
+      background-image: url('/images/projects/blog-cms-thumbnail-1536w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .blog-cms-thumbnail {
+      background-image: url('/images/projects/blog-cms-thumbnail-1536w.avif');
+    }
+  }
+}
+
 /* Responsive image: ecommerce-thumbnail */
 .ecommerce-thumbnail {
   background-image: url('/images/projects/ecommerce-thumbnail.jpg');
@@ -371,6 +496,131 @@
   @supports (background-image: url('image.avif')) {
     .ecommerce-thumbnail {
       background-image: url('/images/projects/ecommerce-thumbnail-1536w.avif');
+    }
+  }
+}
+
+/* Responsive image: portfolio-image */
+.portfolio-image {
+  background-image: url('/images/projects/portfolio-image.jpg');
+}
+
+@supports (background-image: url('image.webp')) {
+  .portfolio-image {
+    background-image: url('/images/projects/portfolio-image.webp');
+  }
+}
+
+@supports (background-image: url('image.avif')) {
+  .portfolio-image {
+    background-image: url('/images/projects/portfolio-image.avif');
+  }
+}
+
+@media (max-width: 640px) {
+  .portfolio-image {
+    background-image: url('/images/projects/portfolio-image-320w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .portfolio-image {
+      background-image: url('/images/projects/portfolio-image-320w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .portfolio-image {
+      background-image: url('/images/projects/portfolio-image-320w.avif');
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .portfolio-image {
+    background-image: url('/images/projects/portfolio-image-640w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .portfolio-image {
+      background-image: url('/images/projects/portfolio-image-640w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .portfolio-image {
+      background-image: url('/images/projects/portfolio-image-640w.avif');
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .portfolio-image {
+    background-image: url('/images/projects/portfolio-image-768w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .portfolio-image {
+      background-image: url('/images/projects/portfolio-image-768w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .portfolio-image {
+      background-image: url('/images/projects/portfolio-image-768w.avif');
+    }
+  }
+}
+
+@media (max-width: 1280px) {
+  .portfolio-image {
+    background-image: url('/images/projects/portfolio-image-1024w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .portfolio-image {
+      background-image: url('/images/projects/portfolio-image-1024w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .portfolio-image {
+      background-image: url('/images/projects/portfolio-image-1024w.avif');
+    }
+  }
+}
+
+@media (max-width: 1536px) {
+  .portfolio-image {
+    background-image: url('/images/projects/portfolio-image-1280w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .portfolio-image {
+      background-image: url('/images/projects/portfolio-image-1280w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .portfolio-image {
+      background-image: url('/images/projects/portfolio-image-1280w.avif');
+    }
+  }
+}
+
+@media (min-width: 1536px) {
+  .portfolio-image {
+    background-image: url('/images/projects/portfolio-image-1536w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .portfolio-image {
+      background-image: url('/images/projects/portfolio-image-1536w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .portfolio-image {
+      background-image: url('/images/projects/portfolio-image-1536w.avif');
     }
   }
 }
@@ -500,6 +750,131 @@
   }
 }
 
+/* Responsive image: taskmanager-thumbnail */
+.taskmanager-thumbnail {
+  background-image: url('/images/projects/taskmanager-thumbnail.jpg');
+}
+
+@supports (background-image: url('image.webp')) {
+  .taskmanager-thumbnail {
+    background-image: url('/images/projects/taskmanager-thumbnail.webp');
+  }
+}
+
+@supports (background-image: url('image.avif')) {
+  .taskmanager-thumbnail {
+    background-image: url('/images/projects/taskmanager-thumbnail.avif');
+  }
+}
+
+@media (max-width: 640px) {
+  .taskmanager-thumbnail {
+    background-image: url('/images/projects/taskmanager-thumbnail-320w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .taskmanager-thumbnail {
+      background-image: url('/images/projects/taskmanager-thumbnail-320w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .taskmanager-thumbnail {
+      background-image: url('/images/projects/taskmanager-thumbnail-320w.avif');
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .taskmanager-thumbnail {
+    background-image: url('/images/projects/taskmanager-thumbnail-640w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .taskmanager-thumbnail {
+      background-image: url('/images/projects/taskmanager-thumbnail-640w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .taskmanager-thumbnail {
+      background-image: url('/images/projects/taskmanager-thumbnail-640w.avif');
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .taskmanager-thumbnail {
+    background-image: url('/images/projects/taskmanager-thumbnail-768w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .taskmanager-thumbnail {
+      background-image: url('/images/projects/taskmanager-thumbnail-768w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .taskmanager-thumbnail {
+      background-image: url('/images/projects/taskmanager-thumbnail-768w.avif');
+    }
+  }
+}
+
+@media (max-width: 1280px) {
+  .taskmanager-thumbnail {
+    background-image: url('/images/projects/taskmanager-thumbnail-1024w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .taskmanager-thumbnail {
+      background-image: url('/images/projects/taskmanager-thumbnail-1024w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .taskmanager-thumbnail {
+      background-image: url('/images/projects/taskmanager-thumbnail-1024w.avif');
+    }
+  }
+}
+
+@media (max-width: 1536px) {
+  .taskmanager-thumbnail {
+    background-image: url('/images/projects/taskmanager-thumbnail-1280w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .taskmanager-thumbnail {
+      background-image: url('/images/projects/taskmanager-thumbnail-1280w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .taskmanager-thumbnail {
+      background-image: url('/images/projects/taskmanager-thumbnail-1280w.avif');
+    }
+  }
+}
+
+@media (min-width: 1536px) {
+  .taskmanager-thumbnail {
+    background-image: url('/images/projects/taskmanager-thumbnail-1536w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .taskmanager-thumbnail {
+      background-image: url('/images/projects/taskmanager-thumbnail-1536w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .taskmanager-thumbnail {
+      background-image: url('/images/projects/taskmanager-thumbnail-1536w.avif');
+    }
+  }
+}
+
 /* Responsive image: weather-thumbnail */
 .weather-thumbnail {
   background-image: url('/images/projects/weather-thumbnail.jpg');
@@ -621,6 +996,256 @@
   @supports (background-image: url('image.avif')) {
     .weather-thumbnail {
       background-image: url('/images/projects/weather-thumbnail-1536w.avif');
+    }
+  }
+}
+
+/* Responsive image: linkedin-avatar */
+.linkedin-avatar {
+  background-image: url('/src/assets/images/profile/linkedin-avatar.jpg');
+}
+
+@supports (background-image: url('image.webp')) {
+  .linkedin-avatar {
+    background-image: url('/src/assets/images/profile/linkedin-avatar.webp');
+  }
+}
+
+@supports (background-image: url('image.avif')) {
+  .linkedin-avatar {
+    background-image: url('/src/assets/images/profile/linkedin-avatar.avif');
+  }
+}
+
+@media (max-width: 640px) {
+  .linkedin-avatar {
+    background-image: url('/src/assets/images/profile/linkedin-avatar-320w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-320w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-320w.avif');
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .linkedin-avatar {
+    background-image: url('/src/assets/images/profile/linkedin-avatar-640w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-640w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-640w.avif');
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .linkedin-avatar {
+    background-image: url('/src/assets/images/profile/linkedin-avatar-768w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-768w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-768w.avif');
+    }
+  }
+}
+
+@media (max-width: 1280px) {
+  .linkedin-avatar {
+    background-image: url('/src/assets/images/profile/linkedin-avatar-1024w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-1024w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-1024w.avif');
+    }
+  }
+}
+
+@media (max-width: 1536px) {
+  .linkedin-avatar {
+    background-image: url('/src/assets/images/profile/linkedin-avatar-1280w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-1280w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-1280w.avif');
+    }
+  }
+}
+
+@media (min-width: 1536px) {
+  .linkedin-avatar {
+    background-image: url('/src/assets/images/profile/linkedin-avatar-1536w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-1536w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-1536w.avif');
+    }
+  }
+}
+
+/* Responsive image: linkedin-avatar */
+.linkedin-avatar {
+  background-image: url('/src/assets/images/profile/linkedin-avatar.jpg');
+}
+
+@supports (background-image: url('image.webp')) {
+  .linkedin-avatar {
+    background-image: url('/src/assets/images/profile/linkedin-avatar.webp');
+  }
+}
+
+@supports (background-image: url('image.avif')) {
+  .linkedin-avatar {
+    background-image: url('/src/assets/images/profile/linkedin-avatar.avif');
+  }
+}
+
+@media (max-width: 640px) {
+  .linkedin-avatar {
+    background-image: url('/src/assets/images/profile/linkedin-avatar-320w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-320w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-320w.avif');
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .linkedin-avatar {
+    background-image: url('/src/assets/images/profile/linkedin-avatar-640w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-640w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-640w.avif');
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .linkedin-avatar {
+    background-image: url('/src/assets/images/profile/linkedin-avatar-768w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-768w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-768w.avif');
+    }
+  }
+}
+
+@media (max-width: 1280px) {
+  .linkedin-avatar {
+    background-image: url('/src/assets/images/profile/linkedin-avatar-1024w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-1024w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-1024w.avif');
+    }
+  }
+}
+
+@media (max-width: 1536px) {
+  .linkedin-avatar {
+    background-image: url('/src/assets/images/profile/linkedin-avatar-1280w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-1280w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-1280w.avif');
+    }
+  }
+}
+
+@media (min-width: 1536px) {
+  .linkedin-avatar {
+    background-image: url('/src/assets/images/profile/linkedin-avatar-1536w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-1536w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .linkedin-avatar {
+      background-image: url('/src/assets/images/profile/linkedin-avatar-1536w.avif');
     }
   }
 }
