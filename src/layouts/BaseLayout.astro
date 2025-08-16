@@ -18,22 +18,22 @@ export interface Props {
 }
 
 const {
-  title = "Portfolio - Full Stack Developer",
+  title = "cdsar626 Portfolio - Full Stack Developer",
   description = "Modern portfolio showcasing full-stack development projects and expertise in React, Vue.js, Node.js, and modern web technologies",
-  image = "/images/og-image.svg",
+  image = "/images/profile/linkedin-avatar.jpg",
   keywords = [
     "developer",
     "portfolio",
     "full-stack",
     "web development",
     "software engineer",
-    "React",
     "Vue.js",
     "Node.js",
-    "TypeScript",
+    "Rust",
+    "Flutter",
   ],
   type = "website",
-  author = "John Developer",
+  author = "Cesar De la Vega",
   publishDate,
   modifiedDate,
   noindex = false,
@@ -47,17 +47,17 @@ const fullImageURL = Astro.site ? new URL(image, Astro.site) : image;
 
 // SEO Configuration
 const siteConfig = {
-  name: "John Developer - Portfolio",
+  name: "Cesar De la Vega - Portfolio",
   url: Astro.site?.toString() || Astro.url.origin,
   author: {
     name: author,
-    email: "john@example.com",
+    email: "cdsar626@gmail.com",
     url: canonicalURL.toString(),
   },
   social: {
-    github: "https://github.com/johndeveloper",
-    linkedin: "https://linkedin.com/in/johndeveloper",
-    twitter: "@johndeveloper",
+    github: "https://github.com/cdsar626",
+    linkedin: "https://linkedin.com/in/cdsar626",
+    twitter: "@cdsar626",
   },
 };
 ---

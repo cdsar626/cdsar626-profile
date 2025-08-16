@@ -6,6 +6,7 @@ import ProjectsSection from '../components/sections/ProjectsSection.astro';
 import { getCollection } from 'astro:content';
 import { generatePortfolioStructuredData, generateFAQStructuredData, generateKeywords, sanitizeSEOData } from '../utils/seo.ts';
 import '../styles/global.css';
+import profileImage from "../assets/images/profile/linkedin-avatar.png"
 
 // Fetch projects for SEO data generation
 const projects = await getCollection('projects');
@@ -18,11 +19,11 @@ const keywords = generateKeywords(projects, [
 ]);
 
 const seoData = sanitizeSEOData({
-  title: 'John Developer - Full Stack Software Developer Portfolio',
-  description: 'Experienced full-stack developer specializing in React, Vue.js, Node.js, and modern web technologies. View my projects, skills, and professional experience.',
+  title: 'Cesar De la Vega - Full Stack Software Developer Portfolio',
+  description: 'Experienced full-stack developer specializing in Flutter, Vue.js, Node.js, and modern web technologies. View my projects, skills, and professional experience.',
   keywords: keywords,
   type: 'website',
-  author: 'John Developer',
+  author: 'Cesar De la Vega',
   modifiedDate: new Date()
 });
 
@@ -39,10 +40,11 @@ const faqStructuredData = generateFAQStructuredData();
     </a>
     
     <ProfileSection 
-      name="John Developer"
+      name="Cesar De la Vega"
       role="Software Developer / Fullstack"
       data-animate-on-scroll
       data-stagger="0"
+      profileImageSrc={profileImage.src}
     />
     <IntroSection 
       content="I'm a passionate full-stack developer with expertise in modern web technologies. I love creating efficient, scalable solutions and bringing ideas to life through clean, maintainable code. With a focus on user experience and performance, I strive to build applications that make a difference."
