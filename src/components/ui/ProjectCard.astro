@@ -1,6 +1,6 @@
 ---
-import ProjectImagePlaceholder from './ProjectImagePlaceholder.astro';
-import ResponsiveImage from '../ResponsiveImage.astro';
+import ProjectImagePlaceholder from "./ProjectImagePlaceholder.astro";
+import ResponsiveImage from "../ResponsiveImage.astro";
 
 export interface Props {
   title: string;
@@ -15,19 +15,26 @@ export interface Props {
   featured?: boolean;
 }
 
-const { title, description, technologies, thumbnail, links, featured = false } = Astro.props;
+const {
+  title,
+  description,
+  technologies,
+  thumbnail,
+  links,
+  featured = false,
+} = Astro.props;
 ---
 
-<article 
-  class="project-card" 
+<article
+  class="project-card"
   data-featured={featured}
   role="article"
-  aria-labelledby={`project-title-${title.replace(/\s+/g, '-').toLowerCase()}`}
+  aria-labelledby={`project-title-${title.replace(/\s+/g, "-").toLowerCase()}`}
   tabindex="0"
 >
   <div class="project-card__thumbnail">
-    <ResponsiveImage 
-      src={thumbnail} 
+    <ResponsiveImage
+      src={thumbnail}
       alt={`Screenshot of ${title} project showing the main interface`}
       class="project-card__image"
       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -38,71 +45,121 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     </div>
     <div class="project-card__overlay" aria-hidden="true">
       {/* Main link covering entire card */}
-      {links.main && (
-        <a 
-          href={links.main} 
-          class="project-card__link project-card__link--main"
-          aria-label={`View ${title} project details and live demo`}
-          target="_blank"
-          rel="noopener noreferrer"
-          tabindex="-1"
-        >
-          <span class="sr-only">View Project</span>
-        </a>
-      )}
-      
+      {
+        links.main && (
+          <a
+            href={links.main}
+            class="project-card__link project-card__link--main"
+            aria-label={`View ${title} project details and live demo`}
+            target="_blank"
+            rel="noopener noreferrer"
+            tabindex="-1"
+          >
+            <div class="project-card__main-link-content">
+              <svg
+                class="project-card__main-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15,3 21,3 21,9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+              <span class="project-card__main-text">View Project</span>
+            </div>
+          </a>
+        )
+      }
+
       {/* Corner links */}
       <div class="project-card__corner-links">
-        {links.github && (
-          <a 
-            href={links.github} 
-            class="project-card__link project-card__link--github"
-            aria-label={`View ${title} source code on GitHub`}
-            target="_blank"
-            rel="noopener noreferrer"
-            tabindex="-1"
-          >
-            <svg class="project-card__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-            </svg>
-          </a>
-        )}
-        {links.additional && (
-          <a 
-            href={links.additional} 
-            class="project-card__link project-card__link--additional"
-            aria-label={`View additional resources for ${title} project`}
-            target="_blank"
-            rel="noopener noreferrer"
-            tabindex="-1"
-          >
-            <svg class="project-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
-              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-            </svg>
-          </a>
-        )}
+        {
+          links.github && (
+            <a
+              href={links.github}
+              class="project-card__link project-card__link--github"
+              aria-label={`View ${title} source code on GitHub`}
+              target="_blank"
+              rel="noopener noreferrer"
+              tabindex="-1"
+            >
+              <svg
+                class="project-card__icon"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+              </svg>
+            </a>
+          )
+        }
+        {
+          links.additional && (
+            <a
+              href={links.additional}
+              class="project-card__link project-card__link--additional"
+              aria-label={`View additional resources for ${title} project`}
+              target="_blank"
+              rel="noopener noreferrer"
+              tabindex="-1"
+            >
+              <svg
+                class="project-card__icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+              </svg>
+            </a>
+          )
+        }
       </div>
     </div>
   </div>
-  
+
   <div class="project-card__content">
-    <h3 id={`project-title-${title.replace(/\s+/g, '-').toLowerCase()}`} class="project-card__title">{title}</h3>
-    
-    <div class="project-card__technologies" role="list" aria-label="Technologies used">
-      {technologies.map((tech) => (
-        <span class="project-card__tech-tag" role="listitem">{tech}</span>
-      ))}
+    <h3
+      id={`project-title-${title.replace(/\s+/g, "-").toLowerCase()}`}
+      class="project-card__title"
+    >
+      {title}
+    </h3>
+
+    <div
+      class="project-card__technologies"
+      role="list"
+      aria-label="Technologies used"
+    >
+      {
+        technologies.map((tech) => (
+          <span class="project-card__tech-tag" role="listitem">
+            {tech}
+          </span>
+        ))
+      }
     </div>
   </div>
-  
+
   <!-- Hidden tooltip data for Tippy.js -->
   <div class="project-tooltip-data" style="display: none;">
     <div class="project-tooltip__description">{description}</div>
     <div class="project-tooltip__tech-list">
-      {technologies.map((tech) => (
-        <span class="project-tooltip__tech-tag">{tech}</span>
-      ))}
+      {
+        technologies.map((tech) => (
+          <span class="project-tooltip__tech-tag">{tech}</span>
+        ))
+      }
     </div>
   </div>
 </article>
@@ -113,8 +170,9 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-base);
     overflow: visible; /* Allow tooltip to show outside card bounds */
-    transition: transform var(--transition-base) cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                box-shadow var(--transition-base) cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition:
+      transform var(--transition-base) cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      box-shadow var(--transition-base) cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: relative;
     height: 100%;
     display: flex;
@@ -123,16 +181,20 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     transform: translateZ(0); /* Hardware acceleration */
     backface-visibility: hidden;
   }
-  
+
   .project-card:hover {
     transform: translateY(-4px) translateZ(0);
     box-shadow: var(--shadow-lg);
   }
-  
+
+  .project-card:hover > .project-card__thumbnail {
+    filter: blur(0px);
+  }
+
   .project-card[data-featured="true"] {
     border: 2px solid var(--color-primary);
   }
-  
+
   .project-card[data-featured="true"]::before {
     content: "Featured";
     position: absolute;
@@ -146,14 +208,16 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     font-weight: var(--font-weight-semibold);
     z-index: 10;
   }
-  
+
   .project-card__thumbnail {
     position: relative;
     aspect-ratio: 16 / 9;
     overflow: hidden;
     background: var(--color-gray-100);
+    filter: blur(2px);
+    transition: filter 0.1s linear;
   }
-  
+
   .project-card__image {
     width: 100%;
     height: 100%;
@@ -161,7 +225,7 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     transition: transform var(--transition-base) ease-out;
     will-change: transform;
   }
-  
+
   .project-card__placeholder {
     position: absolute;
     inset: 0;
@@ -174,15 +238,15 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     transition: transform var(--transition-base) ease-out;
     will-change: transform;
   }
-  
+
   .project-card:hover .project-card__image {
     transform: scale3d(1.05, 1.05, 1);
   }
-  
+
   .project-card:hover .project-card__placeholder {
     transform: scale3d(1.05, 1.05, 1);
   }
-  
+
   .project-card__overlay {
     position: absolute;
     inset: 0;
@@ -199,14 +263,13 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     visibility: hidden;
     transition: all var(--transition-base) ease-out;
     will-change: opacity, visibility;
-    backdrop-filter: blur(2px);
   }
-  
+
   .project-card:hover .project-card__overlay {
     opacity: 1;
     visibility: visible;
   }
-  
+
   .project-card__corner-links {
     position: absolute;
     top: var(--space-3);
@@ -215,7 +278,7 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     gap: var(--space-2);
     z-index: 3;
   }
-  
+
   .project-card__link {
     display: flex;
     align-items: center;
@@ -232,14 +295,14 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     will-change: transform, background-color;
     transform: translateZ(0);
   }
-  
+
   .project-card__link:hover {
     background: var(--color-primary);
     color: var(--color-white);
     transform: scale3d(1.1, 1.1, 1) translateZ(0);
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
   }
-  
+
   .project-card__link--main {
     position: absolute;
     inset: 0;
@@ -251,13 +314,13 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     border: none;
     z-index: 1;
   }
-  
+
   .project-card__link--main:hover {
     background: transparent;
     transform: none;
     box-shadow: none;
   }
-  
+
   .project-card__link--github,
   .project-card__link--additional {
     position: relative;
@@ -266,33 +329,63 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     transform: translateY(-8px) scale(0.8);
     transition: all var(--transition-base) ease-out;
   }
-  
+
   .project-card:hover .project-card__link--github,
   .project-card:hover .project-card__link--additional {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
-  
+
   .project-card:hover .project-card__link--github {
     transition-delay: 0.1s;
   }
-  
+
   .project-card:hover .project-card__link--additional {
     transition-delay: 0.15s;
   }
-  
+
   .project-card__icon {
     width: 20px;
     height: 20px;
   }
-  
+
+  .project-card__main-link-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    color: var(--color-white);
+    text-align: center;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all var(--transition-base) ease-out;
+  }
+
+  .project-card:hover .project-card__main-link-content {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .project-card__main-icon {
+    width: 32px;
+    height: 32px;
+    stroke-width: 2;
+  }
+
+  .project-card__main-text {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.025em;
+  }
+
   .project-card__content {
     padding: var(--space-3);
     flex: 1;
     display: flex;
     flex-direction: column;
   }
-  
+
   .project-card__title {
     font-size: var(--font-size-xl);
     font-weight: var(--font-weight-semibold);
@@ -301,14 +394,14 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     line-height: var(--line-height-tight);
     flex: 1;
   }
-  
+
   .project-card__technologies {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
     margin-top: auto;
   }
-  
+
   .project-card__tech-tag {
     background: var(--color-gray-100);
     color: var(--color-gray-700);
@@ -318,18 +411,18 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     font-weight: var(--font-weight-medium);
     transition: all var(--transition-fast);
   }
-  
+
   .project-card:hover .project-card__tech-tag {
     background: var(--color-primary-light, #60a5fa);
     color: var(--color-primary-dark, #1d4ed8);
   }
-  
+
   /* Mobile Touch Interactions */
   @media (hover: none) and (pointer: coarse) {
     .project-card {
       cursor: pointer;
     }
-    
+
     .project-card__overlay {
       opacity: 0;
       visibility: hidden;
@@ -341,33 +434,33 @@ const { title, description, technologies, thumbnail, links, featured = false } =
       );
       transition: all var(--transition-base) ease-out;
     }
-    
+
     .project-card.touch-active .project-card__overlay {
       opacity: 1;
       visibility: visible;
     }
-    
+
     .project-card__link--github,
     .project-card__link--additional {
       opacity: 0;
       transform: translateY(-8px) scale(0.8);
       transition: all var(--transition-base) ease-out;
     }
-    
+
     .project-card.touch-active .project-card__link--github,
     .project-card.touch-active .project-card__link--additional {
       opacity: 1;
       transform: translateY(0) scale(1);
     }
-    
+
     .project-card.touch-active .project-card__link--github {
       transition-delay: 0.1s;
     }
-    
+
     .project-card.touch-active .project-card__link--additional {
       transition-delay: 0.15s;
     }
-    
+
     .project-card__link {
       width: 48px;
       height: 48px;
@@ -375,47 +468,47 @@ const { title, description, technologies, thumbnail, links, featured = false } =
       min-height: 44px; /* Minimum touch target size */
       min-width: 44px;
     }
-    
+
     .project-card__link:active {
       transform: scale3d(0.95, 0.95, 1) translateZ(0);
       background: var(--color-primary);
       color: var(--color-white);
     }
-    
+
     /* Touch feedback for the entire card */
     .project-card:active {
       transform: scale3d(0.98, 0.98, 1);
     }
-    
+
     .project-card.touch-active:active {
       transform: scale3d(0.98, 0.98, 1) translateY(-2px);
     }
   }
-  
+
   /* Responsive Design */
   @media (max-width: 640px) {
     .project-card__content {
       padding: var(--space-4);
     }
-    
+
     .project-card__title {
       font-size: var(--font-size-lg);
     }
-    
+
     .project-card__corner-links {
       gap: var(--space-2);
     }
-    
+
     .project-card__link {
       width: 40px;
       height: 40px;
     }
-    
+
     .project-card__icon {
       width: 16px;
       height: 16px;
     }
-    
+
     .project-card[data-featured="true"]::before {
       top: var(--space-2);
       right: var(--space-2);
@@ -423,7 +516,7 @@ const { title, description, technologies, thumbnail, links, featured = false } =
       padding: 0.125rem var(--space-1);
     }
   }
-  
+
   /* Screen reader only content */
   .sr-only {
     position: absolute;
@@ -460,28 +553,28 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     opacity: 1;
     transform: translateY(0) scale(1);
   }
-  
+
   /* High Contrast Mode Support */
   @media (prefers-contrast: high) {
     .project-card {
       border: 2px solid var(--color-gray-900);
     }
-    
+
     .project-card__overlay {
       background: rgba(0, 0, 0, 0.9);
     }
-    
+
     .project-card__title {
       color: #000000 !important;
     }
-    
+
     .project-card__tech-tag {
       border: 1px solid var(--color-gray-700);
       color: #000000 !important;
       background: #ffffff !important;
     }
   }
-  
+
   /* Reduced Motion Support */
   @media (prefers-reduced-motion: reduce) {
     .project-card,
@@ -491,18 +584,121 @@ const { title, description, technologies, thumbnail, links, featured = false } =
     .project-card__tech-tag {
       transition: none;
     }
-    
+
     .project-card:hover {
       transform: none;
     }
-    
+
     .project-card:hover .project-card__image {
       transform: none;
     }
-    
+
     .project-card__link:hover {
       transform: none;
     }
   }
 </style>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const projectCards = document.querySelectorAll(".project-card");
+
+    projectCards.forEach((card) => {
+      let clickCount = 0;
+      let clickTimer = null;
+
+      // Get the main link URL from the card
+      const mainLink = card.querySelector(".project-card__link--main");
+      const mainUrl = mainLink?.getAttribute("href");
+
+      if (!mainUrl) return; // Skip if no main link
+
+      // Handle card clicks (but not clicks on corner links)
+      card.addEventListener("click", function (e) {
+        // Don't handle clicks on corner links (GitHub, additional)
+        if (
+          e.target.closest(".project-card__link--github") ||
+          e.target.closest(".project-card__link--additional")
+        ) {
+          return;
+        }
+
+        // Don't handle clicks on the main link itself (it has its own behavior)
+        if (e.target.closest(".project-card__link--main")) {
+          return;
+        }
+
+        clickCount++;
+
+        if (clickCount === 1) {
+          // First click - start timer
+          clickTimer = setTimeout(() => {
+            // Single click - open in new tab
+            window.open(mainUrl, "_blank", "noopener,noreferrer");
+            clickCount = 0;
+          }, 300); // 300ms delay to detect double click
+        } else if (clickCount === 2) {
+          // Double click - clear timer and open immediately
+          clearTimeout(clickTimer);
+          window.open(mainUrl, "_blank", "noopener,noreferrer");
+          clickCount = 0;
+        }
+      });
+
+      // Handle keyboard navigation (Enter and Space)
+      card.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          window.open(mainUrl, "_blank", "noopener,noreferrer");
+        }
+      });
+
+      // Handle touch interactions for mobile
+      let touchStartTime = 0;
+      let touchCount = 0;
+
+      card.addEventListener("touchstart", function (e) {
+        // Don't handle touches on corner links
+        if (
+          e.target.closest(".project-card__link--github") ||
+          e.target.closest(".project-card__link--additional") ||
+          e.target.closest(".project-card__link--main")
+        ) {
+          return;
+        }
+
+        const currentTime = new Date().getTime();
+        const timeDiff = currentTime - touchStartTime;
+
+        if (timeDiff < 300 && timeDiff > 0) {
+          // Double tap detected
+          e.preventDefault();
+          window.open(mainUrl, "_blank", "noopener,noreferrer");
+          touchCount = 0;
+        } else {
+          // Single tap
+          touchStartTime = currentTime;
+          touchCount = 1;
+
+          // Add touch active class for visual feedback
+          card.classList.add("touch-active");
+
+          setTimeout(() => {
+            if (touchCount === 1) {
+              // Single tap after delay
+              window.open(mainUrl, "_blank", "noopener,noreferrer");
+            }
+            touchCount = 0;
+          }, 300);
+        }
+      });
+
+      card.addEventListener("touchend", function () {
+        // Remove touch active class
+        setTimeout(() => {
+          card.classList.remove("touch-active");
+        }, 150);
+      });
+    });
+  });
+</script>
