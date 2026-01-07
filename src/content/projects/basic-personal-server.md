@@ -1,0 +1,20 @@
+---
+title: "Basic Personal Server"
+description: "A basic server to upload files, built in vuejs and expressjs."
+technologies: ["Vuejs", "Expressjs"]
+thumbnail: "/images/projects/basic-personal-server.png"
+featured: true
+order: 1
+links:
+  github: "https://github.com/cdsar626/cd-server"
+publishDate: 2024-01-01
+---
+
+## Overview
+A basic server to upload files, built in vuejs and expressjs. This project allows users to manage files on a personal server with a simple and intuitive interface.
+
+## Key Features
+- **File Upload**: Drag and drop support for file uploads.
+- **File Management**: Create folders, rename, and delete files.
+- **Vue.js Frontend**: Reactive and responsive UI.
+- **Express.js Backend**: Robust and scalable server-side logic.
