@@ -6,8 +6,9 @@ thumbnail: "/images/projects/tablist.png"
 featured: true
 order: 3
 links:
-  main: "https://play.google.com/store/apps/details?id=com.cdsar626.tablist"
+  main: "https://tablist.cdsar626.com/"
   github: "https://github.com/cdsar626/tablist_flutter"
+  additional: "https://play.google.com/store/apps/details?id=com.cdsar626.tablist"
 publishDate: 2024-03-01
 ---
 

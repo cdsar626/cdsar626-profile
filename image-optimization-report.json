@@ -1,60 +1,60 @@
 {
-  "timestamp": "2026-01-07T14:56:09.250Z",
+  "timestamp": "2026-01-07T15:13:44.140Z",
   "totalImages": 180,
-  "totalInputSize": 58950828,
-  "totalOutputSize": 41265648,
-  "totalSavings": 17685180,
+  "totalInputSize": 57567732,
+  "totalOutputSize": 40297488,
+  "totalSavings": 17270244,
   "formatBreakdown": {
     "webp": {
       "count": 90,
-      "inputSize": 29475414,
-      "outputSize": 20632824,
-      "savings": 8842590
+      "inputSize": 28783866,
+      "outputSize": 20148744,
+      "savings": 8635122
     },
     "avif": {
       "count": 90,
-      "inputSize": 29475414,
-      "outputSize": 20632824,
-      "savings": 8842590
+      "inputSize": 28783866,
+      "outputSize": 20148744,
+      "savings": 8635122
     }
   },
   "sizeBreakdown": {
     "320w": {
       "count": 30,
-      "inputSize": 9825138,
-      "outputSize": 6877608,
-      "savings": 2947530
+      "inputSize": 9594622,
+      "outputSize": 6716248,
+      "savings": 2878374
     },
     "640w": {
       "count": 30,
-      "inputSize": 9825138,
-      "outputSize": 6877608,
-      "savings": 2947530
+      "inputSize": 9594622,
+      "outputSize": 6716248,
+      "savings": 2878374
     },
     "768w": {
       "count": 30,
-      "inputSize": 9825138,
-      "outputSize": 6877608,
-      "savings": 2947530
+      "inputSize": 9594622,
+      "outputSize": 6716248,
+      "savings": 2878374
     },
     "1024w": {
       "count": 30,
-      "inputSize": 9825138,
-      "outputSize": 6877608,
-      "savings": 2947530
+      "inputSize": 9594622,
+      "outputSize": 6716248,
+      "savings": 2878374
     },
     "1280w": {
       "count": 30,
-      "inputSize": 9825138,
-      "outputSize": 6877608,
-      "savings": 2947530
+      "inputSize": 9594622,
+      "outputSize": 6716248,
+      "savings": 2878374
     },
     "1536w": {
       "count": 30,
-      "inputSize": 9825138,
-      "outputSize": 6877608,
-      "savings": 2947530
+      "inputSize": 9594622,
+      "outputSize": 6716248,
+      "savings": 2878374
     }
   },
-  "savingsPercentage": 29.99988397109537
+  "savingsPercentage": 29.99986867643144
 }
