@@ -6,6 +6,7 @@ thumbnail: "/images/projects/ecommerce-clone.png"
 featured: true
 order: 2
 links:
+  main: "https://akm.cdsar626.com/"
   github: "https://github.com/cdsar626/custom_ecommerce"
 publishDate: 2024-02-01
 ---

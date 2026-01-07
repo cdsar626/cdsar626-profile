@@ -6,6 +6,7 @@ thumbnail: "/images/projects/basic-personal-server.png"
 featured: true
 order: 1
 links:
+  main: "https://files.cdsar626.com/#/"
   github: "https://github.com/cdsar626/cd-server"
 publishDate: 2024-01-01
 ---
