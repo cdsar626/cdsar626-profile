@@ -255,10 +255,10 @@ const {
 <style>
   /* CSS Custom Properties for Modal */
   :root {
-    --modal-animation-duration: 250ms;
-    --modal-animation-easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --modal-animation-duration: 400ms;
+    --modal-animation-easing: cubic-bezier(0.32, 0.72, 0, 1);
     --modal-backdrop-color: rgba(0, 0, 0, 0.4);
-    --modal-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    --modal-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
     --modal-border-radius: var(--radius-lg);
     --modal-padding: var(--space-4);
   }
@@ -702,24 +702,97 @@ const {
   }
 
   .project-card__modal-backdrop {
-    position: absolute;
-    inset: 0;
-    background: var(--modal-backdrop-color);
-    backdrop-filter: blur(2px);
-    z-index: 1;
+    display: none;
   }
 
   .project-card__modal-content {
     position: relative;
     z-index: 2;
-    background: var(--color-gray-50);
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.7) 0%,
+      rgba(255, 255, 255, 0.4) 100%
+    );
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
     height: 100%;
     display: flex;
     flex-direction: column;
     padding: var(--modal-padding);
-    box-shadow: var(--modal-shadow);
+    box-shadow: 
+      0 -10px 40px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6),
+      inset 0 0 20px rgba(255, 255, 255, 0.3);
     border-radius: var(--modal-border-radius);
-    border: 1px solid var(--color-gray-200);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: background 0.3s ease;
+    overflow: hidden;
+  }
+
+  /* Glare effect */
+  .project-card__modal-content::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle at 50% 0%,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(255, 255, 255, 0) 60%
+    );
+    transform: rotate(-15deg);
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.7;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .project-card__modal-content {
+      background: linear-gradient(
+        160deg,
+        rgba(40, 48, 64, 0.85) 0%,
+        rgba(25, 30, 40, 0.9) 100%
+      );
+      box-shadow: 
+        0 -10px 40px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 0 20px rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .project-card__modal-content::before {
+      background: radial-gradient(
+        circle at 50% 0%,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0) 50%
+      );
+      opacity: 0.5;
+    }
+
+    .project-card__modal-title {
+      color: #ffffff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+    
+    .project-card__modal-description {
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+    }
+
+    .project-card__modal-icon-link {
+        color: rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .project-card__modal-icon-link:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
   }
 
   .project-card__modal-header {
@@ -797,7 +870,7 @@ const {
     width: 32px;
     height: 32px;
     color: var(--color-gray-500);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-full);
     transition: all var(--transition-fast);
   }
 
