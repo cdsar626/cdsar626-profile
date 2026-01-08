@@ -37,7 +37,7 @@ const { title, description, technologies, featured = false } = Astro.props;
   .project-tooltip {
     position: absolute;
     z-index: var(--z-tooltip);
-    background: var(--color-white);
+    background: var(--color-bg-surface);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-xl);
     border: 1px solid var(--color-gray-200);
@@ -135,7 +135,7 @@ const { title, description, technologies, featured = false } = Astro.props;
     position: absolute;
     width: 12px;
     height: 12px;
-    background: var(--color-white);
+    background: var(--color-bg-surface);
     border: 1px solid var(--color-gray-200);
     transform: rotate(45deg);
     border-radius: 2px;
@@ -174,40 +174,7 @@ const { title, description, technologies, featured = false } = Astro.props;
     border-top: none;
   }
   
-  /* Dark mode support */
-  @media (prefers-color-scheme: dark) {
-    .project-tooltip {
-      background: var(--color-gray-800);
-      border-color: var(--color-gray-700);
-    }
-    
-    .project-tooltip__title {
-      color: var(--color-gray-100);
-    }
-    
-    .project-tooltip__description {
-      color: var(--color-gray-300);
-    }
-    
-    .project-tooltip__tech-label {
-      color: var(--color-gray-400);
-    }
-    
-    .project-tooltip__tech-tag {
-      background: var(--color-gray-700);
-      color: var(--color-gray-200);
-      border-color: var(--color-gray-600);
-    }
-    
-    .project-tooltip__technologies {
-      border-color: var(--color-gray-700);
-    }
-    
-    .project-tooltip__arrow {
-      background: var(--color-gray-800);
-      border-color: var(--color-gray-700);
-    }
-  }
+  /* Dark mode support handled by variables */
   
   /* High contrast mode support */
   @media (prefers-contrast: high) {
