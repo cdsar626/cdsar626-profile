@@ -3,43 +3,51 @@
 
 /* CSS Custom Properties for Theming */
 :root {
-  /* Color Palette */
-  --color-primary: #3b82f6;
-  --color-primary-dark: #1d4ed8;
-  --color-primary-light: #60a5fa;
-  
-  --color-secondary: #6366f1;
-  --color-secondary-dark: #4338ca;
-  --color-secondary-light: #818cf8;
-  
+  /* Color Palette - Default Dark Schema */
+  --color-primary: #60a5fa;
+  --color-primary-dark: #3b82f6;
+  --color-primary-light: #93c5fd;
+
+  --color-secondary: #818cf8;
+  --color-secondary-dark: #6366f1;
+  --color-secondary-light: #a5b4fc;
+
   --color-accent: #f59e0b;
   --color-accent-dark: #d97706;
   --color-accent-light: #fbbf24;
-  
-  /* Neutral Colors */
-  --color-white: #ffffff;
-  --color-gray-50: #f9fafb;
-  --color-gray-100: #f3f4f6;
-  --color-gray-200: #e5e7eb;
-  --color-gray-300: #d1d5db;
-  --color-gray-400: #9ca3af;
-  --color-gray-500: #6b7280;
-  --color-gray-600: #4b5563;
-  --color-gray-700: #374151;
-  --color-gray-800: #1f2937;
-  --color-gray-900: #111827;
-  --color-black: #000000;
-  
+
+  /* Neutral Colors - Dark Backgrounds */
+  --color-white: #1f2937;
+  /* Inverted for dark mode logic if needed, but usually we stick to semantic names. Let's keep specific colors specific. */
+  /* Actually, let's keep the palette definitions pure, and just swap the semantic mapping or the gray scale. */
+  /* The previous file mapped grays directly. Let's do that. */
+
+  --color-gray-50: #111827;
+  --color-gray-100: #1f2937;
+  --color-gray-200: #374151;
+  --color-gray-300: #4b5563;
+  --color-gray-400: #6b7280;
+  --color-gray-500: #9ca3af;
+  --color-gray-600: #d1d5db;
+  --color-gray-700: #e5e7eb;
+  --color-gray-800: #f3f4f6;
+  --color-gray-900: #f9fafb;
+  --color-black: #ffffff;
+
+  /* Constants that don't flip */
+  --color-true-white: #ffffff;
+  --color-true-black: #000000;
+
   /* Semantic Colors */
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
   --color-info: #3b82f6;
-  
+
   /* Typography */
   --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-family-mono: 'JetBrains Mono', 'Fira Code', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-  
+
   /* Font Sizes - Fluid Typography */
   --font-size-xs: clamp(0.75rem, 0.65rem + 0.2vw, 0.8125rem);
   --font-size-sm: clamp(0.875rem, 0.75rem + 0.3vw, 0.9375rem);
@@ -51,7 +59,7 @@
   --font-size-4xl: clamp(2.25rem, 2rem + 1.2vw, 2.5rem);
   --font-size-5xl: clamp(2.5rem, 2.25rem + 1.5vw, 3rem);
   --font-size-6xl: clamp(3rem, 2.75rem + 2vw, 3.75rem);
-  
+
   /* Font Weights */
   --font-weight-light: 300;
   --font-weight-normal: 400;
@@ -59,14 +67,14 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
   --font-weight-extrabold: 800;
-  
+
   /* Line Heights */
   --line-height-tight: 1.25;
   --line-height-snug: 1.375;
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.625;
   --line-height-loose: 2;
-  
+
   /* Spacing System */
   --space-px: 1px;
   --space-0: 0;
@@ -87,11 +95,12 @@
   --space-48: 12rem;
   --space-56: 14rem;
   --space-64: 16rem;
-  
+  --space-80: 20rem;
+
   /* Responsive Spacing */
   --space-section: clamp(3rem, 5vw, 6rem);
   --space-container: clamp(1rem, 5vw, 2rem);
-  
+
   /* Border Radius */
   --radius-none: 0;
   --radius-sm: 0.125rem;
@@ -102,7 +111,7 @@
   --radius-2xl: 1rem;
   --radius-3xl: 1.5rem;
   --radius-full: 9999px;
-  
+
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-base: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
@@ -111,12 +120,12 @@
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
   --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
-  
+
   /* Transitions */
   --transition-fast: 150ms ease-in-out;
   --transition-base: 250ms ease-in-out;
   --transition-slow: 350ms ease-in-out;
-  
+
   /* Z-Index Scale */
   --z-dropdown: 1000;
   --z-sticky: 1020;
@@ -126,15 +135,15 @@
   --z-popover: 1060;
   --z-tooltip: 1070;
   --z-toast: 1080;
-  
-  /* Breakpoints (for reference in CSS) */
+
+  /* Breakpoints */
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
   --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1536px;
-  
-  /* Max Width Scale */
+
+  /* Max Widths */
   --max-width-xs: 20rem;
   --max-width-sm: 24rem;
   --max-width-md: 28rem;
@@ -146,30 +155,39 @@
   --max-width-5xl: 64rem;
   --max-width-6xl: 72rem;
   --max-width-7xl: 80rem;
+
+  /* Semantic Backgrounds */
+  --color-bg-surface: var(--color-gray-100);
 }
 
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-primary: #60a5fa;
-    --color-primary-dark: #3b82f6;
-    --color-primary-light: #93c5fd;
-    
-    --color-secondary: #818cf8;
-    --color-secondary-dark: #6366f1;
-    --color-secondary-light: #a5b4fc;
-    
-    --color-gray-50: #111827;
-    --color-gray-100: #1f2937;
-    --color-gray-200: #374151;
-    --color-gray-300: #4b5563;
-    --color-gray-400: #6b7280;
-    --color-gray-500: #9ca3af;
-    --color-gray-600: #d1d5db;
-    --color-gray-700: #e5e7eb;
-    --color-gray-800: #f3f4f6;
-    --color-gray-900: #f9fafb;
-  }
+/* Light Mode Support (Optional Override) */
+[data-theme="light"] {
+  --color-bg-surface: #ffffff;
+
+  --color-primary: #3b82f6;
+  --color-primary-dark: #1d4ed8;
+  --color-primary-light: #60a5fa;
+
+  --color-secondary: #6366f1;
+  --color-secondary-dark: #4338ca;
+  --color-secondary-light: #818cf8;
+
+  --color-accent: #f59e0b;
+  --color-accent-dark: #d97706;
+  --color-accent-light: #fbbf24;
+
+  --color-white: #ffffff;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  --color-black: #000000;
 }
 
 /* CSS Reset and Base Styles */
@@ -201,7 +219,12 @@ body {
 }
 
 /* Typography Base Styles */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
   color: var(--color-gray-900);
@@ -260,7 +283,8 @@ a:focus {
 }
 
 /* Lists */
-ul, ol {
+ul,
+ol {
   margin-bottom: var(--space-4);
   padding-left: var(--space-6);
 }
@@ -277,7 +301,10 @@ img {
 }
 
 /* Form Elements */
-button, input, textarea, select {
+button,
+input,
+textarea,
+select {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -351,6 +378,7 @@ button:focus {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -361,6 +389,7 @@ button:focus {
     opacity: 0;
     transform: translateY(2rem);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -372,6 +401,7 @@ button:focus {
     opacity: 0;
     transform: translateX(-100px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -383,6 +413,7 @@ button:focus {
     opacity: 0;
     transform: translateX(100px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -394,6 +425,7 @@ button:focus {
     opacity: 0;
     transform: scale(0.8);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -405,13 +437,16 @@ button:focus {
     opacity: 0;
     transform: scale(0.3);
   }
+
   50% {
     opacity: 1;
     transform: scale(1.05);
   }
+
   70% {
     transform: scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -423,6 +458,7 @@ button:focus {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -435,6 +471,7 @@ button:focus {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -446,6 +483,7 @@ button:focus {
     opacity: 1;
     transform: translateY(0);
   }
+
   to {
     opacity: 0;
     transform: translateY(-20px);
@@ -454,9 +492,12 @@ button:focus {
 
 /* Loading State Animations */
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.5;
   }
@@ -466,6 +507,7 @@ button:focus {
   0% {
     background-position: -200px 0;
   }
+
   100% {
     background-position: calc(200px + 100%) 0;
   }
@@ -475,6 +517,7 @@ button:focus {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -526,6 +569,7 @@ button:focus {
 
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -534,7 +578,7 @@ button:focus {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  
+
   html {
     scroll-behavior: auto;
   }
@@ -552,6 +596,7 @@ button:focus {
 
 /* Print Styles */
 @media print {
+
   *,
   *::before,
   *::after {
@@ -560,17 +605,19 @@ button:focus {
     box-shadow: none !important;
     text-shadow: none !important;
   }
-  
+
   a,
   a:visited {
     text-decoration: underline;
   }
-  
+
   img {
     page-break-inside: avoid;
   }
-  
-  h1, h2, h3 {
+
+  h1,
+  h2,
+  h3 {
     page-break-after: avoid;
   }
 }

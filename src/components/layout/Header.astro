@@ -58,11 +58,16 @@ const { className = '' } = Astro.props;
     left: 0;
     right: 0;
     z-index: var(--z-fixed);
-    background: rgba(249, 250, 251, 0.8);
+    background: rgba(17, 24, 39, 0.8);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(229, 231, 235, 0.3);
+    border-bottom: 1px solid rgba(75, 85, 99, 0.3);
     transition: all var(--transition-base);
+  }
+
+  :global([data-theme="light"]) .header {
+    background: rgba(249, 250, 251, 0.8);
+    border-bottom: 1px solid rgba(229, 231, 235, 0.3);
   }
 
   .header-container {
@@ -207,13 +212,7 @@ const { className = '' } = Astro.props;
     }
   }
 
-  /* Dark mode support */
-  @media (prefers-color-scheme: dark) {
-    .header {
-      background: rgba(17, 24, 39, 0.8);
-      border-bottom-color: rgba(75, 85, 99, 0.3);
-    }
-  }
+  /* Dark mode support handled by default styles and light mode overrides */
 
   /* High contrast mode support */
   @media (prefers-contrast: high) {

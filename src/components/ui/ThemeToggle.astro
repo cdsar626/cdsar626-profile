@@ -1,0 +1,205 @@
+---
+---
+
+<button
+  id="theme-toggle"
+  class="theme-toggle"
+  aria-label="Toggle Dark Mode"
+  title="Toggle Dark Mode"
+>
+  <div class="sun-icon">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </div>
+  <div class="moon-icon">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+  </div>
+</button>
+
+<script>
+  // Script to handle the toggle logic and animation
+  const setupThemeToggle = () => {
+    const toggle = document.getElementById("theme-toggle");
+    const html = document.documentElement;
+    
+    // Check if intro has been shown
+    const hasSeenIntro = localStorage.getItem("theme_intro_shown");
+
+    // Function to set theme
+    const setTheme = (isLight) => {
+      if (isLight) {
+        html.setAttribute("data-theme", "light");
+        localStorage.setItem("theme", "light");
+      } else {
+        html.removeAttribute("data-theme");
+        localStorage.setItem("theme", "dark");
+      }
+    };
+
+    // Initial State Check from LocalStorage (or system preference if not set, though we default to dark)
+    const storedTheme = localStorage.getItem("theme");
+    if (storedTheme === "light") {
+      setTheme(true);
+    } else {
+      setTheme(false); // Default is dark
+    }
+
+    // Toggle Click Handler
+    toggle?.addEventListener("click", () => {
+      const isLight = html.getAttribute("data-theme") === "light";
+      setTheme(!isLight);
+    });
+
+    // Intro Animation Sequence
+    if (!hasSeenIntro && toggle) {
+      // Start the animation sequence
+      
+      // 1. Initial State: Centered and Big handled by class 'intro-mode'
+      toggle.classList.add("intro-mode");
+
+      // Sequence
+      setTimeout(() => {
+        // Toggle to Light
+        setTheme(true);
+      }, 1000);
+
+      setTimeout(() => {
+        // Back to Dark
+        setTheme(false);
+      }, 1500);
+
+      setTimeout(() => {
+        // Toggle to Light again
+        setTheme(true);
+      }, 2000);
+      
+      setTimeout(() => {
+        // Back to Dark (Default)
+        setTheme(false);
+      }, 2500);
+
+      setTimeout(() => {
+        // End Animation: Move to corner
+        toggle.classList.remove("intro-mode");
+        // Save that we've seen it
+        localStorage.setItem("theme_intro_shown", "true");
+      }, 3500);
+    }
+  };
+
+  // Run immediately mostly, but wait for DOM
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupThemeToggle);
+  } else {
+    setupThemeToggle();
+  }
+  
+  // Also run on view transitions if any
+  document.addEventListener('astro:page-load', setupThemeToggle);
+</script>
+
+<style>
+  .theme-toggle {
+    position: fixed;
+    /* Default Position: Bottom Right (or Top Right as preferred) */
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 9999;
+    
+    width: 3rem;
+    height: 3rem;
+    border-radius: 9999px;
+    
+    background-color: var(--color-gray-800);
+    color: var(--color-gray-100);
+    border: 1px solid var(--color-gray-700);
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    
+    overflow: hidden;
+  }
+
+  .theme-toggle:hover {
+    transform: scale(1.1);
+    background-color: var(--color-gray-700);
+  }
+  
+  /* Icon visibility logic */
+  .sun-icon, .moon-icon {
+    position: absolute;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  }
+  
+  /* If Light Mode: Show Moon (to switch to dark), Hide Sun */
+  :global([data-theme="light"]) .sun-icon {
+    transform: rotate(90deg) scale(0);
+    opacity: 0;
+  }
+  :global([data-theme="light"]) .moon-icon {
+    transform: rotate(0) scale(1);
+    opacity: 1;
+  }
+  
+  /* If Dark Mode (Default): Show Sun (to switch to light), Hide Moon */
+  :global(:root:not([data-theme="light"])) .sun-icon {
+    transform: rotate(0) scale(1);
+    opacity: 1;
+  }
+  :global(:root:not([data-theme="light"])) .moon-icon {
+    transform: rotate(-90deg) scale(0);
+    opacity: 0;
+  }
+
+  /* Intro Animation Class */
+  .theme-toggle.intro-mode {
+    /* Center screen */
+    bottom: 50%;
+    right: 50%;
+    transform: translate(50%, 50%) scale(4);
+    
+    width: 4rem; /* Base size becomes larger due to scale */
+    height: 4rem;
+    
+    box-shadow: 0 0 50px rgba(0,0,0,0.5);
+    background-color: var(--color-primary); /* Highlight it */
+    color: white;
+    border-color: transparent;
+  }
+</style>

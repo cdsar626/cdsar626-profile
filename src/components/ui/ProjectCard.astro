@@ -484,7 +484,7 @@ const {
   .project-card__title {
     font-size: var(--font-size-xl);
     font-weight: var(--font-weight-semibold);
-    color: #111827 !important; /* Force dark color */
+    color: var(--color-gray-900) !important;
     margin-bottom: var(--space-2);
     line-height: var(--line-height-tight);
     flex: 1;
@@ -707,13 +707,14 @@ const {
     display: none;
   }
 
+  /* Dark Mode Default (formerly inside media query) */
   .project-card__modal-content {
     position: relative;
     z-index: 2;
     background: linear-gradient(
-      165deg,
-      rgba(255, 255, 255, 0.5) 0%,
-      rgba(255, 255, 255, 0.2) 100%
+      160deg,
+      rgba(40, 48, 64, 0.85) 0%,
+      rgba(25, 30, 40, 0.9) 100%
     );
     backdrop-filter: blur(40px) saturate(180%);
     -webkit-backdrop-filter: blur(40px) saturate(180%);
@@ -723,14 +724,11 @@ const {
     padding: var(--modal-padding);
     /* Complex Rim Light + Shadow */
     box-shadow: 
-      /* Deep shadow */
-      0 -20px 50px rgba(0, 0, 0, 0.2),
-      /* Outer rim */
-      0 0 0 1px rgba(255, 255, 255, 0.4),
-      /* Inner rim (thick glass effect) */
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.8),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+      0 -10px 40px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 0 20px rgba(255, 255, 255, 0.05);
     border-radius: var(--modal-border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     transition: background 0.4s ease;
     overflow: hidden;
   }
@@ -742,9 +740,15 @@ const {
     inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
     opacity: 0.6;
-    mix-blend-mode: overlay;
+    mix-blend-mode: soft-light;
     pointer-events: none;
     z-index: 0;
+    background: linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.05) 20%,
+      rgba(255, 255, 255, 0) 60%
+    );
   }
 
   /* Specular Glare / Reflection */
@@ -758,51 +762,70 @@ const {
     background: linear-gradient(
       90deg,
       rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.8) 50%,
+      rgba(255, 255, 255, 0.5) 50%,
       rgba(255, 255, 255, 0) 100%
     );
     z-index: 3;
     opacity: 0.8;
   }
 
-  @media (prefers-color-scheme: dark) {
-    .project-card__modal-content {
-      background: linear-gradient(
-        160deg,
-        rgba(40, 48, 64, 0.85) 0%,
-        rgba(25, 30, 40, 0.9) 100%
-      );
-      box-shadow: 
-        0 -10px 40px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        inset 0 0 20px rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .project-card__modal-content::before {
-      background: linear-gradient(
-        120deg,
-        rgba(255, 255, 255, 0.15) 0%,
-        rgba(255, 255, 255, 0.05) 20%,
-        rgba(255, 255, 255, 0) 60%
-      );
-      mix-blend-mode: soft-light;
-    }
-    
-    .project-card__modal-content::after {
-      background: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.5) 50%,
-        rgba(255, 255, 255, 0) 100%
-      );
-    }
+  /* Light Mode Overrides */
+  :global([data-theme="light"]) .project-card__modal-content {
+    background: linear-gradient(
+      165deg,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(255, 255, 255, 0.2) 100%
+    );
+    box-shadow: 
+      /* Deep shadow */
+      0 -20px 50px rgba(0, 0, 0, 0.2),
+      /* Outer rim */
+      0 0 0 1px rgba(255, 255, 255, 0.4),
+      /* Inner rim (thick glass effect) */
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.8),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    border: none;
+  }
 
-    .project-card__modal-title {
-      color: #ffffff;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-    }
-    
+  :global([data-theme="light"]) .project-card__modal-content::before {
+    mix-blend-mode: overlay;
+    background: none; /* Reset the gradient from dark mode */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+  }
+
+  :global([data-theme="light"]) .project-card__modal-content::after {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.8) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+
+  .project-card__modal-title {
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  }
+  
+  :global([data-theme="light"]) .project-card__modal-title {
+    color: var(--color-gray-900);
+    text-shadow: none;
+  }
+
+  .project-card__modal-description {
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+  }
+
+  :global([data-theme="light"]) .project-card__modal-description {
+    color: var(--color-gray-600);
+    text-shadow: none;
+  }
+
+  .project-card__modal-icon-link {
+      color: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     .project-card__modal-description {
       color: rgba(255, 255, 255, 0.9);
       text-shadow: 0 1px 1px rgba(0,0,0,0.3);
