@@ -8,7 +8,16 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { performanceBudgets, buildOptimizations } from '../src/utils/build-optimization.ts';
+// Performance budget configuration (local copy to avoid TS import issues)
+const performanceBudgets = {
+  bundles: {
+    initial: 100 * 1024, // 100KB
+    async: 50 * 1024,    // 50KB
+    css: 50 * 1024,      // 50KB
+    images: 500 * 1024,  // 500KB
+    fonts: 100 * 1024,   // 100KB
+  }
+};
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
