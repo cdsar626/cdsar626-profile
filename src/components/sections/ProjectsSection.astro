@@ -2,23 +2,24 @@
 import { getCollection } from 'astro:content';
 import ProjectCard from '../ui/ProjectCard.astro';
 
-// Fetch and sort projects from content collections
+// Fetch projects
 const allProjects = await getCollection('projects');
 
-// Sort projects by featured status first, then by order, then by publish date
+// Initial sort (Featured first)
 const sortedProjects = allProjects.sort((a, b) => {
-  // Featured projects first
   if (a.data.featured && !b.data.featured) return -1;
   if (!a.data.featured && b.data.featured) return 1;
-  
-  // Then by order (lower numbers first)
-  if (a.data.order !== b.data.order) {
-    return a.data.order - b.data.order;
-  }
-  
-  // Finally by publish date (newest first)
   return new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime();
 });
+
+// Prepare data for the client-side script
+const projectsData = sortedProjects.map(p => ({
+  id: p.id,
+  date: new Date(p.data.publishDate).getTime(),
+  year: new Date(p.data.publishDate).getFullYear(),
+  featured: p.data.featured || false,
+  order: p.data.order || 999
+}));
 ---
 
 <section class="projects-section" id="projects" aria-labelledby="projects-heading">
@@ -29,15 +30,55 @@ const sortedProjects = allProjects.sort((a, b) => {
         A showcase of my recent work and technical expertise
       </p>
     </header>
+
+    <!-- Gallery Controls -->
+    <div class="gallery-controls">
+      <div class="control-group">
+        <label for="sort-select" class="control-label">View Mode</label>
+        <div class="select-wrapper">
+          <select id="sort-select" class="sort-select">
+            <option value="featured">✨ Featured</option>
+            <option value="timeline">📅 Timeline</option>
+          </select>
+          <svg class="select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="control-group slider-group">
+        <label for="size-slider" class="control-label">Card Size</label>
+        <div class="slider-wrapper">
+          <span class="slider-icon small">
+             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          </span>
+          <input 
+            id="size-slider" 
+            type="range" 
+            min="280" 
+            max="600" 
+            value="380"
+            step="10" 
+            class="size-slider"
+            aria-label="Adjust card size"
+          >
+          <span class="slider-icon large">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
+          </span>
+        </div>
+      </div>
+    </div>
     
-    <div class="projects-grid" role="list" aria-label="Portfolio projects">
-      {sortedProjects.map((project, index) => (
+    <!-- Projects Grid Container -->
+    <div id="projects-grid" class="projects-grid" role="list" data-view="featured">
+      {sortedProjects.map((project) => (
         <div 
           class="projects-grid__item" 
           role="listitem"
-          data-animate-on-scroll
-          data-stagger={index * 0.15}
-          style={`--animation-delay: ${index * 0.15}s; --stagger-index: ${index}`}
+          data-id={project.id}
+          data-year={new Date(project.data.publishDate).getFullYear()}
+          data-featured={project.data.featured}
+          data-date={new Date(project.data.publishDate).getTime()}
         >
           <ProjectCard
             title={project.data.title}
@@ -51,35 +92,277 @@ const sortedProjects = allProjects.sort((a, b) => {
       ))}
     </div>
     
-    {sortedProjects.length === 0 && (
-      <div class="projects-empty" role="status" aria-live="polite">
-        <p>No projects available at the moment.</p>
-      </div>
-    )}
+    <!-- Empty State -->
+    <div id="empty-state" class="projects-empty" style="display: none;">
+      <p>No projects available.</p>
+    </div>
   </div>
 </section>
+
+<!-- Client-side Logic for Sorting and Resizing -->
+<script define:vars={{ projectsData }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const grid = document.getElementById('projects-grid');
+    const sortSelect = document.getElementById('sort-select');
+    const sizeSlider = document.getElementById('size-slider');
+    const items = Array.from(document.querySelectorAll('.projects-grid__item'));
+
+    if (!grid || !sortSelect || !sizeSlider) return;
+
+    // --- 1. Size Slider Logic ---
+    const updateSize = (val) => {
+      grid.style.setProperty('--card-min-width', `${val}px`);
+    };
+
+    sizeSlider.addEventListener('input', (e) => {
+      updateSize(e.target.value);
+    });
+    
+    // Initialize size
+    updateSize(sizeSlider.value);
+
+
+    // --- 2. Sorting/Grouping Logic ---
+    const updateView = (mode) => {
+      // Remove all existing timeline headers/wrappers if any
+      const existingHeaders = grid.querySelectorAll('.timeline-year-header');
+      existingHeaders.forEach(el => el.remove());
+      
+      // Reset grid to default flat state implicitly by re-appending items sorted
+      items.forEach(item => {
+        item.style.display = ''; // Ensure visible
+        grid.appendChild(item); // Moves it back to main grid
+      });
+
+      if (mode === 'featured') {
+        grid.dataset.view = 'featured';
+        // Sort by Featured -> Order -> Date
+        items.sort((a, b) => {
+          const featA = a.dataset.featured === 'true';
+          const featB = b.dataset.featured === 'true';
+          if (featA && !featB) return -1;
+          if (!featA && featB) return 1;
+          return Number(b.dataset.date) - Number(a.dataset.date);
+        });
+        items.forEach(item => grid.appendChild(item));
+      } 
+      else if (mode === 'timeline') {
+        grid.dataset.view = 'timeline';
+        
+        // Group by Year
+        const years = {};
+        items.forEach(item => {
+          const year = item.dataset.year;
+          if (!years[year]) years[year] = [];
+          years[year].push(item);
+        });
+
+        // Sort years descending
+        const sortedYears = Object.keys(years).sort((a, b) => Number(b) - Number(a));
+
+        // Create visual groups
+        // Note: CSS Grid handles the layout, but we need to insert "headers" that span full width
+        sortedYears.forEach(year => {
+          // Create Header
+          const header = document.createElement('div');
+          header.className = 'timeline-year-header';
+          header.innerHTML = `<h3 class="year-title">${year}</h3><div class="year-line"></div>`;
+          grid.appendChild(header);
+
+          // Append items for this year
+          // We sort them by date within the year
+          years[year].sort((a, b) => Number(b.dataset.date) - Number(a.dataset.date));
+          years[year].forEach(item => grid.appendChild(item));
+        });
+      }
+    };
+
+    sortSelect.addEventListener('change', (e) => {
+      const mode = e.target.value;
+      // Add a fade out/in effect
+      grid.style.opacity = '0';
+      grid.style.transform = 'translateY(10px)';
+      
+      setTimeout(() => {
+        updateView(mode);
+        grid.style.opacity = '1';
+        grid.style.transform = 'translateY(0)';
+      }, 300);
+    });
+
+  });
+</script>
 
 <style>
   .projects-section {
     padding: var(--space-20) 0;
     background: var(--color-gray-50);
     position: relative;
+    min-height: 100vh;
   }
   
   .projects-container {
-    max-width: var(--max-width-6xl);
+    max-width: var(--max-width-7xl); /* Wider for gallery */
     margin: 0 auto;
     padding: 0 var(--space-6);
   }
   
   .projects-header {
     text-align: center;
-    margin-bottom: var(--space-16);
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 0.8s ease-out forwards;
+    margin-bottom: var(--space-12);
   }
-  
+
+  /* --- Controls Styling --- */
+  .gallery-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    margin-bottom: var(--space-12);
+    padding: var(--space-6);
+    background: var(--color-white);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--color-gray-200);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .control-label {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .select-wrapper {
+    position: relative;
+    width: 200px;
+  }
+
+  .sort-select {
+    width: 100%;
+    appearance: none;
+    background: var(--color-gray-50);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2) var(--space-4);
+    padding-right: var(--space-10);
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-900);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .sort-select:hover, .sort-select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+    outline: none;
+  }
+
+  .select-icon {
+    position: absolute;
+    right: var(--space-3);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--color-gray-500);
+    pointer-events: none;
+  }
+
+  .slider-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    width: 240px;
+  }
+
+  .size-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 99px;
+    background: var(--color-gray-200);
+    outline: none;
+    cursor: pointer;
+  }
+
+  .size-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    border: 2px solid var(--color-white);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+
+  .size-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+  }
+
+  /* --- Grid Styling --- */
+  .projects-grid {
+    display: grid;
+    /* This variable is controlled by the JS slider */
+    --card-min-width: 380px; 
+    grid-template-columns: repeat(auto-fill, minmax(var(--card-min-width), 1fr));
+    gap: var(--space-8);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .projects-grid__item {
+    /* Ensure cards take full height of grid cell */
+    height: 100%;
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* --- Timeline Headers (inserted dynamically) --- */
+  :global(.timeline-year-header) {
+    grid-column: 1 / -1; /* Span full width */
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-4);
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  :global(.year-title) {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-300);
+    margin: 0;
+    line-height: 1;
+  }
+
+  :global(.year-line) {
+    flex: 1;
+    height: 2px;
+    background: var(--color-gray-200);
+    border-radius: 99px;
+  }
+
+  /* --- Titles & Text --- */
   .projects-title {
     font-size: var(--font-size-4xl);
     font-weight: var(--font-weight-bold);
@@ -96,158 +379,35 @@ const sortedProjects = allProjects.sort((a, b) => {
     line-height: var(--line-height-relaxed);
   }
   
-  .projects-grid {
-    display: grid;
-    gap: var(--space-8);
-    grid-template-columns: 1fr;
-  }
-  
-  .projects-grid__item {
-    opacity: 0;
-    transform: translateY(30px) scale(0.95);
-    transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
-                transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    transition-delay: calc(var(--stagger-index, 0) * 0.1s);
-    will-change: transform, opacity;
-  }
-  
-  .projects-grid__item.animate-in {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  
-  /* Fallback animation for browsers without intersection observer */
-  .projects-grid__item:not(.animate-in) {
-    animation: staggeredFadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    animation-delay: var(--animation-delay, 0s);
-  }
-  
   .projects-empty {
     text-align: center;
-    padding: var(--space-16);
+    padding: var(--space-20);
     color: var(--color-gray-500);
     font-size: var(--font-size-lg);
   }
-  
-  /* Tablet Layout - 2 columns */
+
+  /* --- Dark Mode & Responsive --- */
   @media (min-width: 768px) {
     .projects-container {
       padding: 0 var(--space-8);
     }
-    
+  }
+
+  @media (max-width: 640px) {
+    .gallery-controls {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .select-wrapper, .slider-wrapper {
+      width: 100%;
+    }
     .projects-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--space-10);
-    }
-    
-    .projects-title {
-      font-size: var(--font-size-5xl);
+      --card-min-width: 100% !important; /* Force single column on mobile */
     }
   }
-  
-  /* Desktop Layout - 3 columns */
-  @media (min-width: 1024px) {
-    .projects-section {
-      padding: var(--space-24) 0;
-    }
-    
-    .projects-container {
-      padding: 0 var(--space-12);
-    }
-    
-    .projects-grid {
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--space-12);
-    }
-    
-    .projects-header {
-      margin-bottom: var(--space-20);
-    }
-    
-    .projects-title {
-      font-size: var(--font-size-6xl);
-    }
-  }
-  
-  /* Large Desktop - maintain 3 columns with better spacing */
-  @media (min-width: 1280px) {
-    .projects-grid {
-      gap: var(--space-16);
-    }
-  }
-  
-  /* Animation Keyframes */
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes staggeredFadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px) scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
-  
-  /* Reduced Motion Support */
-  @media (prefers-reduced-motion: reduce) {
-    .projects-header,
-    .projects-grid__item {
-      animation: none;
-      opacity: 1;
-      transform: none;
-    }
-  }
-  
-  /* High Contrast Mode Support */
-  @media (prefers-contrast: high) {
-    .projects-section {
-      background: var(--color-white);
-      border-top: 2px solid var(--color-gray-900);
-      border-bottom: 2px solid var(--color-gray-900);
-    }
-    
-    .projects-title {
-      color: var(--color-black);
-    }
-    
-    .projects-subtitle {
-      color: var(--color-gray-800);
-    }
-  }
-  
-  /* Focus Management for Accessibility */
-  .projects-section:focus-within {
-    outline: none;
-  }
-  
-  /* Print Styles */
-  @media print {
-    .projects-section {
-      background: white;
-      padding: var(--space-8) 0;
-    }
-    
-    .projects-grid {
-      grid-template-columns: 1fr;
-      gap: var(--space-6);
-    }
-    
-    .projects-header,
-    .projects-grid__item {
-      animation: none;
-      opacity: 1;
-      transform: none;
-    }
+
+  /* Dark mode overrides (if global.css handles vars, this might be redundant but safe) */
+  @media (prefers-color-scheme: dark) {
+     /* Add dark mode specific overrides if variables don't cover it */
   }
 </style>
