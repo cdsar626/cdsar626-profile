@@ -72,7 +72,7 @@ const {
   <!-- CV Viewer Component -->
   <CVViewer 
     client:only="vue"
-    defaultCvPath="/cv/Cesar_De_la_Vega_Salinas_-_Full_Stack_Developer.pdf"
+    defaultCvPath={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/cv/Cesar_De_la_Vega_Salinas_-_Full_Stack_Developer.pdf`}
   />
 </section>
 

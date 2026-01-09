@@ -5,6 +5,8 @@ import PerformanceScript from "../components/layout/PerformanceScript.astro";
 import TooltipSetup from "../components/ui/TooltipSetup.astro";
 import ThemeToggle from "../components/ui/ThemeToggle.astro";
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+
 export interface Props {
   title?: string;
   description?: string;
@@ -146,12 +148,12 @@ const siteConfig = {
     <meta name="apple-mobile-web-app-title" content={siteConfig.name} />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
 
     <!-- Preload Critical Assets -->
     <link
       rel="preload"
-      href="/fonts/inter-var.woff2"
+      href={`${base}/fonts/inter-var.woff2`}
       as="font"
       type="font/woff2"
       crossorigin
@@ -161,7 +163,7 @@ const siteConfig = {
     <link
       rel="preload"
       as="image"
-      href="/assets/images/profile/profile-placeholder.svg"
+      href={`${base}/assets/images/profile/profile-placeholder.svg`}
     />
 
     <!-- DNS Prefetch for External Resources -->
@@ -172,7 +174,7 @@ const siteConfig = {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
     <!-- Resource hints for better performance -->
-    <link rel="prefetch" href="/favicon.svg" />
+    <link rel="prefetch" href={`${base}/favicon.svg`} />
 
     <!-- Module preload for critical JavaScript -->
     <link rel="modulepreload" href="/src/components/ui/CVViewer.vue" />

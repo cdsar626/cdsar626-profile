@@ -4,17 +4,26 @@ import { defineConfig } from 'astro/config';
 import vue from '@astrojs/vue';
 import sitemap from '@astrojs/sitemap';
 
+/**
+ * Configure dynamic pathing based on environment
+ * GITHUB_ACTIONS is true when building on GitHub (for Pages)
+ * For VPS or local builds, we assume root deployment (/)
+ */
+const isGitHubPages = process.env.GITHUB_ACTIONS === 'true';
+const siteUrl = isGitHubPages ? 'https://cdsar626.github.io' : 'https://tu-dominio-vps.com'; // Cambia esto por tu dominio real si lo tienes
+const baseDir = isGitHubPages ? '/cdsar626-profile' : '/';
+
 // https://astro.build/config
 export default defineConfig({
   // Site URL for SEO and sitemap generation
-  site: 'https://johndeveloper.dev',
-  
+  site: siteUrl,
+
   // Base URL for deployment (adjust for subdirectory deployments)
-  base: '/',
-  
+  base: baseDir,
+
   // Trailing slash configuration for consistent URLs
   trailingSlash: 'ignore',
-  
+
   vite: {
     build: {
       // Enhanced code splitting for better performance
@@ -34,7 +43,6 @@ export default defineConfig({
   integrations: [
     vue({
       // Vue optimization settings
-      reactivityTransform: false, // Disable for better performance
       template: {
         compilerOptions: {
           // Optimize for production
@@ -52,14 +60,12 @@ export default defineConfig({
       filter: (page) => !page.includes('/admin') && !page.includes('/test'),
       // Custom entries for dynamic content
       customPages: [
-        'https://johndeveloper.dev/',
-        'https://johndeveloper.dev/projects'
+        `${siteUrl}${baseDir === '/' ? '' : baseDir}/`,
       ],
       // Generate separate sitemaps for different content types
       serialize(item) {
         // Customize sitemap entries
         if (item.url.includes('/projects/')) {
-          item.changefreq = 'monthly';
           item.priority = 0.8;
         }
         return item;
@@ -115,24 +121,22 @@ export default defineConfig({
 
   // Compression and optimization
   compressHTML: true,
-  
+
   // Output configuration for static hosting
   output: 'static',
-  
+
   // Server configuration for development
   server: {
     port: 3000,
     host: true // Allow external connections
   },
-  
+
   // Markdown configuration for better performance
   markdown: {
     // Optimize markdown processing
     shikiConfig: {
       // Use a lightweight theme
       theme: 'github-light',
-      // Limit languages to reduce bundle size
-      langs: ['javascript', 'typescript', 'html', 'css', 'json']
     },
     // Enable syntax highlighting caching
     syntaxHighlight: 'shiki'

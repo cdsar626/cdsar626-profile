@@ -13,21 +13,24 @@ const { src, alt, class: className = '', loading = 'lazy', sizes = '(max-width: 
 const pathParts = src.split('/');
 const filename = pathParts[pathParts.length - 1];
 const baseName = filename.split('.')[0];
-const directory = pathParts.slice(0, -1).join('/');
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const directory = pathParts.slice(0, -1).join('/').replace(/^\//, "");
+const fullDirectory = base ? `${base}/${directory}` : `/${directory}`;
+const fullSrc = src.startsWith('/') ? (base ? `${base}${src}` : src) : src;
 
 // Generate responsive image paths
 const breakpoints = [320, 640, 768, 1024, 1280, 1536];
 
 const generateSrcset = (format: string) => {
   return breakpoints
-    .map(width => `${directory}/${baseName}-${width}w.${format} ${width}w`)
+    .map(width => `${fullDirectory}/${baseName}-${width}w.${format} ${width}w`)
     .join(', ');
 };
 
 const webpSrcset = generateSrcset('webp');
 const avifSrcset = generateSrcset('avif');
 const fallbackSrcset = breakpoints
-  .map(width => `${directory}/${baseName}-${width}w.jpg ${width}w`)
+  .map(width => `${fullDirectory}/${baseName}-${width}w.jpg ${width}w`)
   .join(', ');
 ---
 
@@ -35,7 +38,7 @@ const fallbackSrcset = breakpoints
   <source srcset={avifSrcset} type="image/avif" />
   <source srcset={webpSrcset} type="image/webp" />
   <img 
-    src={src} 
+    src={fullSrc} 
     srcset={fallbackSrcset}
     sizes={sizes}
     alt={alt}
