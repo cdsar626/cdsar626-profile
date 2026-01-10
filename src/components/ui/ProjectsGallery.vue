@@ -26,7 +26,8 @@ const props = defineProps<{
 }>();
 
 const sortMode = ref<'featured' | 'timeline'>('featured');
-const cardSize = ref(300); // px, default minimum width
+// Fixed card min-width for consistent layout (approx 3 cards per row on desktop)
+const cardMinWidth = '350px';
 
 // Computed property for handling sorting and grouping
 const viewData = computed(() => {
@@ -66,7 +67,7 @@ const viewData = computed(() => {
 
 // Dynamic grid style
 const gridStyle = computed(() => ({
-  '--card-min-width': `${cardSize.value}px`
+  '--card-min-width': cardMinWidth
 }));
 </script>
 
@@ -87,34 +88,7 @@ const gridStyle = computed(() => ({
         </div>
       </div>
 
-      <div class="control-group slider-group">
-        <label for="size-slider" class="control-label">Card Size</label>
-        <div class="slider-wrapper">
-          <span class="slider-icon small">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="4" y="4" width="6" height="6" rx="1" />
-              <rect x="14" y="4" width="6" height="6" rx="1" />
-              <rect x="4" y="14" width="6" height="6" rx="1" />
-              <rect x="14" y="14" width="6" height="6" rx="1" />
-            </svg>
-          </span>
-          <input 
-            id="size-slider" 
-            type="range" 
-            v-model.number="cardSize" 
-            min="250" 
-            max="600" 
-            step="10" 
-            class="size-slider"
-            aria-label="Adjust card size"
-          >
-          <span class="slider-icon large">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-            </svg>
-          </span>
-        </div>
-      </div>
+
     </div>
 
     <!-- Content Area -->
@@ -242,56 +216,7 @@ const gridStyle = computed(() => ({
   pointer-events: none;
 }
 
-/* Slider Styling */
-.slider-wrapper {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  width: 240px;
-}
 
-.size-slider {
-  flex: 1;
-  -webkit-appearance: none;
-  width: 100%;
-  height: 6px;
-  border-radius: var(--radius-full);
-  background: var(--color-gray-200);
-  outline: none;
-  cursor: pointer;
-}
-
-.size-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--color-primary);
-  border: 2px solid var(--color-white);
-  box-shadow: var(--shadow-sm);
-  cursor: pointer;
-  transition: transform 0.1s;
-}
-
-.size-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.1);
-}
-
-.slider-icon {
-  color: var(--color-gray-400);
-  display: flex;
-  align-items: center;
-}
-
-.slider-icon svg {
-  width: 20px;
-  height: 20px;
-}
-
-.slider-icon.small svg {
-  padding: 2px;
-}
 
 /* Content Grid */
 .projects-grid {
@@ -356,9 +281,7 @@ const gridStyle = computed(() => ({
   color: var(--color-white);
 }
 
-:global([data-theme="dark"]) .size-slider {
-  background: var(--color-gray-700);
-}
+
 
 /* Responsive adjust for controls */
 @media (max-width: 640px) {
@@ -367,7 +290,7 @@ const gridStyle = computed(() => ({
     align-items: stretch;
   }
   
-  .select-wrapper, .slider-wrapper {
+  .select-wrapper {
     width: 100%;
   }
 }

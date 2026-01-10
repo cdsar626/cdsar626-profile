@@ -25,49 +25,44 @@ const projectsData = sortedProjects.map(p => ({
 <section class="projects-section" id="projects" aria-labelledby="projects-heading">
   <div class="projects-container">
     <header class="projects-header">
-      <h2 id="projects-heading" class="projects-title">Featured Projects</h2>
-      <p class="projects-subtitle">
-        A showcase of my recent work and technical expertise
-      </p>
+      <div class="projects-header-content">
+        <h2 id="projects-heading" class="projects-title">Featured Projects</h2>
+        <p class="projects-subtitle">
+          A showcase of my recent work and technical expertise
+        </p>
+      </div>
+
+      <!-- Gallery Controls -->
+      <div class="gallery-controls">
+        <div class="control-group">
+          <label class="control-label">View Mode</label>
+          <div class="custom-select" id="custom-select">
+            <button class="select-trigger" id="select-trigger" aria-haspopup="listbox" aria-expanded="false">
+              <span id="selected-text">✨ Featured</span>
+              <svg class="select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="select-dropdown" id="select-dropdown">
+              <ul class="select-options" role="listbox">
+                <li class="select-option selected" data-value="featured" role="option">
+                  <span class="option-icon">✨</span> Featured 
+                  <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </li>
+                <li class="select-option" data-value="timeline" role="option">
+                  <span class="option-icon">📅</span> Timeline
+                  <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </header>
-
-    <!-- Gallery Controls -->
-    <div class="gallery-controls">
-      <div class="control-group">
-        <label for="sort-select" class="control-label">View Mode</label>
-        <div class="select-wrapper">
-          <select id="sort-select" class="sort-select">
-            <option value="featured">✨ Featured</option>
-            <option value="timeline">📅 Timeline</option>
-          </select>
-          <svg class="select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
-      </div>
-
-      <div class="control-group slider-group">
-        <label for="size-slider" class="control-label">Card Size</label>
-        <div class="slider-wrapper">
-          <span class="slider-icon small">
-             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-          </span>
-          <input 
-            id="size-slider" 
-            type="range" 
-            min="280" 
-            max="600" 
-            value="380"
-            step="10" 
-            class="size-slider"
-            aria-label="Adjust card size"
-          >
-          <span class="slider-icon large">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
-          </span>
-        </div>
-      </div>
-    </div>
     
     <!-- Projects Grid Container -->
     <div id="projects-grid" class="projects-grid" role="list" data-view="featured">
@@ -103,23 +98,65 @@ const projectsData = sortedProjects.map(p => ({
 <script define:vars={{ projectsData }}>
   document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('projects-grid');
-    const sortSelect = document.getElementById('sort-select');
-    const sizeSlider = document.getElementById('size-slider');
+    const customSelect = document.getElementById('custom-select');
+    const trigger = document.getElementById('select-trigger');
+    const dropdown = document.getElementById('select-dropdown');
+    const options = document.querySelectorAll('.select-option');
+    const selectedText = document.getElementById('selected-text');
     const items = Array.from(document.querySelectorAll('.projects-grid__item'));
 
-    if (!grid || !sortSelect || !sizeSlider) return;
+    if (!grid || !customSelect || !trigger || !dropdown) return;
 
-    // --- 1. Size Slider Logic ---
-    const updateSize = (val) => {
-      grid.style.setProperty('--card-min-width', `${val}px`);
+    // --- 1. Custom Dropdown Logic ---
+    const toggleDropdown = () => {
+      const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+      trigger.setAttribute('aria-expanded', !isExpanded);
+      dropdown.classList.toggle('active');
     };
 
-    sizeSlider.addEventListener('input', (e) => {
-      updateSize(e.target.value);
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleDropdown();
     });
-    
-    // Initialize size
-    updateSize(sizeSlider.value);
+
+    document.addEventListener('click', () => {
+      trigger.setAttribute('aria-expanded', 'false');
+      dropdown.classList.remove('active');
+    });
+
+    options.forEach(option => {
+      option.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const value = option.dataset.value;
+        const text = option.textContent.trim();
+        
+        // Update selection UI
+        options.forEach(opt => opt.classList.remove('selected'));
+        option.classList.add('selected');
+        selectedText.textContent = text;
+        
+        // Close dropdown
+        trigger.setAttribute('aria-expanded', 'false');
+        dropdown.classList.remove('active');
+
+        // Trigger Sort
+        triggerSort(value);
+      });
+    });
+
+    const triggerSort = (mode) => {
+      // Add a fade out/in effect
+      grid.style.opacity = '0';
+      grid.style.transform = 'translateY(10px)';
+      
+      setTimeout(() => {
+        updateView(mode);
+        grid.style.opacity = '1';
+        grid.style.transform = 'translateY(0)';
+      }, 300);
+    };
+
+
 
 
     // --- 2. Sorting/Grouping Logic ---
@@ -177,18 +214,7 @@ const projectsData = sortedProjects.map(p => ({
       }
     };
 
-    sortSelect.addEventListener('change', (e) => {
-      const mode = e.target.value;
-      // Add a fade out/in effect
-      grid.style.opacity = '0';
-      grid.style.transform = 'translateY(10px)';
-      
-      setTimeout(() => {
-        updateView(mode);
-        grid.style.opacity = '1';
-        grid.style.transform = 'translateY(0)';
-      }, 300);
-    });
+
 
   });
 </script>
@@ -208,118 +234,179 @@ const projectsData = sortedProjects.map(p => ({
   }
   
   .projects-header {
-    text-align: center;
-    margin-bottom: var(--space-12);
+    text-align: left;
+    margin-bottom: var(--space-8);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+  }
+
+  .projects-header-content {
+    flex: 1;
+    min-width: 300px;
   }
 
   /* --- Controls Styling --- */
   .gallery-controls {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-8);
-    margin-bottom: var(--space-12);
-    padding: var(--space-6);
-    background: var(--color-white);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-sm);
     align-items: center;
-    justify-content: space-between;
-    border: 1px solid var(--color-gray-200);
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
+    justify-content: flex-end;
+    background: transparent;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    margin-bottom: var(--space-4);
   }
 
   .control-group {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-3);
   }
 
   .control-label {
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-gray-500);
+    font-size: 10px;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-400);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
   }
 
-  .select-wrapper {
+  .custom-select {
     position: relative;
-    width: 200px;
+    width: 220px;
   }
 
-  .sort-select {
+  .select-trigger {
     width: 100%;
-    appearance: none;
-    background: var(--color-gray-50);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color-bg-surface);
     border: 1px solid var(--color-gray-200);
     border-radius: var(--radius-lg);
-    padding: var(--space-2) var(--space-4);
-    padding-right: var(--space-10);
+    padding: var(--space-3) var(--space-4);
     font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
     color: var(--color-gray-900);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: var(--shadow-sm);
   }
 
-  .sort-select:hover, .sort-select:focus {
+  .select-trigger:hover {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
-    outline: none;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .select-trigger[aria-expanded="true"] .select-icon {
+    transform: rotate(180deg);
   }
 
   .select-icon {
-    position: absolute;
-    right: var(--space-3);
-    top: 50%;
-    transform: translateY(-50%);
     width: 16px;
     height: 16px;
-    color: var(--color-gray-500);
-    pointer-events: none;
+    color: var(--color-gray-400);
+    transition: transform 0.3s ease;
   }
 
-  .slider-wrapper {
+  .select-dropdown {
+    position: absolute;
+    top: calc(100% + var(--space-2));
+    left: 0;
+    right: 0;
+    background: var(--color-bg-surface);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px) scale(0.95);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+  }
+
+  .select-dropdown.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+  }
+
+  .select-options {
+    list-style: none;
+    padding: var(--space-1);
+    margin: 0;
+  }
+
+  .select-option {
     display: flex;
     align-items: center;
-    gap: var(--space-4);
-    width: 240px;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-700);
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
   }
 
-  .size-slider {
-    flex: 1;
-    -webkit-appearance: none;
-    width: 100%;
-    height: 6px;
-    border-radius: 99px;
+  .select-option:hover {
     background: var(--color-gray-200);
-    outline: none;
-    cursor: pointer;
+    color: var(--color-primary);
   }
 
-  .size-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--color-primary);
-    border: 2px solid var(--color-white);
-    box-shadow: var(--shadow-sm);
-    cursor: pointer;
-    transition: transform 0.1s;
+  .select-option.selected {
+    background: var(--color-primary-light);
+    color: var(--color-primary-dark);
+    font-weight: var(--font-weight-semibold);
   }
 
-  .size-slider::-webkit-slider-thumb:hover {
-    transform: scale(1.1);
+  .check-icon {
+    width: 16px;
+    height: 16px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
   }
+
+  .select-option.selected .check-icon {
+    opacity: 1;
+  }
+
+  :global([data-theme="dark"]) .select-trigger {
+    background: rgba(15, 23, 42, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-gray-900);
+  }
+
+  :global([data-theme="dark"]) .select-dropdown {
+    background: rgba(15, 23, 42, 0.8); /* Semi-transparent indigo-dark */
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  :global([data-theme="dark"]) .select-option:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  :global([data-theme="dark"]) .select-option.selected {
+    background: rgba(59, 130, 246, 0.2);
+    color: var(--color-primary-light);
+  }
+
+
 
   /* --- Grid Styling --- */
   .projects-grid {
     display: grid;
-    /* This variable is controlled by the JS slider */
-    --card-min-width: 380px; 
+    /* Fixed at 350px for approximately 3 cards per row on desktop */
+    --card-min-width: 350px; 
     grid-template-columns: repeat(auto-fill, minmax(var(--card-min-width), 1fr));
     gap: var(--space-8);
     transition: opacity 0.3s ease, transform 0.3s ease;
@@ -367,7 +454,7 @@ const projectsData = sortedProjects.map(p => ({
     font-size: var(--font-size-4xl);
     font-weight: var(--font-weight-bold);
     color: var(--color-gray-900);
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-2);
     line-height: var(--line-height-tight);
   }
   
@@ -375,7 +462,7 @@ const projectsData = sortedProjects.map(p => ({
     font-size: var(--font-size-lg);
     color: var(--color-gray-600);
     max-width: 600px;
-    margin: 0 auto;
+    margin: 0;
     line-height: var(--line-height-relaxed);
   }
   
@@ -398,7 +485,7 @@ const projectsData = sortedProjects.map(p => ({
       flex-direction: column;
       align-items: stretch;
     }
-    .select-wrapper, .slider-wrapper {
+    .select-wrapper {
       width: 100%;
     }
     .projects-grid {
