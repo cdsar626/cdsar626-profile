@@ -9,7 +9,7 @@ links:
   main: "https://tablist.cdsar626.com/"
   github: "https://github.com/cdsar626/tablist_flutter"
   additional: "https://play.google.com/store/apps/details?id=com.cdsar626.tablist"
-publishDate: 2024-03-01
+publishDate: 2022-03-01
 ---
 
 ## Overview
