@@ -9,6 +9,7 @@ const allProjects = await getCollection('projects');
 const sortedProjects = allProjects.sort((a, b) => {
   if (a.data.featured && !b.data.featured) return -1;
   if (!a.data.featured && b.data.featured) return 1;
+  // Use UTC for consistent comparison
   return new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime();
 });
 
@@ -16,7 +17,7 @@ const sortedProjects = allProjects.sort((a, b) => {
 const projectsData = sortedProjects.map(p => ({
   id: p.id,
   date: new Date(p.data.publishDate).getTime(),
-  year: new Date(p.data.publishDate).getFullYear(),
+  year: new Date(p.data.publishDate).getUTCFullYear(),
   featured: p.data.featured || false,
   order: p.data.order || 999
 }));
@@ -71,7 +72,7 @@ const projectsData = sortedProjects.map(p => ({
           class="projects-grid__item" 
           role="listitem"
           data-id={project.id}
-          data-year={new Date(project.data.publishDate).getFullYear()}
+          data-year={new Date(project.data.publishDate).getUTCFullYear()}
           data-featured={project.data.featured}
           data-date={new Date(project.data.publishDate).getTime()}
         >
@@ -107,59 +108,7 @@ const projectsData = sortedProjects.map(p => ({
 
     if (!grid || !customSelect || !trigger || !dropdown) return;
 
-    // --- 1. Custom Dropdown Logic ---
-    const toggleDropdown = () => {
-      const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
-      trigger.setAttribute('aria-expanded', !isExpanded);
-      dropdown.classList.toggle('active');
-    };
-
-    trigger.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleDropdown();
-    });
-
-    document.addEventListener('click', () => {
-      trigger.setAttribute('aria-expanded', 'false');
-      dropdown.classList.remove('active');
-    });
-
-    options.forEach(option => {
-      option.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const value = option.dataset.value;
-        const text = option.textContent.trim();
-        
-        // Update selection UI
-        options.forEach(opt => opt.classList.remove('selected'));
-        option.classList.add('selected');
-        selectedText.textContent = text;
-        
-        // Close dropdown
-        trigger.setAttribute('aria-expanded', 'false');
-        dropdown.classList.remove('active');
-
-        // Trigger Sort
-        triggerSort(value);
-      });
-    });
-
-    const triggerSort = (mode) => {
-      // Add a fade out/in effect
-      grid.style.opacity = '0';
-      grid.style.transform = 'translateY(10px)';
-      
-      setTimeout(() => {
-        updateView(mode);
-        grid.style.opacity = '1';
-        grid.style.transform = 'translateY(0)';
-      }, 300);
-    };
-
-
-
-
-    // --- 2. Sorting/Grouping Logic ---
+    // --- 1. Sorting/Grouping Logic ---
     const updateView = (mode) => {
       // Remove all existing timeline headers/wrappers if any
       const existingHeaders = grid.querySelectorAll('.timeline-year-header');
@@ -198,7 +147,6 @@ const projectsData = sortedProjects.map(p => ({
         const sortedYears = Object.keys(years).sort((a, b) => Number(b) - Number(a));
 
         // Create visual groups
-        // Note: CSS Grid handles the layout, but we need to insert "headers" that span full width
         sortedYears.forEach(year => {
           // Create Header
           const header = document.createElement('div');
@@ -207,12 +155,70 @@ const projectsData = sortedProjects.map(p => ({
           grid.appendChild(header);
 
           // Append items for this year
-          // We sort them by date within the year
           years[year].sort((a, b) => Number(b.dataset.date) - Number(a.dataset.date));
           years[year].forEach(item => grid.appendChild(item));
         });
       }
     };
+
+    // --- 2. Custom Dropdown Logic ---
+    const triggerSort = (mode) => {
+      localStorage.setItem('projects_view_mode', mode);
+      
+      grid.style.opacity = '0';
+      grid.style.transform = 'translateY(10px)';
+      
+      setTimeout(() => {
+        updateView(mode);
+        grid.style.opacity = '1';
+        grid.style.transform = 'translateY(0)';
+      }, 300);
+    };
+
+    const toggleDropdown = () => {
+      const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+      trigger.setAttribute('aria-expanded', !isExpanded);
+      dropdown.classList.toggle('active');
+    };
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleDropdown();
+    });
+
+    document.addEventListener('click', () => {
+      trigger.setAttribute('aria-expanded', 'false');
+      dropdown.classList.remove('active');
+    });
+
+    options.forEach(option => {
+      option.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const value = option.dataset.value;
+        const text = option.textContent.trim();
+        
+        options.forEach(opt => opt.classList.remove('selected'));
+        option.classList.add('selected');
+        selectedText.textContent = text;
+        
+        trigger.setAttribute('aria-expanded', 'false');
+        dropdown.classList.remove('active');
+
+        triggerSort(value);
+      });
+    });
+
+    // --- 3. Initialization ---
+    const savedMode = localStorage.getItem('projects_view_mode') || 'featured';
+    const initialOption = Array.from(options).find(opt => opt.dataset.value === savedMode);
+    
+    if (initialOption) {
+      options.forEach(opt => opt.classList.remove('selected'));
+      initialOption.classList.add('selected');
+      selectedText.textContent = initialOption.textContent.trim();
+    }
+    
+    updateView(savedMode);
 
 
 
