@@ -6,7 +6,8 @@ const STATIC_CACHE_URLS = [
   '/assets/index.css',
   '/assets/index.js',
   '/images/og-image.svg',
-  '/favicon.svg'
+  '/favicon.svg',
+  '/cv/Cesar_De_la_Vega_Salinas_-_Full_Stack_Developer.pdf'
 ];
 
 // Install event - cache static assets
@@ -86,12 +87,12 @@ self.addEventListener('fetch', (event) => {
           })
           .catch((error) => {
             console.error('Fetch failed:', error);
-            
+
             // Return offline page for navigation requests
             if (event.request.mode === 'navigate') {
               return caches.match('/index.html');
             }
-            
+
             throw error;
           });
       })
@@ -112,7 +113,7 @@ self.addEventListener('sync', (event) => {
 self.addEventListener('push', (event) => {
   if (event.data) {
     const data = event.data.json();
-    
+
     event.waitUntil(
       self.registration.showNotification(data.title, {
         body: data.body,

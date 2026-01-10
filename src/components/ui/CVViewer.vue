@@ -11,7 +11,7 @@
     </Transition>
 
     <!-- CV Panel -->
-    <Transition name="slide">
+    <Transition :name="isRestoring ? 'none' : 'slide'">
       <div
         v-if="isOpen"
         ref="cvPanel"
@@ -82,7 +82,12 @@
         </div>
 
         <!-- CV Content -->
-        <div class="cv-content" role="main">
+        <div 
+          ref="cvContent"
+          class="cv-content" 
+          role="main"
+          @scroll="handleScroll"
+        >
           <div class="cv-content-container">
             <!-- Error state -->
             <div v-if="error" class="cv-error" role="alert" aria-live="assertive">
@@ -106,14 +111,17 @@
               </div>
             </div>
 
-            <!-- Loading state -->
-            <div v-else-if="loading" class="cv-loading" role="status" aria-live="polite">
+            <!-- Loading state Overlay -->
+            <div v-if="loading" class="cv-loading" role="status" aria-live="polite">
               <div class="cv-spinner" aria-hidden="true"></div>
               <p class="cv-loading-text">Loading CV document...</p>
             </div>
 
-            <!-- PDF Content -->
-            <div v-else class="cv-pdf-container">
+            <!-- PDF Content (Always in DOM to allow background loading) -->
+            <div 
+              class="cv-pdf-container" 
+              :class="{ 'cv-pdf-hidden': loading && !isPreloaded }"
+            >
               <!-- Clean PDF embed without browser controls -->
               <object
                 ref="pdfObject"
@@ -187,8 +195,10 @@ const error = ref<string | null>(null)
 const currentPage = ref(1)
 const totalPages = ref(1)
 const pdfObject = ref<HTMLObjectElement | null>(null)
+const cvContent = ref<HTMLElement | null>(null)
 const isPreloaded = ref(false)
 const preloadError = ref<string | null>(null)
+const isRestoring = ref(false)
 
 // Focus management refs
 const cvPanel = ref<HTMLElement | null>(null)
@@ -253,13 +263,32 @@ const preloadPDF = () => {
 }
 
 // Methods
-const openViewer = () => {
+const openViewer = (page?: number, isRestore = false) => {
   console.log('Opening CV viewer...')
+  isRestoring.value = isRestore
   isOpen.value = true
-  currentPage.value = 1
   
-  // If PDF is already preloaded, show it immediately
-  if (isPreloaded.value) {
+  // Reset restoring flag after a short delay so manual clicks still animate
+  if (isRestore) {
+    setTimeout(() => {
+      isRestoring.value = false
+    }, 500)
+  }
+  
+  // ... page handling ...
+  if (page) {
+    currentPage.value = page
+  } else if (!currentPage.value) {
+    currentPage.value = 1
+  }
+  
+  // Save state to session storage
+  sessionStorage.setItem('cv-viewer-open', 'true')
+  sessionStorage.setItem('cv-viewer-page', currentPage.value.toString())
+  
+  // OPTIMIZATION: If restoring session, skip the spinner entirely
+  // The Service Worker cache will make it instant
+  if (isRestore || isPreloaded.value) {
     loading.value = false
     error.value = null
   } else if (preloadError.value) {
@@ -269,13 +298,12 @@ const openViewer = () => {
     loading.value = true
     error.value = null
     
-    // Add a timeout to handle cases where iframe load event doesn't fire
+    // Safety timeout
     setTimeout(() => {
       if (loading.value) {
-        console.log('PDF load timeout reached, assuming loaded')
         loading.value = false
       }
-    }, 2000) // Reduced to 2 seconds since we have preloading
+    }, 2000)
   }
   
   // Calculate total pages based on assets
@@ -293,6 +321,11 @@ const openViewer = () => {
 
 const closeViewer = () => {
   isOpen.value = false
+  
+  // Clear persistence
+  sessionStorage.removeItem('cv-viewer-open')
+  sessionStorage.removeItem('cv-viewer-page')
+  sessionStorage.removeItem('cv-viewer-scroll')
   
   // Restore body scroll
   if (typeof document !== 'undefined') {
@@ -312,12 +345,14 @@ const handleBackdropClick = () => {
 const previousPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--
+    sessionStorage.setItem('cv-viewer-page', currentPage.value.toString())
   }
 }
 
 const nextPage = () => {
   if (currentPage.value < totalPages.value) {
     currentPage.value++
+    sessionStorage.setItem('cv-viewer-page', currentPage.value.toString())
   }
 }
 
@@ -443,6 +478,20 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 }
 
+const handleScroll = (event: Event) => {
+  const target = event.target as HTMLElement
+  if (target && isOpen.value) {
+    sessionStorage.setItem('cv-viewer-scroll', target.scrollTop.toString())
+  }
+}
+
+const restoreScroll = () => {
+  const savedScroll = sessionStorage.getItem('cv-viewer-scroll')
+  if (savedScroll && cvContent.value) {
+    cvContent.value.scrollTop = parseInt(savedScroll)
+  }
+}
+
 // Touch interaction state
 const touchState = ref({
   startX: 0,
@@ -534,6 +583,18 @@ onMounted(() => {
   
   // Listen for custom event to open CV viewer
   document.addEventListener('open-cv-viewer', handleOpenCVViewer)
+  
+  // Restore state from sessionStorage if needed
+  const wasOpen = sessionStorage.getItem('cv-viewer-open') === 'true'
+  const lastPage = parseInt(sessionStorage.getItem('cv-viewer-page') || '1')
+  
+  if (wasOpen) {
+    console.log('Restoring CV viewer state from session...')
+    openViewer(lastPage, true) // Pass true to skip spinner
+    
+    // Attempt scroll restoration after DOM update
+    setTimeout(restoreScroll, 100)
+  }
   
   // Start preloading PDF in background after component mounts
   setTimeout(() => {
@@ -1162,5 +1223,9 @@ iframe:focus {
     padding: 12px 20px;
     min-height: 44px;
   }
+}
+.cv-pdf-hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 </style>

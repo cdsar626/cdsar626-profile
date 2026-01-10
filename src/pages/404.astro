@@ -1,0 +1,134 @@
+---
+/**
+ * 404 Emergency Redirect & Custom Error Page
+ * This page handles 404s, but also specifically catches broken 
+ * relative links from the PDF CV in a static environment.
+ */
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found | redirecting...</title>
+    <style>
+        :root {
+            --color-primary: #3b82f6;
+            --color-bg: #f9fafb;
+            --color-text: #1f2937;
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--color-bg);
+            color: var(--color-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .container {
+            padding: 2rem;
+            max-width: 400px;
+        }
+        .loader {
+            border: 3px solid #e5e7eb;
+            border-top: 3px solid var(--color-primary);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        h1 { font-size: 1.5rem; margin-bottom: 1rem; }
+        p { color: #6b7280; line-height: 1.5; }
+        .hidden { display: none; }
+        .btn {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--color-primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div id="redirect-ui" class="container hidden">
+        <div class="loader"></div>
+        <h1 id="status-title">Redirecting...</h1>
+        <p id="status-msg">Opening link in a new tab and returning to portfolio.</p>
+        <a href="/" id="manual-link" class="btn">Go Back Home</a>
+    </div>
+
+    <div id="error-ui" class="container hidden">
+        <h1>404 - Page Not Found</h1>
+        <p>Sorry, the page you are looking for doesn't exist.</p>
+        <a href="/" class="btn">Return to Portfolio</a>
+    </div>
+
+    <script is:inline>
+        // Check if we are coming from a broken PDF link
+        const path = window.location.pathname;
+        const cvPrefix = '/cv/';
+        
+        // List of domains we expect to catch from the PDF
+        const domains = ['x.com', 'github.com', 'linkedin.com', 'cdsar626.com', 'twitter.com', 'instagram.com', 'linkedin.com/in'];
+
+        if (path.includes(cvPrefix)) {
+            const parts = path.split(cvPrefix);
+            const rawTarget = parts[parts.length - 1];
+            
+            if (rawTarget && rawTarget.length > 3) {
+                const redirectUI = document.getElementById('redirect-ui');
+                redirectUI.classList.remove('hidden');
+
+                let targetUrl = rawTarget;
+                if (domains.some(d => rawTarget.startsWith(d)) || !rawTarget.includes('://')) {
+                    targetUrl = 'https://' + rawTarget;
+                }
+
+                document.getElementById('manual-link').href = targetUrl;
+                document.getElementById('status-title').textContent = "Opening " + rawTarget;
+
+                // DETECT: Is this a new tab (Ctrl+Click / Middle Click)?
+                // New tabs have a history length of 1.
+                const isNewTab = window.history.length <= 1;
+
+                if (isNewTab) {
+                    // Just replace this page with the target URL
+                    window.location.replace(targetUrl);
+                } else {
+                    // It took over our portfolio tab!
+                    // 1. Open in new tab
+                    window.open(targetUrl, '_blank');
+
+                    // 2. Snap back immediately
+                    window.history.back();
+
+                    // Fallback for edge cases
+                    setTimeout(() => {
+                        if (window.location.pathname === path) {
+                             window.location.href = '/';
+                        }
+                    }, 500);
+                }
+            } else {
+                show404();
+            }
+        } else {
+            show404();
+        }
+
+        function show404() {
+            document.getElementById('error-ui').classList.remove('hidden');
+            document.title = "404 Page Not Found";
+        }
+    </script>
+</body>
+</html>
