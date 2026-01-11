@@ -75,6 +75,7 @@ const projectsData = sortedProjects.map(p => ({
           data-year={new Date(project.data.publishDate).getUTCFullYear()}
           data-featured={project.data.featured}
           data-date={new Date(project.data.publishDate).getTime()}
+          data-order={project.data.order || 999}
         >
           <ProjectCard
             title={project.data.title}
@@ -128,6 +129,11 @@ const projectsData = sortedProjects.map(p => ({
           const featB = b.dataset.featured === 'true';
           if (featA && !featB) return -1;
           if (!featA && featB) return 1;
+          
+          const orderA = Number(a.dataset.order) || 999;
+          const orderB = Number(b.dataset.order) || 999;
+          if (orderA !== orderB) return orderA - orderB;
+
           return Number(b.dataset.date) - Number(a.dataset.date);
         });
         items.forEach(item => grid.appendChild(item));

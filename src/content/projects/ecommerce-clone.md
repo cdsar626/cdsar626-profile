@@ -4,7 +4,7 @@ description: "A clone of Andreas Kitchen Meals website, using shoprocket store i
 technologies: ["Astro", "Solidjs", "TailwindCSS", "Shoprocket"]
 thumbnail: "/images/projects/ecommerce-clone.png"
 featured: true
-order: 2
+order: 3
 links:
   main: "https://akm.cdsar626.com/"
   github: "https://github.com/cdsar626/custom_ecommerce"

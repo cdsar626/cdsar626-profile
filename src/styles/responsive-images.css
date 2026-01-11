@@ -250,6 +250,131 @@
   }
 }
 
+/* Responsive image: animet */
+.animet {
+  background-image: url('/images/projects/animet.jpg');
+}
+
+@supports (background-image: url('image.webp')) {
+  .animet {
+    background-image: url('/images/projects/animet.webp');
+  }
+}
+
+@supports (background-image: url('image.avif')) {
+  .animet {
+    background-image: url('/images/projects/animet.avif');
+  }
+}
+
+@media (max-width: 640px) {
+  .animet {
+    background-image: url('/images/projects/animet-320w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .animet {
+      background-image: url('/images/projects/animet-320w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .animet {
+      background-image: url('/images/projects/animet-320w.avif');
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .animet {
+    background-image: url('/images/projects/animet-640w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .animet {
+      background-image: url('/images/projects/animet-640w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .animet {
+      background-image: url('/images/projects/animet-640w.avif');
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .animet {
+    background-image: url('/images/projects/animet-768w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .animet {
+      background-image: url('/images/projects/animet-768w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .animet {
+      background-image: url('/images/projects/animet-768w.avif');
+    }
+  }
+}
+
+@media (max-width: 1280px) {
+  .animet {
+    background-image: url('/images/projects/animet-1024w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .animet {
+      background-image: url('/images/projects/animet-1024w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .animet {
+      background-image: url('/images/projects/animet-1024w.avif');
+    }
+  }
+}
+
+@media (max-width: 1536px) {
+  .animet {
+    background-image: url('/images/projects/animet-1280w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .animet {
+      background-image: url('/images/projects/animet-1280w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .animet {
+      background-image: url('/images/projects/animet-1280w.avif');
+    }
+  }
+}
+
+@media (min-width: 1536px) {
+  .animet {
+    background-image: url('/images/projects/animet-1536w.jpg');
+  }
+  
+  @supports (background-image: url('image.webp')) {
+    .animet {
+      background-image: url('/images/projects/animet-1536w.webp');
+    }
+  }
+  
+  @supports (background-image: url('image.avif')) {
+    .animet {
+      background-image: url('/images/projects/animet-1536w.avif');
+    }
+  }
+}
+
 /* Responsive image: basic-personal-server */
 .basic-personal-server {
   background-image: url('/images/projects/basic-personal-server.jpg');

@@ -1,60 +1,60 @@
 {
-  "timestamp": "2026-01-07T15:13:44.140Z",
-  "totalImages": 180,
-  "totalInputSize": 57567732,
-  "totalOutputSize": 40297488,
-  "totalSavings": 17270244,
+  "timestamp": "2026-01-11T01:15:23.588Z",
+  "totalImages": 192,
+  "totalInputSize": 72398772,
+  "totalOutputSize": 50679216,
+  "totalSavings": 21719556,
   "formatBreakdown": {
     "webp": {
-      "count": 90,
-      "inputSize": 28783866,
-      "outputSize": 20148744,
-      "savings": 8635122
+      "count": 96,
+      "inputSize": 36199386,
+      "outputSize": 25339608,
+      "savings": 10859778
     },
     "avif": {
-      "count": 90,
-      "inputSize": 28783866,
-      "outputSize": 20148744,
-      "savings": 8635122
+      "count": 96,
+      "inputSize": 36199386,
+      "outputSize": 25339608,
+      "savings": 10859778
     }
   },
   "sizeBreakdown": {
     "320w": {
-      "count": 30,
-      "inputSize": 9594622,
-      "outputSize": 6716248,
-      "savings": 2878374
+      "count": 32,
+      "inputSize": 12066462,
+      "outputSize": 8446536,
+      "savings": 3619926
     },
     "640w": {
-      "count": 30,
-      "inputSize": 9594622,
-      "outputSize": 6716248,
-      "savings": 2878374
+      "count": 32,
+      "inputSize": 12066462,
+      "outputSize": 8446536,
+      "savings": 3619926
     },
     "768w": {
-      "count": 30,
-      "inputSize": 9594622,
-      "outputSize": 6716248,
-      "savings": 2878374
+      "count": 32,
+      "inputSize": 12066462,
+      "outputSize": 8446536,
+      "savings": 3619926
     },
     "1024w": {
-      "count": 30,
-      "inputSize": 9594622,
-      "outputSize": 6716248,
-      "savings": 2878374
+      "count": 32,
+      "inputSize": 12066462,
+      "outputSize": 8446536,
+      "savings": 3619926
     },
     "1280w": {
-      "count": 30,
-      "inputSize": 9594622,
-      "outputSize": 6716248,
-      "savings": 2878374
+      "count": 32,
+      "inputSize": 12066462,
+      "outputSize": 8446536,
+      "savings": 3619926
     },
     "1536w": {
-      "count": 30,
-      "inputSize": 9594622,
-      "outputSize": 6716248,
-      "savings": 2878374
+      "count": 32,
+      "inputSize": 12066462,
+      "outputSize": 8446536,
+      "savings": 3619926
     }
   },
-  "savingsPercentage": 29.99986867643144
+  "savingsPercentage": 29.99989557833937
 }

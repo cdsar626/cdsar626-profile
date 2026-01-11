@@ -4,7 +4,7 @@ description: "A Work-in-progress website to promote and sell clothes in panama."
 technologies: ["WordPress"]
 thumbnail: "/images/projects/importadora-elefante.png"
 featured: true
-order: 4
+order: 5
 links:
   main: "https://ielefante.cdsar626.com/"
 publishDate: 2024-04-01

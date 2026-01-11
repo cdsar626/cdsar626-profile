@@ -4,7 +4,7 @@ description: "A basic server to upload files, built in vuejs and expressjs."
 technologies: ["Vuejs", "Expressjs"]
 thumbnail: "/images/projects/basic-personal-server.png"
 featured: true
-order: 1
+order: 2
 links:
   main: "https://files.cdsar626.com/#/"
   github: "https://github.com/cdsar626/cd-server"

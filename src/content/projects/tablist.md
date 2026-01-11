@@ -4,7 +4,7 @@ description: "A Work-in-progress task list app. Now available only in Playstore.
 technologies: ["Flutter", "MongoDB", "Dart"]
 thumbnail: "/images/projects/tablist.png"
 featured: true
-order: 3
+order: 4
 links:
   main: "https://tablist.cdsar626.com/"
   github: "https://github.com/cdsar626/tablist_flutter"
